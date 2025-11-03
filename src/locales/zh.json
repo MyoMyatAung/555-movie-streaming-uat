@@ -1,0 +1,16 @@
+{
+  "pages": {
+    "home": {
+      "title": "首页"
+    }
+  },
+  "common": {
+    "hello": "你好"
+  },
+
+  "auth": {
+    "login": {
+      "title": "登录"
+    }
+  }
+}
