@@ -1,16 +1,14 @@
 import HomeLayout from "@/components/common/layouts/HomeLayout";
 import { createFileRoute } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
 
-export const Route = createFileRoute("/home/")({
+export const Route = createFileRoute("/explore/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { t } = useTranslation();
   return (
     <HomeLayout>
-      <div className="px-4 text-white">{t("common.hello")} "/home/"!</div>
+      <div className="text-white">Hello "/explore/"!</div>
     </HomeLayout>
   );
 }

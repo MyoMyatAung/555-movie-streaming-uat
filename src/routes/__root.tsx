@@ -4,8 +4,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
-import Footer from "@/components/common/layouts/Footer";
-import Header from "@/components/common/layouts/Header";
+import HomeBg from "@/assets/img/home-background.png";
 import type { QueryClient } from "@tanstack/react-query";
 import { NuqsAdapter } from "nuqs/adapters/react";
 
@@ -17,10 +16,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
       <NuqsAdapter>
-        <div className="relative mx-auto flex h-svh w-screen max-w-md flex-col overflow-hidden bg-black">
-          <Header />
+        <div
+          className="relative mx-auto flex h-svh w-screen max-w-md flex-col overflow-hidden bg-black bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${HomeBg})` }}
+        >
           <Outlet />
-          <Footer />
         </div>
         <TanstackDevtools
           config={{

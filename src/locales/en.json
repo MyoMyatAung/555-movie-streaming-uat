@@ -1,4 +1,12 @@
 {
+  "layout": {
+    "navbar": {
+      "home": "Home",
+      "explore": "Explore",
+      "download": "Download",
+      "profile": "Profile"
+    }
+  },
   "pages": {
     "home": {
       "title": "Home"

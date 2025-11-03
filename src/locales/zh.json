@@ -1,4 +1,12 @@
 {
+  "layout": {
+    "navbar": {
+      "home": "首页",
+      "explore": "探索",
+      "download": "下载",
+      "profile": "个人中心"
+    }
+  },
   "pages": {
     "home": {
       "title": "首页"
