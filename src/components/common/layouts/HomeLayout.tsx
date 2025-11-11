@@ -1,7 +1,11 @@
 import BottomNavbar from "./BottomNavBar";
 import Header from "./Header";
 
-function HomeLayout({ children }: { children: React.ReactNode }) {
+interface HomeLayoutProps {
+  children: React.ReactNode;
+}
+
+function HomeLayout({ children }: HomeLayoutProps) {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <Header />
