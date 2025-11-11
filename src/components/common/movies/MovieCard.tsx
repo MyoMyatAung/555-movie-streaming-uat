@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { ContentItem } from "@/types/movie";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { MovieDetailCard } from "./MovieDetailCard";
 
 interface MovieCardProps {
@@ -22,10 +22,25 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
   const isTopRank = item.badge?.type === "top_rank";
   const [isFlipped, setIsFlipped] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isPressedRef = useRef(false);
 
-  const handleCardClick = () => {
-    setIsFlipped(!isFlipped);
-    onClick?.();
+  const handlePressStart = () => {
+    isPressedRef.current = true;
+    pressTimerRef.current = setTimeout(() => {
+      if (isPressedRef.current) {
+        setIsFlipped(!isFlipped);
+        onClick?.();
+      }
+    }, 500); // 0.5 second press duration
+  };
+
+  const handlePressEnd = () => {
+    isPressedRef.current = false;
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+      pressTimerRef.current = null;
+    }
   };
 
   const handlePlay = () => {
@@ -51,7 +66,12 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
         style={{ transformStyle: "preserve-3d" }}
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-        onClick={handleCardClick}
+        onMouseDown={handlePressStart}
+        onMouseUp={handlePressEnd}
+        onMouseLeave={handlePressEnd}
+        onTouchStart={handlePressStart}
+        onTouchEnd={handlePressEnd}
+        onTouchCancel={handlePressEnd}
       >
         {/* Front Side - Movie Poster */}
         <div
