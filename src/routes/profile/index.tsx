@@ -1,14 +1,183 @@
-import HomeLayout from "@/components/common/layouts/HomeLayout";
+import IconInvitation from "@/assets/svgs/icon-invitation.svg?react";
+import IconNotification from "@/assets/svgs/icon-notification.svg?react";
+import IconSettings from "@/assets/svgs/icon-settings.svg?react";
+import UserAvatar from "@/assets/svgs/user-avatar.svg?react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  ArrowUp,
+  ChevronRight,
+  Download,
+  FolderOpen,
+  Gift,
+  MessageCircle,
+  MessageSquareMore,
+  PlayCircle,
+  Share2,
+} from "lucide-react";
 
 export const Route = createFileRoute("/profile/")({
   component: RouteComponent,
 });
 
+const quickActions = [
+  {
+    label: "Notifications",
+    icon: IconNotification,
+    gradient:
+      "bg-[linear-gradient(180deg,rgba(168,82,255,0.2)_0%,rgba(74,177,255,0.2)_100%)]",
+  },
+  {
+    label: "Invitation",
+    icon: IconInvitation,
+    gradient:
+      "bg-[linear-gradient(180deg,rgba(248,89,8,0.2)_0%,rgba(255,205,174,0.2)_56.73%)]",
+  },
+  {
+    label: "Settings",
+    icon: IconSettings,
+    gradient:
+      "bg-[linear-gradient(360deg,rgba(255,139,82,0.2)_0%,rgba(208,255,0,0.2)_100%)]",
+  },
+  {
+    label: "Update",
+    icon: ArrowUp,
+    gradient:
+      "bg-[linear-gradient(90deg,rgba(82,255,108,0.2)_0%,rgba(71,255,55,0.2)_100%)]",
+  },
+];
+
+const watchlistLinks = [
+  {
+    label: "Continue Watching",
+    icon: PlayCircle,
+  },
+  {
+    label: "My Collection",
+    icon: FolderOpen,
+  },
+  {
+    label: "Download",
+    icon: Download,
+  },
+];
+
+const supportLinks = [
+  {
+    label: "Invitation Code",
+    icon: Gift,
+    value: "80880",
+  },
+  {
+    label: "Share Our App",
+    icon: Share2,
+  },
+  {
+    label: "Feedbacks",
+    icon: MessageSquareMore,
+  },
+  {
+    label: "Contact Us",
+    icon: MessageCircle,
+  },
+];
+
 function RouteComponent() {
   return (
-    <HomeLayout>
-      <div className="text-white">Hello "/profile/"!</div>
-    </HomeLayout>
+    <section>
+      <div className="relative h-full">
+        <div className="flex h-full flex-col px-6 pt-8 pb-10 text-white">
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex size-24 items-center justify-center rounded-full bg-white/10 shadow-[0_15px_45px_rgba(8,14,35,0.45)] backdrop-blur">
+              <UserAvatar className="size-14 text-white/80" />
+            </div>
+            <Button
+              variant="link"
+              className="group flex cursor-pointer items-center gap-2 text-lg font-medium text-white"
+            >
+              <span className="underline underline-offset-4">
+                Login or Sign up
+              </span>
+              <ChevronRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Button>
+          </div>
+
+          <div className="mt-8 grid grid-cols-4 gap-4">
+            {quickActions.map((action) => (
+              <button
+                key={action.label}
+                className="group flex flex-col items-center gap-2"
+              >
+                <div
+                  className={`flex size-14 items-center justify-center rounded-2xl bg-linear-to-br ${action.gradient} shadow-[0_12px_32px_rgba(10,16,32,0.45)] transition-transform duration-200 group-hover:-translate-y-1`}
+                >
+                  <action.icon
+                    className={cn(
+                      "size-8 text-white",
+                      action.label === "Settings" && "size-6",
+                    )}
+                  />
+                </div>
+                <span className="text-xs font-medium text-white/80">
+                  {action.label}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-col gap-6">
+            <div className="rounded-[32px] border border-white/5 bg-white/8 p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
+              <div className="space-y-2">
+                {watchlistLinks.map((item, index) => (
+                  <div key={item.label}>
+                    {index !== 0 && <div className="my-2 h-px bg-white/5" />}
+                    <button className="flex w-full items-center justify-between text-left">
+                      <div className="flex items-center gap-3">
+                        <div className="flex size-11 items-center justify-center rounded-2xl bg-white/8">
+                          <item.icon className="size-5 text-white" />
+                        </div>
+                        <span className="text-base font-medium">
+                          {item.label}
+                        </span>
+                      </div>
+                      <ChevronRight className="size-5 text-white/50" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[32px] border border-white/5 bg-white/8 p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
+              <div className="space-y-2">
+                {supportLinks.map((item, index) => (
+                  <div key={item.label}>
+                    {index !== 0 && <div className="my-2 h-px bg-white/5" />}
+                    <button className="flex w-full items-center justify-between text-left">
+                      <div className="flex items-center gap-3">
+                        <div className="flex size-11 items-center justify-center rounded-2xl bg-white/8">
+                          <item.icon className="size-5 text-white" />
+                        </div>
+                        <span className="text-base font-medium">
+                          {item.label}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {item.value ? (
+                          <span className="text-sm font-semibold text-white/70">
+                            {item.value}
+                          </span>
+                        ) : null}
+                        <ChevronRight className="size-5 text-white/50" />
+                      </div>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
