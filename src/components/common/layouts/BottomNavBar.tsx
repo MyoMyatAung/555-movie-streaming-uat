@@ -10,11 +10,20 @@ import IconHomeActive from "@/assets/svgs/icon-home-active.svg?react";
 import IconHomeInactive from "@/assets/svgs/icon-home-inactive.svg?react";
 import IconProfileActive from "@/assets/svgs/icon-profile-active.svg?react";
 import IconProfileInactive from "@/assets/svgs/icon-profile-inactive.svg?react";
+import BottomNavbarSkeleton from "../skeletons/BottomNavbarSkeleton";
 
-function BottomNavbar() {
+interface BottomNavbarProps {
+  isLoading?: boolean;
+}
+
+function BottomNavbar({ isLoading = false }: BottomNavbarProps) {
   const { t } = useTranslation();
 
   const matchRoute = useMatchRoute();
+
+  if (isLoading) {
+    return <BottomNavbarSkeleton />;
+  }
 
   const checkIsActive = (path: string) => {
     return matchRoute({ to: path });

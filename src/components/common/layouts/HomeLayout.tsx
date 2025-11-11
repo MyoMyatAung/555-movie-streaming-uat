@@ -3,16 +3,17 @@ import Header from "./Header";
 
 interface HomeLayoutProps {
   children: React.ReactNode;
+  isLoading?: boolean;
 }
 
-function HomeLayout({ children }: HomeLayoutProps) {
+function HomeLayout({ children, isLoading = false }: HomeLayoutProps) {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-      <Header />
+      <Header isLoading={isLoading} />
       <div className="flex-1 overflow-y-auto pb-[var(--bottom-nav-height)]">
         {children}
       </div>
-      <BottomNavbar />
+      <BottomNavbar isLoading={isLoading} />
     </div>
   );
 }

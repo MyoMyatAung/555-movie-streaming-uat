@@ -1,0 +1,19 @@
+function BottomNavbarSkeleton() {
+  return (
+    <div className="fixed bottom-0 left-1/2 z-[var(--z-nav-layer)] h-[var(--bottom-nav-height)] w-screen max-w-md -translate-x-1/2 bg-gradient-to-t from-[#141416] to-[#1F1F1F] px-5 pt-2.5 pb-4">
+      <div className="grid grid-cols-4 items-center gap-x-8">
+        {[1, 2, 3, 4].map((item) => (
+          <div key={item} className="flex flex-col items-center gap-y-1">
+            {/* Icon Skeleton - size-6 (24x24) with rounded */}
+            <div className="size-6 animate-pulse rounded bg-white/10" />
+            {/* Label Skeleton - text-sm height */}
+            <div className="h-[20px] w-12 animate-pulse rounded bg-white/10" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default BottomNavbarSkeleton;
+

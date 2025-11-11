@@ -2,9 +2,18 @@ import { BellIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import HeaderSkeleton from "../skeletons/HeaderSkeleton";
 
-function Header() {
+interface HeaderProps {
+  isLoading?: boolean;
+}
+
+function Header({ isLoading = false }: HeaderProps) {
   const [hasNotifications] = useState(true); // This would come from your notification state
+
+  if (isLoading) {
+    return <HeaderSkeleton />;
+  }
 
   return (
     <header className="w-full px-4 py-3">
