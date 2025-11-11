@@ -122,7 +122,7 @@ export const mockTopTenWatchlist: ContentItem[] = [
     id: "tt3",
     title: "Moon Lover",
     imageUrl:
-      "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=300&h=450&fit=crop",
+      "https://images.unsplash.com/photo-1761872936220-1531e97a158a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyMzZ8fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&q=60&w=900",
     type: "tv_series",
     episodes: 48,
     badge: { type: "top_rank", rank: 3 },

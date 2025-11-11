@@ -54,7 +54,7 @@ export function MovieDetailCard({
         </div>
 
         {/* Genres */}
-        <div className="mb-1.5 flex flex-wrap gap-2 text-sm text-white/80">
+        <div className="mb-1.5 flex flex-wrap gap-2 text-xs text-white/80">
           {item.genres?.map((genre, idx) => (
             <div key={idx} className="flex items-center gap-2">
               <span>{genre}</span>

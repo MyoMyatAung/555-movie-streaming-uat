@@ -72,7 +72,27 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
             {isTopRank && item.badge?.rank && (
               <>
                 {/* Gradient overlay at bottom */}
-                <div className="absolute inset-x-0 bottom-1 h-20 bg-gradient-to-br from-white/80 to-black/10 blur-[16px]" />
+                <div className="absolute inset-x-0 bottom-0 h-20 bg-black/50 blur-[20px]" />
+                <div className="absolute inset-x-0 bottom-0 h-24 w-full bg-white/40 blur-[20px]">
+                  <svg width="100" height="100">
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="40"
+                      fill="#FFFFFF4D"
+                      style={{ filter: "blur(20px)" }}
+                    />
+                  </svg>
+                  <svg width="100" height="100">
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="40"
+                      fill="#FFFFFF4D"
+                      style={{ filter: "blur(50px)" }}
+                    />
+                  </svg>
+                </div>
                 <div className="absolute bottom-2 left-2 z-10">
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-bold text-white">
