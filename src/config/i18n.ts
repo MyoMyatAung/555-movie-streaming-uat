@@ -15,8 +15,8 @@ i18n
       zh: { translation: zh },
       en: { translation: en },
     },
-    lng: "en",
-    fallbackLng: "en",
+    lng: "zh",
+    fallbackLng: "zh",
     debug: import.meta.env.MODE === "development",
     interpolation: {
       escapeValue: false,

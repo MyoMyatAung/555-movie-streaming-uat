@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { WatchList } from "@/lib/db";
 import type { ContentItem } from "@/types/movie";
 import { ChevronRightIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ContinueWatchingCard } from "./ContinueWatchingCard";
 
 interface ContinueWatchingSectionProps {
@@ -35,7 +36,7 @@ const ContinueWatchingSectionSkeleton = () => {
 };
 
 export function ContinueWatchingSection({
-  title = "Continue Watching",
+  title,
   watchListFromIndexDB = [],
   watchListVideos = [],
   isLoading = false,
@@ -43,6 +44,8 @@ export function ContinueWatchingSection({
   onItemClick,
   className,
 }: ContinueWatchingSectionProps) {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return <ContinueWatchingSectionSkeleton />;
   }
@@ -55,12 +58,14 @@ export function ContinueWatchingSection({
     <div className={className}>
       {/* Section Header */}
       <div className="mb-4 flex items-center justify-between px-4">
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <h3 className="text-lg font-semibold text-white">
+          {title || t("pages.home.sections.continueWatching")}
+        </h3>
         <button
           onClick={onSeeAll}
           className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300"
         >
-          See all
+          {t("pages.home.sections.seeAll")}
           <ChevronRightIcon className="size-4" />
         </button>
       </div>

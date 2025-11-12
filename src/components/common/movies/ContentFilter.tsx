@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ContentCategory } from "@/types/movie";
+import { useTranslation } from "react-i18next";
 
 interface ContentFilterProps {
   categories: ContentCategory[];
@@ -9,19 +10,21 @@ interface ContentFilterProps {
   className?: string;
 }
 
-const categoryLabels: Record<ContentCategory, string> = {
-  all: "All",
-  movies: "Movies",
-  tv_series: "TV Series",
-  animations: "Animations",
-};
-
 export function ContentFilter({
   categories,
   selectedCategory,
   onCategoryChange,
   className,
 }: ContentFilterProps) {
+  const { t } = useTranslation();
+
+  const categoryLabels: Record<ContentCategory, string> = {
+    all: t("pages.home.categories.all"),
+    movies: t("pages.home.categories.movies"),
+    tv_series: t("pages.home.categories.tv_series"),
+    animations: t("pages.home.categories.animations"),
+  };
+
   return (
     <div className={cn("flex gap-2 overflow-x-auto pb-2", className)}>
       {categories.map((category) => {

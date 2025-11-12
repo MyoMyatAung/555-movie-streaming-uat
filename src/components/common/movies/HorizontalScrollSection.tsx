@@ -1,5 +1,6 @@
 import type { ContentSection } from "@/types/movie";
 import { ChevronRightIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { MovieCard } from "./MovieCard";
 
 interface HorizontalScrollSectionProps {
@@ -15,6 +16,8 @@ export function HorizontalScrollSection({
   onItemClick,
   className,
 }: HorizontalScrollSectionProps) {
+  const { t } = useTranslation();
+
   return (
     <div className={className}>
       {/* Section Header */}
@@ -25,7 +28,7 @@ export function HorizontalScrollSection({
             onClick={() => onSeeAll?.(section.id)}
             className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300"
           >
-            See all
+            {t("pages.home.sections.seeAll")}
             <ChevronRightIcon className="size-4" />
           </button>
         )}

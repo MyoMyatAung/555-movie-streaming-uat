@@ -9,7 +9,25 @@
   },
   "pages": {
     "home": {
-      "title": "Home"
+      "title": "Home",
+      "welcomeBack": "Welcome back",
+      "search": "Search",
+      "categories": {
+        "all": "All",
+        "movies": "Movies",
+        "tv_series": "TV Series",
+        "animations": "Animations"
+      },
+      "heroBanner": {
+        "watchNow": "Watch Now"
+      },
+      "sections": {
+        "continueWatching": "Continue Watching",
+        "latestMovies": "Latest Movies",
+        "topTenWatchlist": "Top Ten Watchlist",
+        "trendingNow": "Trending Now",
+        "seeAll": "See all"
+      }
     }
   },
   "common": {

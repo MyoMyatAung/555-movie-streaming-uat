@@ -55,7 +55,7 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
   return (
     <div
       className={cn(
-        "group relative flex-shrink-0 cursor-pointer",
+        "group relative shrink-0 cursor-pointer",
         "w-[140px]",
         className,
       )}
@@ -81,7 +81,7 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
           }}
         >
           {/* Image Container */}
-          <div className="relative aspect-[2/3] overflow-hidden rounded-lg">
+          <div className="relative aspect-2/3 overflow-hidden rounded-lg">
             <img
               src={item.imageUrl}
               alt={item.title}
@@ -185,7 +185,7 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
             onPlay={handlePlay}
             onFavoriteToggle={handleFavoriteToggle}
             isFavorite={isFavorite}
-            className="aspect-[2/3]"
+            className="aspect-2/3"
           />
         </div>
       </motion.div>

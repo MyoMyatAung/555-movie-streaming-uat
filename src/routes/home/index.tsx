@@ -15,12 +15,14 @@ import { seedWatchlist } from "@/utils/seedWatchlist";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/home/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] =
@@ -79,11 +81,22 @@ function RouteComponent() {
     );
   }, [watchListData, allMockItems]);
 
+  // Map section IDs to translation keys
+  const getSectionTitle = (sectionId: string): string => {
+    const titleMap: Record<string, string> = {
+      "latest-movies": t("pages.home.sections.latestMovies"),
+      "top-ten": t("pages.home.sections.topTenWatchlist"),
+      trending: t("pages.home.sections.trendingNow"),
+    };
+    return titleMap[sectionId] || sectionId;
+  };
+
   // Filter other content sections based on selected category
   const filteredSections = mockContentSections
     .filter((section) => section.id !== "continue-watching")
     .map((section) => ({
       ...section,
+      title: getSectionTitle(section.id),
       items:
         selectedCategory === "all"
           ? section.items
@@ -140,7 +153,6 @@ function RouteComponent() {
           <div className="mt-6 space-y-8">
             {/* Continue Watching Section - from IndexedDB */}
             <ContinueWatchingSection
-              title="Continue Watching"
               watchListFromIndexDB={watchListData}
               watchListVideos={watchListVideos}
               isLoading={isIndexDBLoading}

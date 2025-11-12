@@ -2,6 +2,7 @@ import { BellIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import HeaderSkeleton from "../skeletons/HeaderSkeleton";
 
 interface HeaderProps {
@@ -10,6 +11,7 @@ interface HeaderProps {
 
 function Header({ isLoading = false }: HeaderProps) {
   const [hasNotifications] = useState(true); // This would come from your notification state
+  const { t } = useTranslation();
 
   if (isLoading) {
     return <HeaderSkeleton />;
@@ -46,7 +48,7 @@ function Header({ isLoading = false }: HeaderProps) {
           {/* Welcome Text */}
           <div className="flex flex-col">
             <span className="text-sm font-normal text-white">
-              Welcome back,
+              {t("pages.home.welcomeBack")},
             </span>
             <span className="text-base font-semibold text-white">
               Krystina Jenny
@@ -62,7 +64,7 @@ function Header({ isLoading = false }: HeaderProps) {
             className="h-auto rounded-2xl bg-white/5 px-4 py-2 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] hover:bg-white/10"
           >
             <SearchIcon className="mr-2 size-5 text-white" />
-            <span className="text-sm text-white">Search</span>
+            <span className="text-sm text-white">{t("pages.home.search")}</span>
           </Button>
 
           {/* Notification Bell */}

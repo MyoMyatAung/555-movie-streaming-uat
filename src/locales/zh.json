@@ -9,7 +9,25 @@
   },
   "pages": {
     "home": {
-      "title": "首页"
+      "title": "首页",
+      "welcomeBack": "欢迎回来",
+      "search": "搜索",
+      "categories": {
+        "all": "全部",
+        "movies": "电影",
+        "tv_series": "电视剧",
+        "animations": "动画"
+      },
+      "heroBanner": {
+        "watchNow": "立即观看"
+      },
+      "sections": {
+        "continueWatching": "继续观看",
+        "latestMovies": "最新电影",
+        "topTenWatchlist": "前十观影榜",
+        "trendingNow": "热门推荐",
+        "seeAll": "查看全部"
+      }
     }
   },
   "common": {

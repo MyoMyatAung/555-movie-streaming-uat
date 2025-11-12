@@ -4,6 +4,7 @@ import { PlayIcon } from "lucide-react";
 import type { PanInfo } from "motion/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import DividerStroke from "./DividerStroke";
 
 interface HeroBannerProps {
@@ -19,6 +20,7 @@ export function HeroBanner({
   className,
   autoPlayInterval = 5000,
 }: HeroBannerProps) {
+  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentItem = items[currentIndex];
 
@@ -124,7 +126,7 @@ export function HeroBanner({
               className="mt-2 w-fit rounded-full bg-white/20 text-base font-semibold text-white hover:bg-white/30"
             >
               <PlayIcon className="size-5" />
-              Watch Now
+              {t("pages.home.heroBanner.watchNow")}
             </Button>
           </motion.div>
         </div>

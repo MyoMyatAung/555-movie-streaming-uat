@@ -31,7 +31,7 @@ export function MovieDetailCard({
         <img
           src={item.imageUrl}
           alt={item.title}
-          className="h-full w-full scale-110 object-cover blur-[8px]"
+          className="h-full w-full scale-95 object-cover blur-sm"
         />
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       </div>
@@ -103,7 +103,7 @@ export function MovieDetailCard({
               e.stopPropagation();
               onPlay?.();
             }}
-            className="!h-7.5 flex-1 gap-2 rounded-full bg-white/20 text-white hover:bg-white/30"
+            className="h-7.5 flex-1 gap-2 rounded-full bg-white/20 text-white hover:bg-white/30"
           >
             <PlayIcon className="size-4" />
             Play
