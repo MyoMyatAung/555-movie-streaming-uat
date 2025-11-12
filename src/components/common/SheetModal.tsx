@@ -71,13 +71,15 @@ function SheetModal({
         {title && (
           <div className="relative mb-4 px-4 text-center">
             <div></div>
-            {title && <h1 className="text-[20px] font-medium">{title}</h1>}
+            {title && (
+              <h1 className="text-[20px] font-medium text-white">{title}</h1>
+            )}
             {onClose && (
               <Button
                 variant={"ghost"}
                 size={"icon"}
                 onClick={onClose}
-                className="absolute -top-1 right-5"
+                className="absolute -top-1 right-5 text-white"
               >
                 <XIcon className="size-6" />
               </Button>

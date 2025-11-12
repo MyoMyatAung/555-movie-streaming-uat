@@ -1,65 +1,112 @@
-import { AUTH_STAGES } from "@/constants/common";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 
-export type TUserData = {
-  id: string;
-  email: string;
-  username: string;
-  fullname: string;
-  phone: string;
-  role: string;
-  status: string;
-};
+import type { AuthTokens, User } from "@/types/auth";
 
-type TAuthStore = {
-  auth: {
-    token: string;
-    stage: (typeof AUTH_STAGES)[keyof typeof AUTH_STAGES];
-    userData: TUserData;
-  };
-};
+interface AuthState {
+  // State
+  user: User | null;
+  tokens: AuthTokens | null;
+  isAuthenticated: boolean;
+  recaptchaToken: string | null;
 
-type TAuthStoreActions = {
-  setAuth: (
-    auth:
-      | TAuthStore["auth"]
-      | ((prev: TAuthStore["auth"]) => TAuthStore["auth"]),
-  ) => void;
-  resetAuth: () => void;
-};
+  // Actions
+  setUser: (user: User | null) => void;
+  updateUser: (updates: Partial<User>) => void; // Add this
+  setTokens: (tokens: AuthTokens | null) => void;
+  setAuth: (user: User, tokens: AuthTokens) => void;
+  clearAuth: () => void;
+  setRecaptchaToken: (token: string | null) => void;
 
-const initialState: TAuthStore = {
-  auth: {
-    token: "",
-    stage: AUTH_STAGES.UNAUTHENTICATED,
-    userData: {
-      id: "",
-      email: "",
-      username: "",
-      fullname: "",
-      phone: "",
-      role: "",
-      status: "",
-    },
-  },
-};
+  // Token helpers
+  getRecaptchaToken: () => string | null;
+  getAccessToken: () => string | null;
+  getRefreshToken: () => string | null;
+  isTokenExpired: () => boolean;
+}
 
-export const useAuthStore = create<TAuthStore & TAuthStoreActions>()(
-  persist(
-    (set) => ({
-      auth: initialState.auth,
-      setAuth: (auth) =>
-        set((state) => ({
-          auth: typeof auth === "function" ? auth(state.auth) : auth,
-        })),
-      resetAuth: () => {
-        console.log("resetAuth");
-        set(initialState);
+export const useAuthStore = create<AuthState>()(
+  devtools(
+    persist(
+      (set, get) => ({
+        // Initial state
+        user: null,
+        tokens: null,
+        isAuthenticated: false,
+        recaptchaToken: "",
+
+        // Actions
+        setUser: (user) =>
+          set({
+            user,
+            isAuthenticated: !!user,
+          }),
+
+        updateUser: (updates) =>
+          set((state) => ({
+            user: state.user ? { ...state.user, ...updates } : null,
+          })),
+
+        setTokens: (tokens) =>
+          set({
+            tokens,
+          }),
+
+        setAuth: (user, tokens) =>
+          set({
+            user,
+            tokens,
+            isAuthenticated: true,
+          }),
+
+        clearAuth: () =>
+          set({
+            user: null,
+            tokens: null,
+            isAuthenticated: false,
+          }),
+
+        setRecaptchaToken: (token) =>
+          set({
+            recaptchaToken: token,
+          }),
+
+        // Token helpers
+        getAccessToken: () => {
+          const state = get();
+          return state.tokens?.accessToken || null;
+        },
+
+        getRefreshToken: () => {
+          const state = get();
+          return state.tokens?.refreshToken || null;
+        },
+
+        getRecaptchaToken: () => {
+          const state = get();
+          return state.recaptchaToken || null;
+        },
+
+        isTokenExpired: () => {
+          const state = get();
+          if (!state.tokens?.accessTokenExpiresIn) return true;
+
+          const expirationTime = state.tokens.accessTokenExpiresIn * 1000; // Convert to milliseconds
+          const currentTime = Date.now();
+
+          return currentTime >= expirationTime;
+        },
+      }),
+      {
+        name: "auth-storage",
+        partialize: (state) => ({
+          user: state.user,
+          tokens: state.tokens,
+          isAuthenticated: state.isAuthenticated,
+        }),
       },
-    }),
-    {
-      name: "auth",
-    },
+    ),
   ),
 );
+
+export default useAuthStore;

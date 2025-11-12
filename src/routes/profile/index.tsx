@@ -2,8 +2,12 @@ import IconInvitation from "@/assets/svgs/icon-invitation.svg?react";
 import IconNotification from "@/assets/svgs/icon-notification.svg?react";
 import IconSettings from "@/assets/svgs/icon-settings.svg?react";
 import UserAvatar from "@/assets/svgs/user-avatar.svg?react";
+import { LoginForm } from "@/components/common/auth/LoginForm";
+import RegisterForm from "@/components/common/auth/RegisterForm";
+import SheetModal from "@/components/common/SheetModal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowUp,
@@ -16,6 +20,7 @@ import {
   PlayCircle,
   Share2,
 } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/profile/")({
   component: RouteComponent,
@@ -84,6 +89,15 @@ const supportLinks = [
 ];
 
 function RouteComponent() {
+  const [showModal, setShowModal] = useState({
+    language: false,
+    share: false,
+    login: false,
+    signup: false,
+  });
+
+  const { setRecaptchaToken } = useAuthStore();
+
   return (
     <section>
       <div className="relative h-full">
@@ -95,6 +109,7 @@ function RouteComponent() {
             <Button
               variant="link"
               className="group flex cursor-pointer items-center gap-2 text-lg font-medium text-white"
+              onClick={() => setShowModal((prev) => ({ ...prev, login: true }))}
             >
               <span className="underline underline-offset-4">
                 Login or Sign up
@@ -178,6 +193,48 @@ function RouteComponent() {
           </div>
         </div>
       </div>
+
+      <SheetModal
+        showModal={showModal.login}
+        setShowModal={(value) => {
+          if (!value) {
+            setRecaptchaToken(null);
+          }
+          setShowModal((prev) => ({ ...prev, login: value }));
+        }}
+        containerClassName="!bg-dark-gray"
+      >
+        <LoginForm
+          onClose={() => setShowModal((prev) => ({ ...prev, login: false }))}
+          onForgotPassword={() => {}}
+          onSignUp={() => {
+            setShowModal((prev) => ({ ...prev, login: false, signup: true }));
+          }}
+        />
+      </SheetModal>
+
+      <SheetModal
+        detent="content"
+        key={"signup"}
+        showModal={showModal.signup}
+        setShowModal={(value) => {
+          if (!value) {
+            setRecaptchaToken(null);
+          }
+          setShowModal((prev) => ({ ...prev, signup: value }));
+        }}
+        snapPoints={[0, 1]}
+        containerClassName="bg-dark-gray! overflow-y-auto"
+      >
+        {showModal.signup && (
+          <RegisterForm
+            onSignIn={() => {
+              setShowModal((prev) => ({ ...prev, login: true, signup: false }));
+            }}
+            onClose={() => setShowModal((prev) => ({ ...prev, signup: false }))}
+          />
+        )}
+      </SheetModal>
     </section>
   );
 }

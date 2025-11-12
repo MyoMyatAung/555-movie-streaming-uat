@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import countriesAndDial from "@/constants/countryAndDial.json";
 import { cn, isValidEmail, isValidMobile } from "@/lib/utils";
+import useAuthStore from "@/stores/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -10,8 +10,9 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import * as z from "zod";
 import { Form } from "../form/Form";
+import SocialLogin from "../SocialLogin";
 
-export const LoginModal = ({
+export const LoginForm = ({
   onClose,
   onForgotPassword,
   onSignUp,
@@ -28,7 +29,7 @@ export const LoginModal = ({
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const { setRecaptchaToken, recaptchaToken } = useAuthStore();
 
   // Simple validation schema that works for both tabs
   const loginSchema = z
@@ -110,7 +111,6 @@ export const LoginModal = ({
       otp: "",
     },
   });
-  const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState("+66");
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
@@ -203,7 +203,7 @@ export const LoginModal = ({
         /> */}
       <div className="flex flex-col">
         {/* Header */}
-        <div className="relative mb-4 px-4 text-center">
+        <div className="relative mb-4 px-4 text-center text-white">
           <h1 className="text-[20px] font-medium">{t("profile.login")}</h1>
           <Button
             variant={"ghost"}
@@ -221,8 +221,8 @@ export const LoginModal = ({
             type="button"
             onClick={() => handleTabChange("username")}
             className={cn(
-              "border-b-2 border-transparent bg-transparent pb-1.5 text-base font-medium text-gray-500",
-              activeTab === "username" && "border-primary-yellow text-gray-900",
+              "border-b-2 border-transparent bg-transparent pb-1.5 text-base text-gray-500",
+              activeTab === "username" && "border-primary-blue text-white",
             )}
           >
             {t("profile.username")}
@@ -231,8 +231,8 @@ export const LoginModal = ({
             type="button"
             onClick={() => handleTabChange("mobile")}
             className={cn(
-              "border-b-2 border-transparent bg-transparent pb-1.5 text-base font-medium text-gray-500",
-              activeTab === "mobile" && "border-primary-yellow text-gray-900",
+              "border-b-2 border-transparent bg-transparent pb-1.5 text-base text-gray-500",
+              activeTab === "mobile" && "border-primary-blue text-white",
             )}
           >
             {t("profile.mobilePhone")}
@@ -241,8 +241,8 @@ export const LoginModal = ({
             type="button"
             onClick={() => handleTabChange("email")}
             className={cn(
-              "border-b-2 border-transparent bg-transparent pb-1.5 text-base font-medium text-gray-500",
-              activeTab === "email" && "border-primary-yellow text-gray-900",
+              "border-b-2 border-transparent bg-transparent pb-1.5 text-base text-gray-500",
+              activeTab === "email" && "border-primary-blue text-white",
             )}
           >
             {t("profile.email")}
@@ -299,7 +299,7 @@ export const LoginModal = ({
               variant="border"
               placeholder={t("profile.enterYourOTP")}
               onResend={() => handleSendOTP(activeTab)}
-              disabled={!isValidToGetOTP}
+              // disabled={!isValidToGetOTP}
             />
           )}
           <div>
@@ -322,7 +322,7 @@ export const LoginModal = ({
             <Button
               type="submit"
               size="lg"
-              className="w-full rounded-full text-base font-bold"
+              className="bg-primary-blue w-full text-base font-medium"
               disabled={false}
             >
               {t("profile.login")}
@@ -332,7 +332,7 @@ export const LoginModal = ({
             <div className="flex items-center justify-between text-base">
               <button
                 type="button"
-                className="text-gray font-medium hover:underline"
+                className="text-sm text-white hover:underline"
                 onClick={onForgotPassword}
               >
                 {t("profile.forgotPassword")}
@@ -340,7 +340,7 @@ export const LoginModal = ({
               <button
                 type="button"
                 onClick={onSignUp}
-                className="text-primary-yellow font-medium hover:underline"
+                className="text-primary-blue text-sm hover:underline"
               >
                 {t("profile.signUp")}
               </button>
@@ -349,14 +349,14 @@ export const LoginModal = ({
             {/* Divider */}
             <div className="flex w-full items-center gap-4">
               <div className="h-0.5 flex-1 bg-gray-200" />
-              <span className="text-sm text-gray-400">
+              <span className="text-sm text-[#AAAAAA]">
                 {t("profile.orSignInWith")}
               </span>
               <div className="h-0.5 flex-1 bg-gray-200" />
             </div>
 
             {/* Social login */}
-            {/* <SocialLogin /> */}
+            <SocialLogin />
           </div>
         </Form>
       </div>

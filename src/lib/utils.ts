@@ -13,3 +13,13 @@ export function isValidEmail(email: string) {
 export function isValidMobile(mobile: string) {
   return /^[0-9]{7,15}$/.test(mobile);
 }
+
+export function getRedirectUri({
+  provider,
+  intent,
+}: {
+  provider: "google" | "facebook" | "wx" | "sina";
+  intent: "register" | "login" | "bind";
+}) {
+  return `${window.location.origin}/social-callback?provider=${provider}&intent=${intent}`;
+}

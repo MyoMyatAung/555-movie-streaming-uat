@@ -1,13 +1,6 @@
-import { FormField } from "@/components/common/form/FormField";
-import { PasswordInput } from "@/components/common/form/PasswordInput";
-import TextareaInput from "@/components/common/form/TextareaInput";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Form as BaseForm } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
 import React, { createContext } from "react";
 import type {
+  FieldErrors,
   FieldPath,
   FieldValues,
   Path,
@@ -15,6 +8,15 @@ import type {
   UseFormReturn,
 } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
+
+import { FormField } from "@/components/common/form/FormField";
+import { PasswordInput } from "@/components/common/form/PasswordInput";
+import TextareaInput from "@/components/common/form/TextareaInput";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Form as BaseForm } from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
+import Input from "./Input";
 import MobileInput from "./MobileInput";
 import OTPInput from "./OTPInput";
 
@@ -26,6 +28,7 @@ type FormProps<T extends FieldValues> = {
   id: string;
   formMethods: UseFormReturn<T>;
   onSubmit: (data: T) => void;
+  onError?: (errors: FieldErrors<T>) => void;
   className?: string;
   children: React.ReactNode;
 };
@@ -34,6 +37,7 @@ function Form<T extends FieldValues>({
   id,
   formMethods,
   onSubmit,
+  onError,
   className,
   children,
 }: FormProps<T>) {
@@ -44,7 +48,7 @@ function Form<T extends FieldValues>({
       <BaseForm {...formMethods}>
         <form
           id={id}
-          onSubmit={formMethods.handleSubmit(onSubmit)}
+          onSubmit={formMethods.handleSubmit(onSubmit, onError)}
           className={className}
           noValidate
         >
@@ -59,12 +63,14 @@ Form.InputField = function InputField<T extends FieldValues = FieldValues>({
   name,
   label,
   required = false,
+  variant,
   ...props
 }: {
   name: FieldPath<T>;
   label?: string;
   required?: boolean;
-} & React.ComponentProps<typeof Input>) {
+  variant?: "border" | "default";
+} & Omit<React.ComponentProps<typeof Input>, "variant">) {
   const { control } = useFormContext<T>();
 
   return (
@@ -75,7 +81,13 @@ Form.InputField = function InputField<T extends FieldValues = FieldValues>({
         name,
         label,
         required,
-        render: <Input className="h-12 rounded-lg text-white" {...props} />,
+        render: (
+          <Input
+            className="h-12 rounded-lg text-white"
+            variant={variant}
+            {...props}
+          />
+        ),
       }}
     />
   );
@@ -86,9 +98,15 @@ Form.PasswordField = function PasswordField<
 >({
   name,
   label,
+  variant,
   ...props
-}: { name: FieldPath<T> } & React.ComponentProps<typeof PasswordInput>) {
+}: {
+  name: FieldPath<T>;
+  label?: string;
+  variant?: "border" | "default";
+} & Omit<React.ComponentProps<typeof PasswordInput>, "variant">) {
   const { control } = useFormContext<T>();
+  const { className, ...restProps } = props;
 
   return (
     <FormField
@@ -97,7 +115,17 @@ Form.PasswordField = function PasswordField<
       field={{
         name,
         label,
-        render: <PasswordInput {...props} />,
+        render: (
+          <PasswordInput
+            {...restProps}
+            className={cn(
+              "h-12 rounded-lg text-white",
+              variant === "border" &&
+                "rounded-none border-none bg-transparent px-0 pt-4 pb-1.5",
+              className,
+            )}
+          />
+        ),
       }}
     />
   );
@@ -216,11 +244,12 @@ Form.MobileField = function MobileField<T extends FieldValues = FieldValues>({
 
   return (
     <FormField
-      className="w-full"
+      className="w-full **:data-[slot=form-label]:left-20"
       control={control}
       field={{
         name,
-        label: variant === "default" ? label : undefined,
+        label,
+        labelClassName: "left-20",
         render: (
           <MobileInput
             label={label}
@@ -255,7 +284,7 @@ Form.OTPField = function OTPField<T extends FieldValues = FieldValues>({
       control={control}
       field={{
         name,
-        label: variant === "default" ? label : undefined,
+        label,
         render: <OTPInput label={label} onResend={onResend} {...props} />,
       }}
     />

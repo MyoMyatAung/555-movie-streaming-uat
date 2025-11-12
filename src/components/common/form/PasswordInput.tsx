@@ -45,9 +45,9 @@ export const PasswordInput = React.memo(
           className="absolute top-1/2 right-4 -translate-y-1/2"
         >
           {showPassword ? (
-            <EyeIcon size={16} className="text-primary" />
+            <EyeIcon size={16} className="text-white" />
           ) : (
-            <EyeClosedIcon size={16} className="text-primary" />
+            <EyeClosedIcon size={16} className="text-white" />
           )}
         </button>
       </div>
