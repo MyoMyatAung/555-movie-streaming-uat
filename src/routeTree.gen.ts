@@ -14,6 +14,8 @@ import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
+import { Route as ProfileCollectionIndexRouteImport } from './routes/profile/collection/index'
+import { Route as ProfileCollectionSlugRouteImport } from './routes/profile/collection/$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +42,16 @@ const DownloadIndexRoute = DownloadIndexRouteImport.update({
   path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileCollectionIndexRoute = ProfileCollectionIndexRouteImport.update({
+  id: '/profile/collection/',
+  path: '/profile/collection/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileCollectionSlugRoute = ProfileCollectionSlugRouteImport.update({
+  id: '/profile/collection/$slug',
+  path: '/profile/collection/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +59,8 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
   '/profile': typeof ProfileIndexRoute
+  '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
+  '/profile/collection': typeof ProfileCollectionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +68,8 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
   '/profile': typeof ProfileIndexRoute
+  '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
+  '/profile/collection': typeof ProfileCollectionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +78,37 @@ export interface FileRoutesById {
   '/explore/': typeof ExploreIndexRoute
   '/home/': typeof HomeIndexRoute
   '/profile/': typeof ProfileIndexRoute
+  '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
+  '/profile/collection/': typeof ProfileCollectionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/download' | '/explore' | '/home' | '/profile'
+  fullPaths:
+    | '/'
+    | '/download'
+    | '/explore'
+    | '/home'
+    | '/profile'
+    | '/profile/collection/$slug'
+    | '/profile/collection'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/download' | '/explore' | '/home' | '/profile'
-  id: '__root__' | '/' | '/download/' | '/explore/' | '/home/' | '/profile/'
+  to:
+    | '/'
+    | '/download'
+    | '/explore'
+    | '/home'
+    | '/profile'
+    | '/profile/collection/$slug'
+    | '/profile/collection'
+  id:
+    | '__root__'
+    | '/'
+    | '/download/'
+    | '/explore/'
+    | '/home/'
+    | '/profile/'
+    | '/profile/collection/$slug'
+    | '/profile/collection/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +117,8 @@ export interface RootRouteChildren {
   ExploreIndexRoute: typeof ExploreIndexRoute
   HomeIndexRoute: typeof HomeIndexRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
+  ProfileCollectionSlugRoute: typeof ProfileCollectionSlugRoute
+  ProfileCollectionIndexRoute: typeof ProfileCollectionIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +158,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/collection/': {
+      id: '/profile/collection/'
+      path: '/profile/collection'
+      fullPath: '/profile/collection'
+      preLoaderRoute: typeof ProfileCollectionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/collection/$slug': {
+      id: '/profile/collection/$slug'
+      path: '/profile/collection/$slug'
+      fullPath: '/profile/collection/$slug'
+      preLoaderRoute: typeof ProfileCollectionSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +181,8 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreIndexRoute: ExploreIndexRoute,
   HomeIndexRoute: HomeIndexRoute,
   ProfileIndexRoute: ProfileIndexRoute,
+  ProfileCollectionSlugRoute: ProfileCollectionSlugRoute,
+  ProfileCollectionIndexRoute: ProfileCollectionIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
