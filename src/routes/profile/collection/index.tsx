@@ -108,6 +108,7 @@ function RouteComponent() {
         <Button
           type="button"
           size={"icon"}
+          variant={"ghost"}
           onClick={() => {
             console.log("action clicked");
           }}

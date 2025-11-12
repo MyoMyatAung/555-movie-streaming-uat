@@ -1,6 +1,7 @@
 import CollectionCover from "@/assets/img/collection-cover.png";
 import IconPlay from "@/assets/svgs/icon-play.svg?react";
 import IconStar from "@/assets/svgs/icon-star-fill.svg?react";
+import { Button } from "@/components/ui/button";
 import type { CollectionItem } from "@/types/collection";
 
 interface CollectionItemCardProps {
@@ -30,7 +31,7 @@ function CollectionItemCard({ item }: CollectionItemCardProps) {
           <p className="line-clamp-1 text-lg font-medium">{item.title}</p>
           <div className="flex items-center">
             <p className="text-sm">{item.episodes} Full</p>
-            <div className="mx-2 h-5 border-[1px] border-l border-white/12"></div>
+            <div className="mx-2 h-5 border border-l border-white/12"></div>
             <p className="text-sm">{item.typeDesc}</p>
           </div>
           <div className="flex items-center gap-x-2">
@@ -39,9 +40,17 @@ function CollectionItemCard({ item }: CollectionItemCardProps) {
           </div>
         </div>
 
-        <div className="flex size-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-[4px]">
+        <Button
+          type="button"
+          size={"icon"}
+          variant={"ghost"}
+          onClick={() => {
+            console.log("action clicked");
+          }}
+          className="rounded-full border border-white/10 backdrop-blur-xs"
+        >
           <IconPlay className="size-6 text-white" />
-        </div>
+        </Button>
       </div>
     </div>
   );

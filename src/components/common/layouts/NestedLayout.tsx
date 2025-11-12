@@ -26,12 +26,13 @@ function NestedLayout({
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-      <div className="my-7 grid h-[var(--nested-topbar-height)] grid-cols-12 items-center bg-transparent px-4">
+      <div className="my-7 grid h-(--nested-topbar-height) grid-cols-12 items-center bg-transparent px-4">
         <div className="col-span-2">
           {isIncludeBack && (
             <Button
               type="button"
               size={"icon"}
+              variant={"ghost"}
               onClick={() => {
                 if (link) navigate(link);
                 else router.history.back();
