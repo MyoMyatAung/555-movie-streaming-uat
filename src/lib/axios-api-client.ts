@@ -1,43 +1,43 @@
-import { toast } from 'sonner'
-import Axios from 'axios'
-import type { InternalAxiosRequestConfig } from 'axios'
-import { API_BASE_URL } from '@/config/env'
-import { useAuthStore } from '@/stores/useAuthStore'
+import { API_BASE_URL } from "@/config/env";
+import { useAuthStore } from "@/stores/useAuthStore";
+import type { InternalAxiosRequestConfig } from "axios";
+import Axios from "axios";
+import { toast } from "sonner";
 
-const PUBLIC_BASE_URLS: Array<string> = []
+const PUBLIC_BASE_URLS: Array<string> = [];
 
 function requestInterceptor(config: InternalAxiosRequestConfig) {
-  const authStore = useAuthStore.getState().auth
+  const authStore = useAuthStore.getState();
 
-  config.headers.Accept = 'application/json'
-  config.withCredentials = !PUBLIC_BASE_URLS.includes(config.baseURL || '')
-  const token = authStore.token
+  config.headers.Accept = "application/json";
+  // config.withCredentials = !PUBLIC_BASE_URLS.includes(config.baseURL || "");
+  // const token = authStore.getAccessToken();
 
-  if (config.withCredentials && !!token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
+  // if (config.withCredentials && !!token) {
+  //   config.headers.Authorization = `Bearer ${token}`;
+  // }
+  return config;
 }
 
 function handleResponseError(error: any) {
-  const resetAuth = useAuthStore.getState().resetAuth
+  const resetAuth = useAuthStore.getState().clearAuth;
 
-  toast.error(error.response?.data.message)
+  toast.error(error.response?.data.message);
   if (error.response?.status === 401 || error.response?.status === 403) {
-    resetAuth()
-    window.location.href = '/login'
-    return new Response(error.response.data, { status: error.response.status })
+    resetAuth();
+    window.location.href = "/login";
+    return new Response(error.response.data, { status: error.response.status });
   } else {
-    console.error('API Error:', error)
+    console.error("API Error:", error);
   }
-  return Promise.reject(error)
+  return Promise.reject(error);
 }
 
 export function createAxiosClient(baseURL: string) {
-  const client = Axios.create({ baseURL })
-  client.interceptors.request.use(requestInterceptor)
-  client.interceptors.response.use((response) => response, handleResponseError)
-  return client
+  const client = Axios.create({ baseURL });
+  client.interceptors.request.use(requestInterceptor);
+  client.interceptors.response.use((response) => response, handleResponseError);
+  return client;
 }
 
-export const AXIOS_CLIENT = createAxiosClient(API_BASE_URL)
+export const AXIOS_CLIENT = createAxiosClient(API_BASE_URL);
