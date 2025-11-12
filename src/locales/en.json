@@ -212,5 +212,22 @@
       "resendOTP": "Resend OTP",
       "resendOTPWithTimer": "Resend OTP ({{time}}s)"
     }
+  },
+
+  "movie-detail": {
+    "comments": {
+      "title": "Comments",
+      "bullet": "Bullet Comments"
+    },
+    "info": {
+      "title": "Info",
+      "more": "More similar content"
+    },
+    "actions": {
+      "download": "Download",
+      "bookmark": "Bookmark",
+      "share": "Share",
+      "feedback": "Feedback"
+    }
   }
 }
