@@ -35,6 +35,84 @@ export const mockHeroBanners: HeroBannerItem[] = [
   },
 ];
 
+// Movies that match IndexedDB seed data (IDs 1-6)
+export const mockVideosForWatchlist: ContentItem[] = [
+  {
+    id: "1",
+    title: "Fantastic 4",
+    imageUrl:
+      "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=300&h=450&fit=crop",
+    type: "movie",
+    duration: "2hr 36mins",
+    rating: 6.8,
+    genres: ["Action", "Sci-Fi"],
+    description:
+      "Four young outsiders teleport to an alternate and dangerous universe which alters their physical form.",
+  },
+  {
+    id: "2",
+    title: "Thunder Bolts",
+    imageUrl:
+      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=450&fit=crop",
+    type: "movie",
+    duration: "2hr 36mins",
+    rating: 7.2,
+    genres: ["Action", "Superhero"],
+    description:
+      "A group of supervillains are recruited by the government to undertake dangerous black ops missions.",
+  },
+  {
+    id: "3",
+    title: "Agatha All Along",
+    imageUrl:
+      "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=300&h=450&fit=crop",
+    type: "tv_series",
+    episodes: 9,
+    duration: "45min",
+    badge: { type: "exclusive" },
+    genres: ["Mystery", "Fantasy"],
+    description:
+      "The infamous Agatha Harkness finds herself down and out of power after a suspicious goth Teen helps break her free.",
+  },
+  {
+    id: "4",
+    title: "Wakanda Forever",
+    imageUrl:
+      "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=300&h=450&fit=crop",
+    type: "movie",
+    duration: "2hr 36mins",
+    rating: 7.8,
+    genres: ["Action", "Adventure"],
+    description:
+      "The people of Wakanda fight to protect their home from intervening world powers as they mourn the death of King T'Challa.",
+  },
+  {
+    id: "5",
+    title: "Iron Heart",
+    imageUrl:
+      "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=300&h=450&fit=crop",
+    type: "tv_series",
+    episodes: 8,
+    duration: "1hr",
+    badge: { type: "exclusive" },
+    genres: ["Action", "Sci-Fi"],
+    description:
+      "Genius teen Riri Williams creates the most advanced suit of armor since Iron Man.",
+  },
+  {
+    id: "6",
+    title: "Spider-Man: Across the Spider-Verse",
+    imageUrl:
+      "https://images.unsplash.com/photo-1635863138275-d9b33299680b?w=300&h=450&fit=crop",
+    type: "animation",
+    duration: "2hr 36mins",
+    rating: 8.9,
+    genres: ["Animation", "Action"],
+    description:
+      "Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People.",
+  },
+];
+
 export const mockContinueWatching: ContentItem[] = [
   {
     id: "cw1",
@@ -194,7 +272,7 @@ export const mockContentSections: ContentSection[] = [
   {
     id: "latest-movies",
     title: "Latest Movies",
-    items: mockLatestMovies,
+    items: [...mockVideosForWatchlist, ...mockLatestMovies], // Include watchlist videos for filtering
     showSeeAll: true,
   },
   {

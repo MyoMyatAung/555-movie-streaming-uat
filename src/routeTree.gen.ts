@@ -14,6 +14,7 @@ import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
+import { Route as ContinueWatchingIndexRouteImport } from './routes/continue-watching/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,9 +41,15 @@ const DownloadIndexRoute = DownloadIndexRouteImport.update({
   path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContinueWatchingIndexRoute = ContinueWatchingIndexRouteImport.update({
+  id: '/continue-watching/',
+  path: '/continue-watching/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/continue-watching': typeof ContinueWatchingIndexRoute
   '/download': typeof DownloadIndexRoute
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/continue-watching': typeof ContinueWatchingIndexRoute
   '/download': typeof DownloadIndexRoute
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/continue-watching/': typeof ContinueWatchingIndexRoute
   '/download/': typeof DownloadIndexRoute
   '/explore/': typeof ExploreIndexRoute
   '/home/': typeof HomeIndexRoute
@@ -65,14 +74,34 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/download' | '/explore' | '/home' | '/profile'
+  fullPaths:
+    | '/'
+    | '/continue-watching'
+    | '/download'
+    | '/explore'
+    | '/home'
+    | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/download' | '/explore' | '/home' | '/profile'
-  id: '__root__' | '/' | '/download/' | '/explore/' | '/home/' | '/profile/'
+  to:
+    | '/'
+    | '/continue-watching'
+    | '/download'
+    | '/explore'
+    | '/home'
+    | '/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/continue-watching/'
+    | '/download/'
+    | '/explore/'
+    | '/home/'
+    | '/profile/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContinueWatchingIndexRoute: typeof ContinueWatchingIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
   ExploreIndexRoute: typeof ExploreIndexRoute
   HomeIndexRoute: typeof HomeIndexRoute
@@ -116,11 +145,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/continue-watching/': {
+      id: '/continue-watching/'
+      path: '/continue-watching'
+      fullPath: '/continue-watching'
+      preLoaderRoute: typeof ContinueWatchingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContinueWatchingIndexRoute: ContinueWatchingIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,
   ExploreIndexRoute: ExploreIndexRoute,
   HomeIndexRoute: HomeIndexRoute,

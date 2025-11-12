@@ -5,27 +5,57 @@ import { HeroBanner } from "@/components/common/movies/HeroBanner";
 import { HorizontalScrollSection } from "@/components/common/movies/HorizontalScrollSection";
 import HomePageSkeleton from "@/components/common/skeletons/HomePageSkeleton";
 import { mockContentSections, mockHeroBanners } from "@/data/mockMovies";
-import type { ContentCategory, HeroBannerItem } from "@/types/movie";
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { db } from "@/lib/db";
+import type {
+  ContentCategory,
+  ContentItem,
+  HeroBannerItem,
+} from "@/types/movie";
+import { seedWatchlist } from "@/utils/seedWatchlist";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useLiveQuery } from "dexie-react-hooks";
+import { useEffect, useMemo, useState } from "react";
 
 export const Route = createFileRoute("/home/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] =
     useState<ContentCategory>("all");
 
-  // Simulate loading data
-  useEffect(() => {
-    // Simulate API call
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // 2 seconds loading time
+  // Fetch watch list from IndexedDB
+  const watchListFromIndexDB = useLiveQuery(() =>
+    db.watchList
+      .orderBy("updated_at")
+      .reverse()
+      .toArray()
+      .catch((err: unknown) => {
+        console.error("Dexie query error:", err);
+        return [];
+      }),
+  );
 
-    return () => clearTimeout(timer);
+  const isIndexDBLoading = watchListFromIndexDB === undefined;
+  const watchListData = watchListFromIndexDB ?? [];
+
+  // Simulate loading data and seed watchlist for development
+  useEffect(() => {
+    const initData = async () => {
+      // Seed watchlist with sample data for development
+      await seedWatchlist();
+
+      // Simulate API call
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // 2 seconds loading time
+
+      return () => clearTimeout(timer);
+    };
+
+    initData();
   }, []);
 
   const categories: ContentCategory[] = [
@@ -35,10 +65,19 @@ function RouteComponent() {
     "animations",
   ];
 
-  // Separate continue watching section
-  const continueWatchingSection = mockContentSections.find(
-    (section) => section.id === "continue-watching",
-  );
+  // Get all items from mock data (this would be replaced with API call)
+  const allMockItems = mockContentSections.flatMap((section) => section.items);
+
+  // Filter watch list videos from mock data based on IndexedDB
+  const watchListVideos = useMemo<ContentItem[]>(() => {
+    if (!watchListData || watchListData.length === 0) return [];
+
+    return allMockItems.filter((item) =>
+      watchListData.some(
+        (watchList: { vod_id: string }) => watchList.vod_id === item.id,
+      ),
+    );
+  }, [watchListData, allMockItems]);
 
   // Filter other content sections based on selected category
   const filteredSections = mockContentSections
@@ -64,8 +103,12 @@ function RouteComponent() {
   };
 
   const handleSeeAll = (sectionId: string) => {
-    // TODO: Navigate to section detail page
-    console.log("See all:", sectionId);
+    if (sectionId === "continue-watching") {
+      navigate({ to: "/continue-watching" });
+    } else {
+      // TODO: Navigate to other section detail pages
+      console.log("See all:", sectionId);
+    }
   };
 
   const handleItemClick = (itemId: string) => {
@@ -78,7 +121,7 @@ function RouteComponent() {
       {isLoading ? (
         <HomePageSkeleton />
       ) : (
-        <div className="min-h-screen bg-gradient-to-b from-[#141416] to-[#1F1F1F] pb-6">
+        <div className="min-h-screen pb-6">
           {/* Content Filters */}
           <div className="px-4 pt-4">
             <ContentFilter
@@ -95,14 +138,15 @@ function RouteComponent() {
 
           {/* Content Sections */}
           <div className="mt-6 space-y-8">
-            {/* Continue Watching Section */}
-            {continueWatchingSection && (
-              <ContinueWatchingSection
-                section={continueWatchingSection}
-                onSeeAll={handleSeeAll}
-                onItemClick={handleItemClick}
-              />
-            )}
+            {/* Continue Watching Section - from IndexedDB */}
+            <ContinueWatchingSection
+              title="Continue Watching"
+              watchListFromIndexDB={watchListData}
+              watchListVideos={watchListVideos}
+              isLoading={isIndexDBLoading}
+              onSeeAll={() => navigate({ to: "/continue-watching" })}
+              onItemClick={handleItemClick}
+            />
 
             {/* Other Sections */}
             {filteredSections.map((section) => (

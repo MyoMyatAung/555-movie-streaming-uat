@@ -4,6 +4,7 @@ import { PlayIcon } from "lucide-react";
 
 interface ContinueWatchingCardProps {
   item: ContentItem;
+  progress?: number;
   onClick?: () => void;
   className?: string;
 }
@@ -15,10 +16,11 @@ const badgeLabels: Record<string, string> = {
 
 export function ContinueWatchingCard({
   item,
+  progress = 0,
   onClick,
   className,
 }: ContinueWatchingCardProps) {
-  const hasProgress = item.progress !== undefined && item.progress > 0;
+  const hasProgress = progress !== undefined && progress > 0;
 
   return (
     <div
@@ -72,8 +74,8 @@ export function ContinueWatchingCard({
         {hasProgress && (
           <div className="absolute right-0 bottom-0 left-0 h-1 bg-gray-800/50">
             <div
-              className="bg-primary-blue h-full transition-all"
-              style={{ width: `${item.progress}%` }}
+              className="h-full bg-blue-500 transition-all"
+              style={{ width: `${progress}%` }}
             />
           </div>
         )}
