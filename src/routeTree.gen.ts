@@ -14,12 +14,9 @@ import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
-<<<<<<< HEAD
+import { Route as PlayerIdRouteImport } from './routes/player/$id'
 import { Route as ProfileCollectionIndexRouteImport } from './routes/profile/collection/index'
 import { Route as ProfileCollectionSlugRouteImport } from './routes/profile/collection/$slug'
-=======
-import { Route as PlayerIdRouteImport } from './routes/player/$id'
->>>>>>> b8f5ce9 (Resolve Conflict)
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,7 +43,11 @@ const DownloadIndexRoute = DownloadIndexRouteImport.update({
   path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
+const PlayerIdRoute = PlayerIdRouteImport.update({
+  id: '/player/$id',
+  path: '/player/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileCollectionIndexRoute = ProfileCollectionIndexRouteImport.update({
   id: '/profile/collection/',
   path: '/profile/collection/',
@@ -55,11 +56,6 @@ const ProfileCollectionIndexRoute = ProfileCollectionIndexRouteImport.update({
 const ProfileCollectionSlugRoute = ProfileCollectionSlugRouteImport.update({
   id: '/profile/collection/$slug',
   path: '/profile/collection/$slug',
-=======
-const PlayerIdRoute = PlayerIdRouteImport.update({
-  id: '/player/$id',
-  path: '/player/$id',
->>>>>>> b8f5ce9 (Resolve Conflict)
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -98,20 +94,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-<<<<<<< HEAD
-=======
     | '/player/$id'
->>>>>>> b8f5ce9 (Resolve Conflict)
     | '/download'
     | '/explore'
     | '/home'
     | '/profile'
-<<<<<<< HEAD
     | '/profile/collection/$slug'
     | '/profile/collection'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/player/$id'
     | '/download'
     | '/explore'
     | '/home'
@@ -121,23 +114,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-=======
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/player/$id' | '/download' | '/explore' | '/home' | '/profile'
-  id:
-    | '__root__'
-    | '/'
     | '/player/$id'
->>>>>>> b8f5ce9 (Resolve Conflict)
     | '/download/'
     | '/explore/'
     | '/home/'
     | '/profile/'
-<<<<<<< HEAD
     | '/profile/collection/$slug'
     | '/profile/collection/'
-=======
->>>>>>> b8f5ce9 (Resolve Conflict)
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -188,7 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
+    '/player/$id': {
+      id: '/player/$id'
+      path: '/player/$id'
+      fullPath: '/player/$id'
+      preLoaderRoute: typeof PlayerIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/collection/': {
       id: '/profile/collection/'
       path: '/profile/collection'
@@ -201,13 +190,6 @@ declare module '@tanstack/react-router' {
       path: '/profile/collection/$slug'
       fullPath: '/profile/collection/$slug'
       preLoaderRoute: typeof ProfileCollectionSlugRouteImport
-=======
-    '/player/$id': {
-      id: '/player/$id'
-      path: '/player/$id'
-      fullPath: '/player/$id'
-      preLoaderRoute: typeof PlayerIdRouteImport
->>>>>>> b8f5ce9 (Resolve Conflict)
       parentRoute: typeof rootRouteImport
     }
   }

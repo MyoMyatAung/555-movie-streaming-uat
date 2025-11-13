@@ -4,14 +4,32 @@ import Message from "@/assets/svgs/message-text.svg?react";
 import Share from "@/assets/svgs/share.svg?react";
 import Star from "@/assets/svgs/star.svg?react";
 
+import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { MoreMovie } from "./MoreMovie";
 import { SelectEpisode } from "./SelectEpisode";
-export function MovieInfo() {
+
+interface MovieInfoProps {
+  setOpenDownloadSheet: Dispatch<SetStateAction<boolean>>;
+  setOpenFeedbackSheet: Dispatch<SetStateAction<boolean>>;
+}
+
+export function MovieInfo({
+  setOpenDownloadSheet,
+  setOpenFeedbackSheet,
+}: MovieInfoProps) {
   const { t } = useTranslation();
 
+  const handleClickDownload = () => {
+    setOpenDownloadSheet(true);
+  };
+
+  const handleClickFeedback = () => {
+    setOpenFeedbackSheet(true);
+  };
+
   return (
-    <div className="p-2 overflow-y-auto">
+    <div className="overflow-y-auto p-2">
       <h1 className="text-white">Moana (2016)</h1>
       <div className="flex w-fit items-start divide-x divide-solid divide-gray-400 text-white">
         <div className="w-fit pr-2">2016</div>
@@ -45,13 +63,19 @@ export function MovieInfo() {
       </p>
       <button className="mt-2 text-blue-400">Read more</button>
       <div className="mt-4 flex justify-between gap-4">
-        <button className="flex flex-col items-center gap-2 text-white">
+        <button
+          onClick={handleClickDownload}
+          className="flex flex-col items-center gap-2 text-white"
+        >
           <Download /> {t("movie-detail.actions.download")}
         </button>
         <button className="flex flex-col items-center gap-2 text-white">
           <HeartActive /> {t("movie-detail.actions.bookmark")}
         </button>
-        <button className="flex flex-col items-center gap-2 text-white">
+        <button
+          onClick={handleClickFeedback}
+          className="flex flex-col items-center gap-2 text-white"
+        >
           <Message /> {t("movie-detail.actions.feedback")}
         </button>
         <button className="flex flex-col items-center gap-2 text-white">

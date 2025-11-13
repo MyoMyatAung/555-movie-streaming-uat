@@ -217,20 +217,34 @@
       "resendOTPWithTimer": "重新发送验证码 ({{time}}秒)"
     }
   },
-    "movie-detail": {
+  "movie-detail": {
     "comments": {
       "title": "评论",
       "bullet": "子弹评论"
     },
     "info": {
       "title": "简介",
-      "more": "更多类似内容"
+      "more": "更多类似内容",
+      "downloadSeries": "下载剧集"
     },
     "actions": {
       "download": "下载",
       "bookmark": "书签",
       "share": "分享",
-      "feedback": "反馈"
+      "feedback": "反馈",
+      "cancel": "取消",
+      "selectAll": "全选",
+      "submit": "提交"
+    },
+    "issues": {
+      "header": "反馈/影片请求",
+      "title": "选择您遇到的问题",
+      "description": "问题的详细描述",
+      "required": "必填"
+    },
+    "error": {
+      "refresh": "刷新一下",
+      "switch": "切换资源"
     }
   }
 }

@@ -221,13 +221,27 @@
     },
     "info": {
       "title": "Info",
-      "more": "More similar content"
+      "more": "More similar content",
+      "downloadSeries": "Download Series"
     },
     "actions": {
       "download": "Download",
       "bookmark": "Bookmark",
       "share": "Share",
-      "feedback": "Feedback"
+      "feedback": "Feedback",
+      "cancel": "Cancel",
+      "selectAll": "Select All",
+      "submit": "Submit"
+    },
+    "issues": {
+      "header": "Feedback/Movie Request",
+      "title": "Select the problem you encountered.",
+      "description": "Detailed description of the issue",
+      "required": "Required"
+    },
+    "error": {
+      "refresh": "Refresh",
+      "switch": "Switch Resources"
     }
   }
 }

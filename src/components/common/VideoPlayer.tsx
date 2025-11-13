@@ -1,6 +1,6 @@
 import Artplayer from "artplayer";
 import Hls from "hls.js";
-import { useEffect, useRef, type ReactNode } from "react";
+import React, { useEffect, useRef, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
 interface LayerConfig {
@@ -19,7 +19,7 @@ interface VideoPlayerProps {
   layers?: LayerConfig[];
 }
 
-export default function VideoPlayer({
+function VideoPlayer({
   url,
   poster,
   title,
@@ -66,7 +66,7 @@ export default function VideoPlayer({
       layers: layers.map((layer) => ({
         name: layer.name,
         html: "",
-        style: layer.style as Record<string, string> || {},
+        style: (layer.style as Record<string, string>) || {},
         mounted: (layerElement: HTMLElement) => {
           // Create a React root and render the component
           const root = createRoot(layerElement);
@@ -84,13 +84,45 @@ export default function VideoPlayer({
             // Optional: Handle HLS events
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
               console.log("HLS manifest loaded");
+              
+              // Enable quality selector if multiple levels are available
+              if (hls.levels.length > 1) {
+                const qualities = hls.levels.map((level, index) => ({
+                  default: index === 0,
+                  html: level.height ? `${level.height}p` : `Level ${index}`,
+                  url: url,
+                  level: index,
+                }));
+
+                // Add Auto quality option
+                qualities.unshift({
+                  default: false,
+                  html: 'Auto',
+                  url: url,
+                  level: -1,
+                });
+
+                art.quality = qualities;
+                
+                // Set up quality switching
+                art.on('quality', (...args: unknown[]) => {
+                  const quality = args[0] as { level: number };
+                  if (quality.level === -1) {
+                    hls.currentLevel = -1; // Auto quality
+                  } else {
+                    hls.currentLevel = quality.level;
+                  }
+                });
+              }
             });
 
             hls.on(Hls.Events.ERROR, (_event, data) => {
               if (data.fatal) {
                 switch (data.type) {
                   case Hls.ErrorTypes.NETWORK_ERROR:
-                    console.error("Network error encountered, trying to recover");
+                    console.error(
+                      "Network error encountered, trying to recover",
+                    );
                     hls.startLoad();
                     break;
                   case Hls.ErrorTypes.MEDIA_ERROR:
@@ -140,3 +172,5 @@ export default function VideoPlayer({
 
   return <div ref={$container} className="aspect-video w-full"></div>;
 }
+
+export default React.memo(VideoPlayer);

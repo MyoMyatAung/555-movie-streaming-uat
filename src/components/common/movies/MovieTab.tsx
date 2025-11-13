@@ -1,13 +1,25 @@
 import BulletComment from "@/assets/svgs/bulletscreens.svg?react";
+import ActiveBulletComment from "@/assets/svgs/icon-bulletactive.svg?react";
 import { useTranslation } from "react-i18next";
 
 interface MovieTabProps {
   activeTab: "tab-1" | "tab-2";
   setActiveTab: React.Dispatch<React.SetStateAction<"tab-1" | "tab-2">>;
+  activeBulletComment: boolean;
+  setActiveBulletComment: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function MovieTab({ activeTab, setActiveTab }: MovieTabProps) {
+export function MovieTab({
+  activeTab,
+  setActiveTab,
+  activeBulletComment,
+  setActiveBulletComment,
+}: MovieTabProps) {
   const { t } = useTranslation();
+
+  const handleToggleBulletComment = () => {
+    setActiveBulletComment((prev) => !prev);
+  };
 
   return (
     <div className="flex w-full items-center justify-between">
@@ -40,11 +52,14 @@ export function MovieTab({ activeTab, setActiveTab }: MovieTabProps) {
           )}
         </div>
       </div>
-      <button className="mr-2 flex cursor-pointer items-center gap-2">
+      <button
+        onClick={handleToggleBulletComment}
+        className="mr-2 flex cursor-pointer items-center gap-2"
+      >
         <span className="text-sm text-white">
           {t("movie-detail.comments.bullet")}
         </span>
-        <BulletComment />
+        {activeBulletComment ? <ActiveBulletComment /> : <BulletComment />}
       </button>
     </div>
   );
