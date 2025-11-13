@@ -1,9 +1,10 @@
+import FilterIcon from "@/assets/svgs/icon-filter.svg?react";
+import SearchIcon from "@/assets/svgs/icon-search.svg?react";
 import HomeLayout from "@/components/common/layouts/HomeLayout";
 import { MovieCard } from "@/components/common/movies/MovieCard";
 import { Button } from "@/components/ui/button";
 import { mockContentSections } from "@/data/mockMovies";
 import { createFileRoute } from "@tanstack/react-router";
-import { SearchIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export const Route = createFileRoute("/explore/")({
@@ -86,80 +87,64 @@ function RouteComponent() {
     <HomeLayout noHeader>
       <div className="flex h-full flex-col">
         {/* Header - Sticky Top Navigation and Category Tabs */}
-        <div className="sticky top-0 z-20">
-          {/* Collapsed Filter Bar - Behind category tabs */}
-          <div
-            className={`absolute top-full right-0 left-0 z-0 bg-linear-to-b from-[#141416] to-[#1F1F1F]/95 backdrop-blur-sm transition-all duration-300 ease-in-out ${
-              isScrolled
-                ? "translate-y-0 opacity-100"
-                : "-translate-y-full opacity-0"
-            }`}
-          >
-            <div className="scrollbar-hide flex h-12 items-center gap-2 overflow-x-auto px-4">
-              <span className="shrink-0 text-sm text-white/80">
-                Category • Country • Year • Sort
-              </span>
-              <Button className="shrink-0 rounded-full bg-white/10 p-2 hover:bg-white/20">
-                <svg
-                  className="size-4 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                  />
-                </svg>
-              </Button>
+        <div className="sticky top-0 z-20 bg-transparent">
+          {/* Top Navigation */}
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex gap-6">
+              <button className="text-lg font-semibold text-white">
+                Library
+              </button>
+              <button className="text-base font-normal text-[#AAAAAA]">
+                Album
+              </button>
+              <button className="text-base font-normal text-[#AAAAAA]">
+                Weekly List
+              </button>
+              <button className="text-base font-normal text-[#AAAAAA]">
+                Ranking
+              </button>
+            </div>
+
+            <Button
+              variant="ghost"
+              className="relative size-10 rounded-full bg-white/5 hover:bg-white/10"
+            >
+              <SearchIcon className="size-5 text-white" />
+            </Button>
+          </div>
+
+          {/* Category Tabs */}
+          <div className="scrollbar-hide overflow-x-auto px-4">
+            <div className="flex gap-6 pb-2">
+              {["All", "Movies", "TV Series", "Documentary", "Animation"].map(
+                (tab) => (
+                  <button
+                    key={tab}
+                    className={`pb-1.5 text-base font-medium whitespace-nowrap ${
+                      tab === "All"
+                        ? "border-b-[3px] border-[#6BA6FF] text-white"
+                        : "text-[#AAAAAA]"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ),
+              )}
             </div>
           </div>
 
-          <div className="relative z-10 bg-linear-to-b from-[#141416] to-[#1F1F1F]/95 backdrop-blur-sm">
-            {/* Top Navigation */}
-            <div className="flex items-center justify-between px-4 py-3">
-              <div className="flex gap-6">
-                <button className="text-lg font-semibold text-white">
-                  Library
-                </button>
-                <button className="text-lg font-normal text-white/60">
-                  Album
-                </button>
-                <button className="text-lg font-normal text-white/60">
-                  Weekly List
-                </button>
-                <button className="text-lg font-normal text-white/60">
-                  Ranking
-                </button>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full hover:bg-white/10"
-              >
-                <SearchIcon className="size-5 text-white" />
-              </Button>
-            </div>
-
-            {/* Category Tabs */}
-            <div className="scrollbar-hide overflow-x-auto px-4">
-              <div className="flex gap-6 border-b border-white/10 pb-2">
-                {["All", "Movies", "TV Series", "Documentary", "Animation"].map(
-                  (tab) => (
-                    <button
-                      key={tab}
-                      className={`pb-2 text-base font-medium whitespace-nowrap ${
-                        tab === "All"
-                          ? "border-b-2 border-blue-500 text-white"
-                          : "text-white/60"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ),
-                )}
+          {/* Collapsed Filter Bar - Appears when scrolled */}
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              isScrolled ? "max-h-14 opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="flex items-center justify-center px-4 py-1.5 pb-3">
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+                <span className="shrink-0 text-sm text-white">
+                  Category • Country • Year • Sort
+                </span>
+                <FilterIcon className="size-4 text-white" />
               </div>
             </div>
           </div>
@@ -167,13 +152,9 @@ function RouteComponent() {
 
         {/* Scrollable Content Area */}
         <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
-          {/* Expanded Filters - Part of scrollable content */}
-          <div
-            ref={expandedFiltersRef}
-            className="bg-linear-to-b from-[#141416] to-[#1F1F1F]/95 backdrop-blur-sm"
-          >
+          {/* Expanded Filters */}
+          <div ref={expandedFiltersRef}>
             <div className="space-y-3 px-4 py-4">
-              {/* Category Filters */}
               <div className="scrollbar-hide flex gap-2 overflow-x-auto">
                 {categoryFilters.map((filter) => (
                   <Button
