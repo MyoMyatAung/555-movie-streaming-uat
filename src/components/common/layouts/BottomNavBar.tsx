@@ -98,11 +98,7 @@ function BottomNavbar({ isLoading = false }: BottomNavbarProps) {
                   }}
                   transition={{ duration: 0.2 }}
                 >
-                  {showSkeleton ? (
-                    <div className="skeleton-gradient h-[20px] w-12 animate-pulse rounded" />
-                  ) : (
-                    item.label
-                  )}
+                  {item.label}
                 </motion.p>
               </Link>
             </motion.div>

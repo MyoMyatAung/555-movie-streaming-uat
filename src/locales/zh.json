@@ -28,12 +28,23 @@
         "trendingNow": "热门推荐",
         "seeAll": "查看全部"
       }
+    },
+    "continueWatching": {
+      "title": "继续观看",
+      "unselectAll": "全不选",
+      "selectAll": "全选",
+      "remove": "移除",
+      "confirmRemoveTitle": "删除所选历史记录？",
+      "confirmRemoveMessage": "您确定要删除所选的观看历史吗？",
+      "confirmRemoveButton": "移除",
+      "cancelButton": "返回"
     }
   },
   "common": {
     "hello": "你好",
     "optional": "可选",
-    "continue": "继续"
+    "continue": "继续",
+    "play": "播放"
   },
 
   "auth": {

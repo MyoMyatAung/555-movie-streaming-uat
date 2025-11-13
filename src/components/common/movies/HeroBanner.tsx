@@ -1,6 +1,6 @@
+import PlayIcon from "@/assets/svgs/icon-play.svg?react";
 import { Button } from "@/components/ui/button";
 import type { HeroBannerItem } from "@/types/movie";
-import { PlayIcon } from "lucide-react";
 import type { PanInfo } from "motion/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
@@ -77,7 +77,7 @@ export function HeroBanner({
               className="h-full w-full object-cover"
             />
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
           </motion.div>
         </AnimatePresence>
 

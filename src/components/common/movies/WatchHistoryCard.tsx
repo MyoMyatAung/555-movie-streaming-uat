@@ -1,8 +1,9 @@
+import PlayIcon from "@/assets/svgs/icon-play.svg?react";
 import { Button } from "@/components/ui/button";
 import type { WatchList } from "@/lib/db";
 import { cn } from "@/lib/utils";
 import type { ContentItem } from "@/types/movie";
-import { CheckIcon, PlayIcon } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 
 interface WatchHistoryCardProps {
   item: ContentItem;
@@ -45,11 +46,7 @@ export function WatchHistoryCard({
   return (
     <div
       onClick={handleCardClick}
-      className={cn(
-        "flex gap-3",
-        isSelected && "bg-white/15 ring-2 ring-blue-500",
-        className,
-      )}
+      className={cn("flex items-center gap-3", className)}
     >
       {/* Thumbnail */}
       <div className="relative h-[80px] w-[120px] shrink-0 overflow-hidden rounded-lg">
@@ -61,30 +58,15 @@ export function WatchHistoryCard({
 
         {/* HD/4K Badge */}
         {item.badge?.type === "exclusive" && (
-          <div className="absolute top-0 right-0 rounded-bl-sm bg-blue-500 px-1.5 py-0.5 text-xs text-white">
+          <div className="bg-primary-blue absolute top-0 right-0 rounded-bl-sm px-1.5 py-0.5 text-xs text-white">
             HD
-          </div>
-        )}
-
-        {/* Play Icon (only show when not in selection mode) */}
-        {!isSelectionMode && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity hover:opacity-100">
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                onPlay?.(item.id);
-              }}
-              className="flex size-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30"
-            >
-              <PlayIcon className="size-6 fill-white text-white" />
-            </Button>
           </div>
         )}
 
         {/* Progress Bar */}
         <div className="absolute inset-x-0 bottom-0 h-1 bg-white/20">
           <div
-            className="h-full bg-blue-500"
+            className="bg-primary-blue h-full"
             style={{ width: `${getProgressPercentage()}%` }}
           />
         </div>
@@ -107,7 +89,7 @@ export function WatchHistoryCard({
       </div>
 
       {/* Selection Checkbox/Icon */}
-      {isSelectionMode && (
+      {isSelectionMode ? (
         <div className="flex items-center">
           <div
             onClick={(e) => {
@@ -117,13 +99,22 @@ export function WatchHistoryCard({
             className={cn(
               "flex size-6 items-center justify-center rounded-full border-2 transition-all",
               isSelected
-                ? "border-blue-500 bg-blue-500"
-                : "border-white/30 bg-transparent",
+                ? "border-primary-blue bg-primary-blue"
+                : "border-white/30 bg-white/10",
             )}
           >
             {isSelected && <CheckIcon className="size-4 text-white" />}
           </div>
         </div>
+      ) : (
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className="flex size-9.5 items-center justify-center rounded-full bg-white/20 transition-colors hover:bg-white/30"
+        >
+          <PlayIcon className="size-5 text-white" />
+        </Button>
       )}
     </div>
   );

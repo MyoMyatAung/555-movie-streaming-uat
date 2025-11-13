@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { ContentItem } from "@/types/movie";
-import { PlayIcon } from "lucide-react";
+import PlayCircleButton from "./PlayCircleButton";
 
 interface ContinueWatchingCardProps {
   item: ContentItem;
@@ -14,7 +14,7 @@ const badgeLabels: Record<string, string> = {
   exclusive: "独播",
 };
 
-export function ContinueWatchingCard({
+export function ContinueWatchingHomeCard({
   item,
   progress = 0,
   onClick,
@@ -39,12 +39,7 @@ export function ContinueWatchingCard({
           className="h-full w-full object-cover"
         />
 
-        {/* Play Icon Overlay - Always visible on hover */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100">
-          <div className="flex size-14 items-center justify-center rounded-full bg-black/30 backdrop-blur-[1px]">
-            <PlayIcon className="ml-1 size-7 text-white" />
-          </div>
-        </div>
+        <PlayCircleButton />
 
         {/* Exclusive Badge - shown at bottom left above progress bar */}
         {item.badge?.type === "exclusive" && (

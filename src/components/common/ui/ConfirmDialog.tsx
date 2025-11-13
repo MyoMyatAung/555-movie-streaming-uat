@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -33,42 +33,44 @@ export function ConfirmDialog({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onCancel}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-70 bg-black/70"
           />
 
           {/* Dialog */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", duration: 0.3 }}
-            className="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-md -translate-y-1/2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", duration: 0.3, bounce: 0.2 }}
+            className="fixed inset-x-6 top-1/2 z-70 mx-auto max-w-sm -translate-y-1/2"
           >
             <div
               className={cn(
-                "rounded-2xl bg-[#2A2A2E] p-6 shadow-xl",
+                "bg-dark-gray rounded-2xl p-6 shadow-2xl backdrop-blur-xl",
                 className,
               )}
             >
-              {/* Title */}
-              <h2 className="mb-3 text-xl font-bold text-white">{title}</h2>
+              <h2 className="mb-4 text-lg font-bold text-neutral-50">
+                {title}
+              </h2>
 
-              {/* Message */}
-              <p className="mb-6 text-base leading-relaxed text-white/70">
+              <p className="mb-8 text-base leading-relaxed text-neutral-50">
                 {message}
               </p>
 
               {/* Actions */}
-              <div className="flex gap-3">
+              <div className="flex justify-end gap-3">
                 <Button
+                  variant="ghost"
                   onClick={onCancel}
-                  className="flex-1 rounded-xl bg-white/10 py-3 text-base font-medium text-white hover:bg-white/20"
+                  className="text-base text-neutral-400 hover:bg-transparent hover:text-neutral-50"
                 >
                   {cancelText}
                 </Button>
                 <Button
+                  variant="ghost"
                   onClick={onConfirm}
-                  className="flex-1 rounded-xl bg-blue-500 py-3 text-base font-semibold text-white hover:bg-blue-600"
+                  className="text-primary-blue hover:text-primary-blue/90 text-base hover:bg-transparent"
                 >
                   {confirmText}
                 </Button>
@@ -80,4 +82,3 @@ export function ConfirmDialog({
     </AnimatePresence>
   );
 }
-

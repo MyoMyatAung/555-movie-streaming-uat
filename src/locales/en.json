@@ -28,12 +28,23 @@
         "trendingNow": "Trending Now",
         "seeAll": "See all"
       }
+    },
+    "continueWatching": {
+      "title": "Continue Watching",
+      "unselectAll": "Unselect All",
+      "selectAll": "Select All",
+      "remove": "Remove",
+      "confirmRemoveTitle": "Remove Selected History?",
+      "confirmRemoveMessage": "Are you sure you want to remove selected watch history?",
+      "confirmRemoveButton": "Yes, Remove",
+      "cancelButton": "Go back"
     }
   },
   "common": {
     "hello": "Hello",
     "optional": "Optional",
-    "continue": "Continue"
+    "continue": "Continue",
+    "play": "Play"
   },
   "auth": {
     "signUp": {

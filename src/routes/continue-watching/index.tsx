@@ -1,6 +1,9 @@
+import XIcon from "@/assets/svgs/icon-close.svg?react";
+import ListIcon from "@/assets/svgs/icon-select.svg?react";
 import HomeLayout from "@/components/common/layouts/HomeLayout";
 import PageHeader from "@/components/common/layouts/PageHeader";
 import { WatchHistoryCard } from "@/components/common/movies/WatchHistoryCard";
+import SheetModal from "@/components/common/SheetModal";
 import { ConfirmDialog } from "@/components/common/ui/ConfirmDialog";
 import { EmptyState } from "@/components/common/ui/EmptyState";
 import { Button } from "@/components/ui/button";
@@ -11,8 +14,8 @@ import type { ContentItem } from "@/types/movie";
 import { groupByDateCategory, type DateCategory } from "@/utils/dateHelpers";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
-import { ListIcon, XIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/continue-watching/")({
   component: RouteComponent,
@@ -23,6 +26,8 @@ function RouteComponent() {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showSelectionSheet, setShowSelectionSheet] = useState(false);
+  const { t } = useTranslation();
 
   // Fetch watch list from IndexedDB
   const watchListFromIndexDB = useLiveQuery(() =>
@@ -57,14 +62,26 @@ function RouteComponent() {
     return groupByDateCategory(watchListData);
   }, [watchListData]);
 
-  // Map grouped data to ContentItem[]
+  // Map grouped data to ContentItem[] (deduplicated by vod_id)
   const getItemsForCategory = (category: DateCategory): ContentItem[] => {
     const watchListItems = groupedByDate.get(category) || [];
-    return watchListItems
-      .map((watchListItem) =>
-        watchHistory.find((item) => item.id === watchListItem.vod_id),
-      )
-      .filter((item): item is ContentItem => item !== undefined);
+    const seenVodIds = new Set<string>();
+    const items: ContentItem[] = [];
+
+    for (const watchListItem of watchListItems) {
+      // Skip if we've already seen this vod_id in this category
+      if (seenVodIds.has(watchListItem.vod_id)) continue;
+
+      const contentItem = watchHistory.find(
+        (item) => item.id === watchListItem.vod_id,
+      );
+      if (contentItem) {
+        seenVodIds.add(watchListItem.vod_id);
+        items.push(contentItem);
+      }
+    }
+
+    return items;
   };
 
   const handleBack = () => {
@@ -77,8 +94,12 @@ function RouteComponent() {
   };
 
   const handleToggleSelectionMode = () => {
-    setIsSelectionMode(!isSelectionMode);
-    setSelectedIds([]);
+    const newSelectionMode = !isSelectionMode;
+    setIsSelectionMode(newSelectionMode);
+    setShowSelectionSheet(newSelectionMode);
+    if (!newSelectionMode) {
+      setSelectedIds([]);
+    }
   };
 
   const handleSelect = (itemId: string) => {
@@ -118,6 +139,7 @@ function RouteComponent() {
 
       setSelectedIds([]);
       setIsSelectionMode(false);
+      setShowSelectionSheet(false);
       setShowConfirmDialog(false);
     } catch (error) {
       console.error("Failed to remove items from watchlist:", error);
@@ -139,12 +161,12 @@ function RouteComponent() {
       <HomeLayout
         customHeader={
           <PageHeader
-            title="Continue Watching"
+            title={t("pages.continueWatching.title")}
             onBack={() => navigate({ to: "/home" })}
           />
         }
       >
-        <div className="flex h-full flex-col bg-gradient-to-b from-[#141416] to-[#1F1F1F]">
+        <div className="flex h-full flex-col">
           <EmptyState title="There is no history yet." />
         </div>
       </HomeLayout>
@@ -155,7 +177,7 @@ function RouteComponent() {
     <HomeLayout
       customHeader={
         <PageHeader
-          title="Continue Watching"
+          title={t("pages.continueWatching.title")}
           onBack={handleBack}
           rightAction={{
             icon: isSelectionMode ? (
@@ -193,13 +215,22 @@ function RouteComponent() {
                 </h2>
                 <div className="space-y-3 px-4 py-3">
                   {items.map((item) => {
-                    const currentVideo = watchListData.find(
-                      (watchList: { vod_id: string }) =>
-                        watchList.vod_id === item.id,
-                    );
+                    // Find the most recent watchlist item for this vod_id in this category
+                    const categoryWatchListItems =
+                      groupedByDate.get(category) || [];
+                    const currentVideo = categoryWatchListItems
+                      .filter(
+                        (watchList: { vod_id: string }) =>
+                          watchList.vod_id === item.id,
+                      )
+                      .sort(
+                        (a: { updated_at: Date }, b: { updated_at: Date }) =>
+                          new Date(b.updated_at).getTime() -
+                          new Date(a.updated_at).getTime(),
+                      )[0];
                     return (
                       <WatchHistoryCard
-                        key={`${item.id}-${currentVideo?.ep_id || ""}`}
+                        key={`${item.id}-${category}-${currentVideo?.ep_id || ""}`}
                         item={item}
                         watchListItem={currentVideo}
                         isSelected={selectedIds.includes(item.id)}
@@ -215,38 +246,53 @@ function RouteComponent() {
           })}
         </div>
 
-        {/* Bottom Action Buttons (only show in selection mode) */}
-        {isSelectionMode && (
-          <div className="sticky bottom-0 flex gap-3 border-t border-white/10 bg-gradient-to-t from-[#141416] to-[#1F1F1F] px-4 pt-4">
-            <Button
-              onClick={handleSelectAll}
-              className="flex-1 rounded-xl bg-white/10 py-3 text-base font-medium text-white hover:bg-white/20"
-            >
-              {selectedIds.length === watchHistory.length
-                ? "Deselect All"
-                : "Select all"}
-            </Button>
-            <Button
-              onClick={handleRemove}
-              disabled={selectedIds.length === 0}
-              className="flex-1 rounded-xl bg-blue-500 py-3 text-base font-semibold text-white hover:bg-blue-600 disabled:opacity-50"
-            >
-              Remove {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
-            </Button>
-          </div>
-        )}
-
         {/* Confirm Dialog */}
         <ConfirmDialog
           isOpen={showConfirmDialog}
-          title="Remove Selected History ?"
-          message="Are sure you want to remove selected watch history ?"
-          confirmText="Yes, Remove"
-          cancelText="Go back"
+          title={t("pages.continueWatching.confirmRemoveTitle")}
+          message={t("pages.continueWatching.confirmRemoveMessage")}
+          confirmText={t("pages.continueWatching.confirmRemoveButton")}
+          cancelText={t("pages.continueWatching.cancelButton")}
           onConfirm={handleConfirmRemove}
           onCancel={handleCancelRemove}
         />
       </div>
+
+      {/* Selection Sheet Modal */}
+      <SheetModal
+        detent="content"
+        showModal={showSelectionSheet}
+        setShowModal={(value) => {
+          setShowSelectionSheet(value);
+          if (!value) {
+            setIsSelectionMode(false);
+            setSelectedIds([]);
+          }
+        }}
+        containerClassName="!bg-[#202229]"
+        disableBackdropClick={true}
+      >
+        <div className="h-[123px] px-4 pt-3">
+          <div className="flex gap-3">
+            <Button
+              onClick={handleSelectAll}
+              className="h-11 flex-1 rounded-lg bg-white/10 py-2.5 text-base font-semibold text-white hover:bg-white/20"
+            >
+              {selectedIds.length === watchHistory.length
+                ? t("pages.continueWatching.unselectAll")
+                : t("pages.continueWatching.selectAll")}
+            </Button>
+            <Button
+              onClick={handleRemove}
+              disabled={selectedIds.length === 0}
+              className="bg-primary-blue hover:bg-primary-blue/90 h-11 flex-1 rounded-lg py-2.5 text-base font-semibold text-white disabled:opacity-50"
+            >
+              {t("pages.continueWatching.remove")}{" "}
+              {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
+            </Button>
+          </div>
+        </div>
+      </SheetModal>
     </HomeLayout>
   );
 }

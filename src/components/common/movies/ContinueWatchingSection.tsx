@@ -1,9 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import type { WatchList } from "@/lib/db";
 import type { ContentItem } from "@/types/movie";
-import { ChevronRightIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { ContinueWatchingCard } from "./ContinueWatchingCard";
+import { ContinueWatchingHomeCard } from "./ContinueWatchingHomeCard";
 
 interface ContinueWatchingSectionProps {
   title?: string;
@@ -66,7 +65,6 @@ export function ContinueWatchingSection({
           className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300"
         >
           {t("pages.home.sections.seeAll")}
-          <ChevronRightIcon className="size-4" />
         </button>
       </div>
 
@@ -89,7 +87,7 @@ export function ContinueWatchingSection({
                 key={`${item.id}-${currentVideo?.ep_id || ""}`}
                 className="last:pr-4"
               >
-                <ContinueWatchingCard
+                <ContinueWatchingHomeCard
                   item={item}
                   progress={progress}
                   onClick={() => onItemClick?.(item.id)}

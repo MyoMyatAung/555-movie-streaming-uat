@@ -1,7 +1,9 @@
+import PlayIcon from "@/assets/svgs/icon-play.svg?react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ContentItem } from "@/types/movie";
-import { HeartIcon, PlayIcon, StarIcon } from "lucide-react";
+import { HeartIcon, StarIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import DividerStroke from "./DividerStroke";
 
 interface MovieDetailCardProps {
@@ -19,6 +21,7 @@ export function MovieDetailCard({
   isFavorite = false,
   className,
 }: MovieDetailCardProps) {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(
@@ -103,10 +106,10 @@ export function MovieDetailCard({
               e.stopPropagation();
               onPlay?.();
             }}
-            className="h-7.5 flex-1 gap-2 rounded-full bg-white/20 text-white hover:bg-white/30"
+            className="h-7.5 flex-1 gap-1 rounded-full bg-white/20 text-white hover:bg-white/30"
           >
-            <PlayIcon className="size-4" />
-            Play
+            <PlayIcon className="size-5" />
+            {t("common.play")}
           </Button>
         </div>
       </div>

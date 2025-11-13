@@ -12,6 +12,7 @@ function SheetModal({
   setShowModal,
   snapPoints = defaultSnapPoints,
   disableDrag = false,
+  disableBackdropClick = false,
   containerClassName,
   title,
   onClose,
@@ -22,6 +23,7 @@ function SheetModal({
   setShowModal: (showModal: boolean) => void;
   snapPoints?: Array<number>;
   disableDrag?: boolean;
+  disableBackdropClick?: boolean;
   containerClassName?: string;
   title?: string;
   onClose?: () => void;
@@ -63,9 +65,11 @@ function SheetModal({
       onClick={(e) => {
         e.stopPropagation();
       }}
+      style={{ zIndex: 60 }}
     >
       <Sheet.Container
-        className={cn("mx-auto max-w-md !rounded-t-3xl", containerClassName)}
+        className={cn("mx-auto max-w-md rounded-t-3xl!", containerClassName)}
+        style={{ zIndex: 60 }}
       >
         <Sheet.Header />
         {title && (
@@ -89,10 +93,14 @@ function SheetModal({
         <Sheet.Content>{children}</Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop
+        className={cn(disableBackdropClick && "pointer-events-none!")}
+        style={{ zIndex: 40 }}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          setShowModal(false);
+          if (!disableBackdropClick) {
+            setShowModal(false);
+          }
         }}
       />
     </Sheet>
