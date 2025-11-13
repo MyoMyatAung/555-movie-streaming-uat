@@ -25,14 +25,14 @@ export function ContinueWatchingCard({
   return (
     <div
       className={cn(
-        "group relative flex-shrink-0 cursor-pointer transition-transform",
+        "group relative shrink-0 cursor-pointer transition-transform",
         "w-[280px]",
         className,
       )}
       onClick={onClick}
     >
       {/* Image Container */}
-      <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
+      <div className="relative aspect-video overflow-hidden rounded-xl">
         <img
           src={item.imageUrl}
           alt={item.title}

@@ -70,7 +70,7 @@ function Header({ isLoading = false }: HeaderProps) {
           {/* Notification Bell */}
           <Button
             variant="ghost"
-            className="relative rounded-full bg-white/5 p-2.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] hover:bg-white/10"
+            className="relative size-10 rounded-full bg-white/5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] hover:bg-white/10"
           >
             <BellIcon className="size-5 text-white" />
             {hasNotifications && (

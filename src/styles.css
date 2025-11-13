@@ -57,6 +57,12 @@ code {
   --bottom-nav-height: 80px;
 
   --primary-blue: oklch(66.6% 0.183 251.71);
+
+  /* Skeleton gradient colors */
+  --skeleton-gradient-from: #d5d9ff;
+  --skeleton-gradient-to: #d5d9ff;
+  --skeleton-gradient-from-opacity: 0.06;
+  --skeleton-gradient-to-opacity: 0.02;
 }
 
 .dark {
@@ -133,6 +139,8 @@ code {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-primary-blue: var(--primary-blue);
   --color-dark-gray: #202229;
+  --color-skeleton-gradient-from: var(--skeleton-gradient-from);
+  --color-skeleton-gradient-to: var(--skeleton-gradient-to);
 }
 
 @layer base {
@@ -156,6 +164,15 @@ code {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
+}
+
+/* Skeleton loading gradient */
+.skeleton-gradient {
+  background: linear-gradient(
+    90deg,
+    rgba(213, 217, 255, 0.06) 0%,
+    rgba(213, 217, 255, 0.02) 100%
+  );
 }
 
 input:-webkit-autofill,

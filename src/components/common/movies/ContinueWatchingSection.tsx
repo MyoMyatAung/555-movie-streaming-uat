@@ -25,7 +25,7 @@ const ContinueWatchingSectionSkeleton = () => {
       <div className="scrollbar-hide overflow-x-auto px-4">
         <div className="flex gap-2.5 pb-4">
           {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="flex-shrink-0">
+            <div key={index} className="shrink-0">
               <Skeleton className="h-[157px] w-[280px] rounded-lg" />
             </div>
           ))}

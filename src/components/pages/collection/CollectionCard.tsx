@@ -9,9 +9,9 @@ interface CollectionCardProps {
 
 function CollectionCard({ item }: CollectionCardProps) {
   return (
-    <div className="grid w-full grid-cols-12 items-center gap-x-3 rounded-xl border-1 border-white/10 bg-white/1 p-3">
+    <div className="grid w-full grid-cols-12 items-center gap-x-3 rounded-xl border border-white/10 bg-white/1 p-3">
       {/* Image Container */}
-      <div className="relative col-span-4 aspect-[3/2] overflow-hidden rounded-md">
+      <div className="relative col-span-4 aspect-3/2 overflow-hidden rounded-md">
         {!item.isDefault ? (
           <img
             src={item.imageUrl ?? CollectionCover}
@@ -36,7 +36,7 @@ function CollectionCard({ item }: CollectionCardProps) {
           <p className="text-lg font-medium">{item.title}</p>
           <div className="flex items-center">
             <p className="text-sm">{item.videoCount} Videos</p>
-            <div className="mx-2 h-5 border-[1px] border-l border-white/12"></div>
+            <div className="mx-2 h-5 border border-l border-white/12"></div>
             <div className="flex items-center gap-x-1 text-[#888888]">
               {item.isPublic ? (
                 <GlobeIcon className="size-4" />

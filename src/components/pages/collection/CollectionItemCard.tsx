@@ -12,7 +12,7 @@ function CollectionItemCard({ item }: CollectionItemCardProps) {
   return (
     <div className="grid w-full grid-cols-12 items-center gap-x-3">
       {/* Image Container */}
-      <div className="relative col-span-4 aspect-[3/2] overflow-hidden rounded-md">
+      <div className="relative col-span-4 aspect-3/2 overflow-hidden rounded-md">
         <img
           src={item.imageUrl ?? CollectionCover}
           alt={item.title}

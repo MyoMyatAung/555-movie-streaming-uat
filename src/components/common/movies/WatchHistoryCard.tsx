@@ -52,7 +52,7 @@ export function WatchHistoryCard({
       )}
     >
       {/* Thumbnail */}
-      <div className="relative h-[80px] w-[120px] flex-shrink-0 overflow-hidden rounded-lg">
+      <div className="relative h-[80px] w-[120px] shrink-0 overflow-hidden rounded-lg">
         <img
           src={item.imageUrl}
           alt={item.title}

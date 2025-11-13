@@ -4,10 +4,21 @@ function BottomNavbarSkeleton() {
       <div className="grid grid-cols-4 items-center gap-x-8">
         {[1, 2, 3, 4].map((item) => (
           <div key={item} className="flex flex-col items-center gap-y-1">
-            {/* Icon Skeleton - size-6 (24x24) with rounded */}
-            <div className="size-6 animate-pulse rounded bg-white/10" />
-            {/* Label Skeleton - text-sm height */}
-            <div className="h-[20px] w-12 animate-pulse rounded bg-white/10" />
+            {/* Only show skeleton for the 4th item (Profile) */}
+            {item === 4 ? (
+              <>
+                {/* Icon Skeleton - size-6 (24x24) with rounded */}
+                <div className="skeleton-gradient size-6 animate-pulse rounded" />
+                {/* Label Skeleton - text-sm height */}
+                <div className="skeleton-gradient h-[20px] w-12 animate-pulse rounded" />
+              </>
+            ) : (
+              <>
+                {/* Empty placeholder for other nav items */}
+                <div className="size-6" />
+                <div className="h-[20px] w-12" />
+              </>
+            )}
           </div>
         ))}
       </div>
