@@ -14,7 +14,11 @@ import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
+<<<<<<< HEAD
 import { Route as ContinueWatchingIndexRouteImport } from './routes/continue-watching/index'
+=======
+import { Route as PlayerIdRouteImport } from './routes/player/$id'
+>>>>>>> feature/video-detail-screen
 import { Route as ProfileCollectionIndexRouteImport } from './routes/profile/collection/index'
 import { Route as ProfileCollectionSlugRouteImport } from './routes/profile/collection/$slug'
 
@@ -43,9 +47,15 @@ const DownloadIndexRoute = DownloadIndexRouteImport.update({
   path: '/download/',
   getParentRoute: () => rootRouteImport,
 } as any)
+<<<<<<< HEAD
 const ContinueWatchingIndexRoute = ContinueWatchingIndexRouteImport.update({
   id: '/continue-watching/',
   path: '/continue-watching/',
+=======
+const PlayerIdRoute = PlayerIdRouteImport.update({
+  id: '/player/$id',
+  path: '/player/$id',
+>>>>>>> feature/video-detail-screen
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileCollectionIndexRoute = ProfileCollectionIndexRouteImport.update({
@@ -61,7 +71,11 @@ const ProfileCollectionSlugRoute = ProfileCollectionSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+<<<<<<< HEAD
   '/continue-watching': typeof ContinueWatchingIndexRoute
+=======
+  '/player/$id': typeof PlayerIdRoute
+>>>>>>> feature/video-detail-screen
   '/download': typeof DownloadIndexRoute
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
@@ -71,7 +85,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+<<<<<<< HEAD
   '/continue-watching': typeof ContinueWatchingIndexRoute
+=======
+  '/player/$id': typeof PlayerIdRoute
+>>>>>>> feature/video-detail-screen
   '/download': typeof DownloadIndexRoute
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
@@ -82,7 +100,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+<<<<<<< HEAD
   '/continue-watching/': typeof ContinueWatchingIndexRoute
+=======
+  '/player/$id': typeof PlayerIdRoute
+>>>>>>> feature/video-detail-screen
   '/download/': typeof DownloadIndexRoute
   '/explore/': typeof ExploreIndexRoute
   '/home/': typeof HomeIndexRoute
@@ -94,7 +116,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+<<<<<<< HEAD
     | '/continue-watching'
+=======
+    | '/player/$id'
+>>>>>>> feature/video-detail-screen
     | '/download'
     | '/explore'
     | '/home'
@@ -104,7 +130,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+<<<<<<< HEAD
     | '/continue-watching'
+=======
+    | '/player/$id'
+>>>>>>> feature/video-detail-screen
     | '/download'
     | '/explore'
     | '/home'
@@ -114,7 +144,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+<<<<<<< HEAD
     | '/continue-watching/'
+=======
+    | '/player/$id'
+>>>>>>> feature/video-detail-screen
     | '/download/'
     | '/explore/'
     | '/home/'
@@ -125,7 +159,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+<<<<<<< HEAD
   ContinueWatchingIndexRoute: typeof ContinueWatchingIndexRoute
+=======
+  PlayerIdRoute: typeof PlayerIdRoute
+>>>>>>> feature/video-detail-screen
   DownloadIndexRoute: typeof DownloadIndexRoute
   ExploreIndexRoute: typeof ExploreIndexRoute
   HomeIndexRoute: typeof HomeIndexRoute
@@ -171,11 +209,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DownloadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+<<<<<<< HEAD
     '/continue-watching/': {
       id: '/continue-watching/'
       path: '/continue-watching'
       fullPath: '/continue-watching'
       preLoaderRoute: typeof ContinueWatchingIndexRouteImport
+=======
+    '/player/$id': {
+      id: '/player/$id'
+      path: '/player/$id'
+      fullPath: '/player/$id'
+      preLoaderRoute: typeof PlayerIdRouteImport
+>>>>>>> feature/video-detail-screen
       parentRoute: typeof rootRouteImport
     }
     '/profile/collection/': {
@@ -197,7 +243,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+<<<<<<< HEAD
   ContinueWatchingIndexRoute: ContinueWatchingIndexRoute,
+=======
+  PlayerIdRoute: PlayerIdRoute,
+>>>>>>> feature/video-detail-screen
   DownloadIndexRoute: DownloadIndexRoute,
   ExploreIndexRoute: ExploreIndexRoute,
   HomeIndexRoute: HomeIndexRoute,
