@@ -14,7 +14,7 @@ export interface AuthTokens {
 }
 
 export interface LoginResponse {
-  data: AuthTokens;
+  data?: AuthTokens;
   message?: string;
   status?: boolean;
 }

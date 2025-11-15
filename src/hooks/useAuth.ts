@@ -71,7 +71,10 @@ export function useAuth(): UseAuthReturn {
     error: loginError,
   } = useLogin({
     onSuccess: async (response) => {
-      console.log({ response });
+      if (!response?.data) {
+        toast.error(response?.error?.detail || t("auth.login.loginFailed"));
+        return;
+      }
       // Store tokens first so they're available for the next API call
       const authTokens = {
         access_token: response.data.access_token,
@@ -158,6 +161,9 @@ export function useAuth(): UseAuthReturn {
         toast.success(t("auth.login.loginSuccess"));
       } catch (error) {
         console.error("Login error:", error);
+        toast.error(
+          error?.response?.data?.error?.detail || t("auth.login.loginFailed"),
+        );
         throw error;
       }
     },
