@@ -251,9 +251,16 @@
       "mobileMaxLength": "Mobile number must be at most 15 digits",
       "otpRequired": "OTP is required",
       "emailRequired": "Email is required",
-      "logoutConfirmation": "Are you sure you want to log out?",
+      "logoutConfirmation": "Are you sure do you want to log out?",
+      "goBack": "Go back",
       "mobileUpdatedSuccessfully": "Mobile number updated successfully",
-      "failedToUpdateMobile": "Failed to update mobile number"
+      "failedToUpdateMobile": "Failed to update mobile number",
+      "notifications": "Notifications",
+      "teenMode": "Teen Mode",
+      "pictureInPictureMode": "Picture-in-picture mode",
+      "allowDownloadWithoutWiFi": "Allow Download Without Wi-Fi",
+      "currentVersion": "Current Version",
+      "clearCache": "Clear Cache"
     }
   },
   "forms": {

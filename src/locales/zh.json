@@ -256,8 +256,15 @@
       "otpRequired": "验证码是必填项",
       "emailRequired": "邮箱是必填项",
       "logoutConfirmation": "您确定要退出登录吗？",
+      "goBack": "返回",
       "mobileUpdatedSuccessfully": "手机号码更新成功",
-      "failedToUpdateMobile": "手机号码更新失败"
+      "failedToUpdateMobile": "手机号码更新失败",
+      "notifications": "通知",
+      "teenMode": "青少年模式",
+      "pictureInPictureMode": "画中画模式",
+      "allowDownloadWithoutWiFi": "允许无Wi-Fi下载",
+      "currentVersion": "当前版本",
+      "clearCache": "清除缓存"
     }
   },
   "forms": {

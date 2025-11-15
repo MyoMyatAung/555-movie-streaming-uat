@@ -15,6 +15,7 @@ import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
 import { Route as ContinueWatchingIndexRouteImport } from './routes/continue-watching/index'
+import { Route as ProfileSettingsIndexRouteImport } from './routes/profile/settings/index'
 import { Route as ProfileCollectionIndexRouteImport } from './routes/profile/collection/index'
 import { Route as ProfileCollectionSlugRouteImport } from './routes/profile/collection/$slug'
 
@@ -48,6 +49,11 @@ const ContinueWatchingIndexRoute = ContinueWatchingIndexRouteImport.update({
   path: '/continue-watching/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileSettingsIndexRoute = ProfileSettingsIndexRouteImport.update({
+  id: '/profile/settings/',
+  path: '/profile/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileCollectionIndexRoute = ProfileCollectionIndexRouteImport.update({
   id: '/profile/collection/',
   path: '/profile/collection/',
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileIndexRoute
   '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
   '/profile/collection': typeof ProfileCollectionIndexRoute
+  '/profile/settings': typeof ProfileSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileIndexRoute
   '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
   '/profile/collection': typeof ProfileCollectionIndexRoute
+  '/profile/settings': typeof ProfileSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/profile/': typeof ProfileIndexRoute
   '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
   '/profile/collection/': typeof ProfileCollectionIndexRoute
+  '/profile/settings/': typeof ProfileSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/profile/collection/$slug'
     | '/profile/collection'
+    | '/profile/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/profile/collection/$slug'
     | '/profile/collection'
+    | '/profile/settings'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/profile/'
     | '/profile/collection/$slug'
     | '/profile/collection/'
+    | '/profile/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   ProfileIndexRoute: typeof ProfileIndexRoute
   ProfileCollectionSlugRoute: typeof ProfileCollectionSlugRoute
   ProfileCollectionIndexRoute: typeof ProfileCollectionIndexRoute
+  ProfileSettingsIndexRoute: typeof ProfileSettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContinueWatchingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/settings/': {
+      id: '/profile/settings/'
+      path: '/profile/settings'
+      fullPath: '/profile/settings'
+      preLoaderRoute: typeof ProfileSettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/collection/': {
       id: '/profile/collection/'
       path: '/profile/collection'
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileIndexRoute: ProfileIndexRoute,
   ProfileCollectionSlugRoute: ProfileCollectionSlugRoute,
   ProfileCollectionIndexRoute: ProfileCollectionIndexRoute,
+  ProfileSettingsIndexRoute: ProfileSettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

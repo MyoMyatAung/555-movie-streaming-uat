@@ -28,9 +28,10 @@ function handleResponseError(error: any) {
 
   toast.error(error.response?.data.message);
   if (error.response?.status === 401 || error.response?.status === 403) {
+    console.log({ error });
     // resetAuth();
     // window.location.href = "/login";
-    return new Response(error.response.data, { status: error.response.status });
+    return Promise.reject(error);
   } else {
     console.error("API Error:", error);
   }

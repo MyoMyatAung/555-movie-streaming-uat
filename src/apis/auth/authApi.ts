@@ -38,6 +38,7 @@ export async function loginApi(
     `${AUTH_BASE_URL}/auth/login/password`,
     credentials,
   );
+
   return response.data;
 }
 

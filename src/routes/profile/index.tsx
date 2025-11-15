@@ -1,25 +1,26 @@
 import AchievementBadge from "@/assets/svgs/achievement.svg?react";
+import CollectionIcon from "@/assets/svgs/collection.svg?react";
 import IconInvitation from "@/assets/svgs/icon-invitation.svg?react";
 import IconNotification from "@/assets/svgs/icon-notification.svg?react";
 import IconSettingsFill from "@/assets/svgs/icon-settings-fill.svg?react";
+import SmileSquareIcon from "@/assets/svgs/smile-square.svg?react";
 import UserAvatar from "@/assets/svgs/user-avatar.svg?react";
+import UserInvitationIcon from "@/assets/svgs/user-invitation.svg?react";
+import VideoIcon from "@/assets/svgs/video-play.svg?react";
 import { LoginForm } from "@/components/common/auth/LoginForm";
 import RegisterForm from "@/components/common/auth/RegisterForm";
+import HomeLayout from "@/components/common/layouts/HomeLayout";
 import SheetModal from "@/components/common/SheetModal";
 import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowUp,
   ChevronRight,
   Download,
-  FolderOpen,
-  Gift,
-  MessageCircle,
   MessageSquareMore,
-  PlayCircle,
   Share2,
 } from "lucide-react";
 import { useState } from "react";
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/profile/")({
 function RouteComponent() {
   const { t } = useTranslation();
   const { isAuthenticated, user, logout } = useAuth();
-  console.log({ isAuthenticated, user });
+
   const [showModal, setShowModal] = useState({
     language: false,
     share: false,
@@ -60,6 +61,7 @@ function RouteComponent() {
       icon: IconSettingsFill,
       gradient:
         "bg-[linear-gradient(360deg,rgba(255,139,82,0.2)_0%,rgba(208,255,0,0.2)_100%)]",
+      to: "/profile/settings",
     },
     {
       label: t("profile.quickActions.update"),
@@ -72,11 +74,11 @@ function RouteComponent() {
   const watchlistLinks = [
     {
       label: t("profile.watchlistLinks.continueWatching"),
-      icon: PlayCircle,
+      icon: VideoIcon,
     },
     {
       label: t("profile.watchlistLinks.watchlist"),
-      icon: FolderOpen,
+      icon: CollectionIcon,
     },
     {
       label: t("profile.watchlistLinks.history"),
@@ -87,7 +89,7 @@ function RouteComponent() {
   const supportLinks = [
     {
       label: t("profile.supportLinks.invitationCode"),
-      icon: Gift,
+      icon: UserInvitationIcon,
       value: "80880",
     },
     {
@@ -96,20 +98,20 @@ function RouteComponent() {
     },
     {
       label: t("profile.supportLinks.feedbacks"),
-      icon: MessageSquareMore,
+      icon: SmileSquareIcon,
     },
     {
       label: t("profile.supportLinks.contactUs"),
-      icon: MessageCircle,
+      icon: MessageSquareMore,
     },
   ];
 
   return (
-    <section>
+    <HomeLayout noHeader={true}>
       <div className="relative h-full">
         <div className="flex h-full flex-col px-6 pt-8 pb-10 text-white">
           {isAuthenticated ? (
-            <div className="flex items-center gap-4 rounded-lg border border-white/20 p-2">
+            <div className="flex items-center gap-4 rounded-xl border border-white/20 p-2 backdrop-blur-xl">
               <UserAvatar className="size-12 text-white/80" />
               <div className="flex-1 space-y-2">
                 <p className="flex items-center justify-between gap-2">
@@ -144,7 +146,8 @@ function RouteComponent() {
 
           <div className="mt-8 grid grid-cols-4 gap-4">
             {quickActions.map((action) => (
-              <button
+              <Link
+                to={action.to || ""}
                 key={action.label}
                 className="group flex flex-col items-center gap-2"
               >
@@ -161,41 +164,39 @@ function RouteComponent() {
                 <span className="text-xs font-medium text-white/80">
                   {action.label}
                 </span>
-              </button>
+              </Link>
             ))}
           </div>
 
           <div className="mt-10 flex flex-col gap-6">
-            <div className="rounded-[32px] border border-white/5 bg-white/8 p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
-              <div className="space-y-2">
+            <div className="rounded-xl border border-white/20 bg-transparent p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
+              <div className="space-y-6">
                 {watchlistLinks.map((item, index) => (
                   <div key={item.label}>
-                    {index !== 0 && <div className="my-2 h-px bg-white/5" />}
                     <button className="flex w-full items-center justify-between text-left">
                       <div className="flex items-center gap-3">
-                        <div className="flex size-11 items-center justify-center rounded-2xl bg-white/8">
-                          <item.icon className="size-5 text-white" />
+                        <div className="flex items-center justify-center rounded-2xl">
+                          <item.icon className="size-6 text-white" />
                         </div>
                         <span className="text-base font-medium">
                           {item.label}
                         </span>
                       </div>
-                      <ChevronRight className="size-5 text-white/50" />
+                      <ChevronRight className="size-5 text-white" />
                     </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-[32px] border border-white/5 bg-white/8 p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
-              <div className="space-y-2">
+            <div className="rounded-lg border border-white/20 bg-transparent p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
+              <div className="space-y-6">
                 {supportLinks.map((item, index) => (
                   <div key={item.label}>
-                    {index !== 0 && <div className="my-2 h-px bg-white/5" />}
                     <button className="flex w-full items-center justify-between text-left">
                       <div className="flex items-center gap-3">
-                        <div className="flex size-11 items-center justify-center rounded-2xl bg-white/8">
-                          <item.icon className="size-5 text-white" />
+                        <div className="flex items-center justify-center rounded-2xl">
+                          <item.icon className="size-6 text-white" />
                         </div>
                         <span className="text-base font-medium">
                           {item.label}
@@ -203,11 +204,11 @@ function RouteComponent() {
                       </div>
                       <div className="flex items-center gap-2">
                         {item.value ? (
-                          <span className="text-sm font-semibold text-white/70">
+                          <span className="text-sm text-white/70">
                             {item.value}
                           </span>
                         ) : null}
-                        <ChevronRight className="size-5 text-white/50" />
+                        <ChevronRight className="size-5 text-white" />
                       </div>
                     </button>
                   </div>
@@ -215,9 +216,11 @@ function RouteComponent() {
               </div>
             </div>
 
-            <Button className="" variant="destructive" onClick={logout}>
-              Logout
-            </Button>
+            {isAuthenticated && (
+              <Button className="w-full" variant="destructive" onClick={logout}>
+                Logout
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -263,6 +266,6 @@ function RouteComponent() {
           />
         )}
       </SheetModal>
-    </section>
+    </HomeLayout>
   );
 }

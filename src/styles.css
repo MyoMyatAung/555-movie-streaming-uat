@@ -155,6 +155,15 @@ code {
   .react-modal-sheet-container {
     @apply !right-0 !left-0 max-w-md rounded-t-xl;
   }
+  .glass-border {
+    @apply border border-solid;
+    border-image-source: linear-gradient(
+      143.59deg,
+      rgba(0, 0, 0, 0.4) 13.57%,
+      rgba(0, 0, 0, 0.1) 50.86%,
+      rgba(0, 0, 0, 0.4) 88.15%
+    );
+  }
 }
 
 /* Hide scrollbar for horizontal scroll sections */

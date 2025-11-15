@@ -4,13 +4,15 @@ import { AnimatePresence, motion } from "motion/react";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
-  title: string;
+  title?: string;
   message: string;
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
   onCancel: () => void;
   className?: string;
+  confirmButtonClassName?: string;
+  cancelButtonClassName?: string;
 }
 
 export function ConfirmDialog({
@@ -22,6 +24,8 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
   className,
+  confirmButtonClassName,
+  cancelButtonClassName,
 }: ConfirmDialogProps) {
   return (
     <AnimatePresence>
@@ -50,9 +54,11 @@ export function ConfirmDialog({
                 className,
               )}
             >
-              <h2 className="mb-4 text-lg font-bold text-neutral-50">
-                {title}
-              </h2>
+              {title && (
+                <h2 className="mb-4 text-lg font-bold text-neutral-50">
+                  {title}
+                </h2>
+              )}
 
               <p className="mb-8 text-base leading-relaxed text-neutral-50">
                 {message}
@@ -63,14 +69,20 @@ export function ConfirmDialog({
                 <Button
                   variant="ghost"
                   onClick={onCancel}
-                  className="text-base text-neutral-400 hover:bg-transparent hover:text-neutral-50"
+                  className={cn(
+                    "text-base text-neutral-400 hover:bg-transparent hover:text-neutral-50",
+                    cancelButtonClassName,
+                  )}
                 >
                   {cancelText}
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={onConfirm}
-                  className="text-primary-blue hover:text-primary-blue/90 text-base hover:bg-transparent"
+                  className={cn(
+                    "text-primary-blue hover:text-primary-blue/90 text-base hover:bg-transparent",
+                    confirmButtonClassName,
+                  )}
                 >
                   {confirmText}
                 </Button>
