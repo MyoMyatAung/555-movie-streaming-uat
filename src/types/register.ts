@@ -5,10 +5,9 @@
 // Base register request
 export interface RegisterRequest {
   username: string;
-  token: string;
   password?: string;
-  nickname?: string;
-  code?: number;
+  token: string;
+  invitation_code?: string;
 }
 
 // Register response
@@ -26,12 +25,10 @@ export interface RegisterResponse {
       city?: string;
       country?: string;
     };
-    signup_token?: string;
-    token?: {
-      accessToken: string;
-      accessTokenExpiresIn: number;
-      refreshToken: string;
-      refreshTokenExpiresIn: number;
-    };
+    access_token?: string;
+    token_type?: string;
+    expires_in?: number;
+    refresh_token?: string;
+    scope?: string;
   };
 }

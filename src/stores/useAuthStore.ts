@@ -21,7 +21,6 @@ interface AuthState {
   // Token helpers
   getRecaptchaToken: () => string | null;
   getAccessToken: () => string | null;
-  getRefreshToken: () => string | null;
   isTokenExpired: () => boolean;
 }
 
@@ -74,12 +73,7 @@ export const useAuthStore = create<AuthState>()(
         // Token helpers
         getAccessToken: () => {
           const state = get();
-          return state.tokens?.accessToken || null;
-        },
-
-        getRefreshToken: () => {
-          const state = get();
-          return state.tokens?.refreshToken || null;
+          return state.tokens?.access_token || null;
         },
 
         getRecaptchaToken: () => {
@@ -88,13 +82,16 @@ export const useAuthStore = create<AuthState>()(
         },
 
         isTokenExpired: () => {
-          const state = get();
-          if (!state.tokens?.accessTokenExpiresIn) return true;
+          return false;
+          // const state = get();
+          // console.log({ tokens: state.tokens });
+          // if (!state.tokens?.expires_in) return true;
+          // console.log({ expirationTime: state.tokens?.expires_in * 1000 });
 
-          const expirationTime = state.tokens.accessTokenExpiresIn * 1000; // Convert to milliseconds
-          const currentTime = Date.now();
+          // const expirationTime = state.tokens.expires_in * 1000; // Convert to milliseconds
+          // const currentTime = Date.now();
 
-          return currentTime >= expirationTime;
+          // return currentTime >= expirationTime;
         },
       }),
       {
