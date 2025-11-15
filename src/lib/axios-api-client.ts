@@ -11,7 +11,11 @@ function requestInterceptor(config: InternalAxiosRequestConfig) {
 
   config.headers.Accept = "application/json";
   // config.withCredentials = !PUBLIC_BASE_URLS.includes(config.baseURL || "");
-  // const token = authStore.getAccessToken();
+  const token = authStore.getAccessToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
   // if (config.withCredentials && !!token) {
   //   config.headers.Authorization = `Bearer ${token}`;
@@ -24,8 +28,8 @@ function handleResponseError(error: any) {
 
   toast.error(error.response?.data.message);
   if (error.response?.status === 401 || error.response?.status === 403) {
-    resetAuth();
-    window.location.href = "/login";
+    // resetAuth();
+    // window.location.href = "/login";
     return new Response(error.response.data, { status: error.response.status });
   } else {
     console.error("API Error:", error);

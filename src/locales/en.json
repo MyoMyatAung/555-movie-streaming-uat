@@ -41,6 +41,7 @@
     }
   },
   "common": {
+    "loading": "Loading...",
     "hello": "Hello",
     "optional": "Optional",
     "continue": "Continue",
@@ -129,6 +130,26 @@
     }
   },
   "profile": {
+    "loginOrSignup": "Login or Sign up",
+    "quickActions": {
+      "notifications": "Notifications",
+      "invitation": "Invitation",
+      "settings": "Settings",
+      "update": "Update"
+    },
+    "watchlistLinks": {
+      "continueWatching": "Continue Watching",
+      "watchlist": "Watchlist",
+      "history": "History",
+      "settings": "Settings",
+      "update": "Update"
+    },
+    "supportLinks": {
+      "invitationCode": "Invitation Code",
+      "shareOurApp": "Share Our App",
+      "feedbacks": "Feedbacks",
+      "contactUs": "Contact Us"
+    },
     "email": "Email",
     "emailIsRequired": "Email is required",
     "emailOtpLoginSuccessfully": "Email OTP login successfully",

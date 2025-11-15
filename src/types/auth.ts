@@ -1,8 +1,8 @@
 // Auth types
 export interface LoginCredentials {
-  account?: string;
-  email?: string;
-  password: string;
+  username: string;
+  password?: string;
+  token?: string;
 }
 
 export interface AuthTokens {
@@ -60,66 +60,45 @@ export interface AuthState {
 
 export interface EmailOtpLoginRequest {
   email: string;
-  code: string;
+  token: string;
 }
 
 export interface EmailOtpLoginResponse {
   code: string;
   data?: {
     user: {
-      uid: string;
+      id: string;
       username: string;
+      nickname: string;
       email: string;
-      phone?: string;
-      profile: {
-        uid: string;
-        nickname?: string;
-        bio?: string;
-        gender?: "Male" | "Female" | "Other";
-        country?: string;
-        city?: string;
-        avatar?: string;
-      };
+      phone: string;
+      status: string;
     };
-    token: {
-      accessToken: string;
-      accessTokenExpiresIn: number;
-      refreshToken: string;
-      refreshTokenExpiresIn: number;
-    };
+    access_token: string;
+    token_type: string;
+    expires_in: number;
   };
 }
 
 export interface PhoneOtpLoginRequest {
-  countryCode: string;
-  code: string;
-  phoneNumber: string;
+  token: string;
+  phone: string;
 }
 
 export interface PhoneOtpLoginResponse {
   code: string;
   data?: {
     user: {
-      uid: string;
+      id: string;
       username: string;
+      nickname: string;
       email: string;
-      phone?: string;
-      profile: {
-        uid: string;
-        nickname?: string;
-        bio?: string;
-        gender?: "Male" | "Female" | "Other";
-        country?: string;
-        city?: string;
-        avatar?: string;
-      };
+      phone: string;
+      status: string;
     };
-    token: {
-      accessToken: string;
-      accessTokenExpiresIn: number;
-      refreshToken: string;
-      refreshTokenExpiresIn: number;
-    };
+    access_token: string;
+    token_type: string;
+    expires_in: number;
   };
 }
 
@@ -210,4 +189,9 @@ export interface AccountSetupResponse {
     token_type?: string;
     [key: string]: any;
   };
+}
+
+export interface LogoutResponse {
+  status: string;
+  message: string;
 }

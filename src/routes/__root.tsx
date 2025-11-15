@@ -7,6 +7,7 @@ import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import HomeBg from "@/assets/img/home-background.png";
 import type { QueryClient } from "@tanstack/react-query";
 import { NuqsAdapter } from "nuqs/adapters/react";
+import { Toaster } from "sonner";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -35,6 +36,34 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           ]}
         />
       </NuqsAdapter>
+      <Toaster
+        position="bottom-center"
+        visibleToasts={1}
+        offset={0}
+        mobileOffset={0}
+        toastOptions={{
+          style: {
+            background: "#202229",
+            color: "#fff",
+            fontSize: "14px",
+            fontWeight: "500",
+            wordBreak: "break-word",
+            whiteSpace: "normal",
+            padding: "8px 16px",
+            borderRadius: "25px",
+            textAlign: "center",
+            width: "fit-content",
+            maxWidth: "420px",
+            margin: "0 auto",
+            bottom: "100px",
+            left: "0",
+            right: "0",
+          },
+        }}
+        icons={{
+          info: null,
+        }}
+      />
     </>
   ),
 });

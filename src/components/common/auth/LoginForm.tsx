@@ -1,13 +1,18 @@
+import { useEmailOtpLogin } from "@/apis/auth/mutationEmailOtpLogin";
+import { usePhoneOtpLogin } from "@/apis/auth/mutationPhoneOtpLogin";
+import { useSendOTP, useVerifyOTP } from "@/apis/otp";
 import { Button } from "@/components/ui/button";
 import countriesAndDial from "@/constants/countryAndDial.json";
+import useAuth from "@/hooks/useAuth";
 import { cn, isValidEmail, isValidMobile } from "@/lib/utils";
 import useAuthStore from "@/stores/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { XIcon } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import * as z from "zod";
 import { Form } from "../form/Form";
 import SocialLogin from "../SocialLogin";
@@ -23,11 +28,80 @@ export const LoginForm = ({
 }) => {
   const { t } = useTranslation();
 
+  const { setTokens } = useAuthStore();
+
+  const { passwordLogin, isLoading: isPasswordLoginLoading } = useAuth();
+
+  const { mutateAsync: phoneOtpLogin, isPending: isPhoneOtpLoginPending } =
+    usePhoneOtpLogin({
+      onSuccess: (response: any) => {
+        recaptchaRef.current?.reset();
+        toast.success(t("auth.login.loginSuccess"));
+
+        const authTokens = {
+          access_token: response.data.access_token,
+          token_type: response.data.token_type || "",
+          expires_in: response.data.expires_in || 0,
+        };
+
+        setTokens(authTokens);
+      },
+      onError: (error: any) => {
+        recaptchaRef.current?.reset();
+        console.error("Failed to login with phone OTP:", error);
+        toast.info(
+          error?.response?.data?.error?.detail || t("auth.login.loginFailed"),
+        );
+      },
+    });
+
+  const { mutateAsync: emailOtpLogin, isPending: isEmailOtpLoginPending } =
+    useEmailOtpLogin({
+      onSuccess: (response: any) => {
+        recaptchaRef.current?.reset();
+        toast.success(t("auth.login.loginSuccess"));
+
+        const authTokens = {
+          access_token: response.data.access_token,
+          token_type: response.data.token_type || "",
+          expires_in: response.data.expires_in || 0,
+        };
+        setTokens(authTokens);
+      },
+      onError: (error: any) => {
+        recaptchaRef.current?.reset();
+        console.error("Failed to login with email OTP:", error);
+        toast.info(
+          error?.response?.data?.error?.detail || t("auth.login.loginFailed"),
+        );
+      },
+    });
+
+  const { mutateAsync: verifyOTP, isPending: isVerifyOTPPending } =
+    useVerifyOTP();
+
+  const { mutate: sendOTP, isPending: isSendOTPPending } = useSendOTP({
+    onSuccess: () => {
+      toast.success(t("auth.signUp.otpSentSuccessfully"));
+    },
+    onError: (error: any) => {
+      // recaptchaRef.current?.reset();
+      console.error("Failed to send OTP:", error);
+      // toast.info(
+      //   error?.response?.data?.message?.replace(".", "\n") ||
+      //     t("auth.signUp.failedToSendOTP"),
+      // );
+    },
+  });
+
+  const [lastVerifiedOtp, setLastVerifiedOtp] = useState<string | null>(null);
+
   const [activeTab, setActiveTab] = useState<"username" | "mobile" | "email">(
     "username",
   );
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [otpToken, setOtpToken] = useState<string | null>(null);
 
   const { setRecaptchaToken, recaptchaToken } = useAuthStore();
 
@@ -114,7 +188,7 @@ export const LoginForm = ({
   const [selectedCountry, setSelectedCountry] = useState("+66");
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     setHasSubmitted(true);
     if (!recaptchaRef.current?.getValue()) {
       // toast.error(t("profile.pleaseCompleteRecaptcha"));
@@ -122,26 +196,26 @@ export const LoginForm = ({
     }
 
     if (activeTab === "username") {
-      console.log({
-        account: data.username || "",
+      await passwordLogin({
+        username: data.username || "",
         password: data.password,
       });
     } else if (activeTab === "mobile") {
-      console.log({
-        countryCode: selectedCountry.replace("+", ""),
-        phoneNumber: data.mobile || "",
-        code: data.otp || "",
+      await phoneOtpLogin({
+        token: otpToken || "",
+        phone: `${selectedCountry.replace("+", "")}${data.mobile}` || "",
       });
     } else {
-      console.log({
+      await emailOtpLogin({
+        token: otpToken || "",
         email: data.email || "",
-        code: data.otp || "",
       });
     }
 
     setHasSubmitted(false);
+    onClose();
 
-    // recaptchaRef.current.reset();
+    recaptchaRef.current.reset();
   };
 
   const onError = () => {
@@ -174,15 +248,20 @@ export const LoginForm = ({
         ? `${selectedCountry.replace("+", "")}${formMethods.getValues("mobile")}`
         : formMethods.getValues("email");
 
-    console.log({
-      to: to || "",
-      channel: tab === "mobile" ? "sms" : "email",
-      scene: "login",
+    sendOTP({
+      recipient: to || "",
+      channel: tab === "mobile" ? "phone" : "email",
+      action: "login",
     });
   };
 
   const watchedMobile = formMethods.watch("mobile");
   const watchedEmail = formMethods.watch("email");
+  const watchedOtp = formMethods.watch("otp");
+
+  const getValues = formMethods.getValues;
+  const setError = formMethods.setError;
+  const clearErrors = formMethods.clearErrors;
 
   const isValidToGetOTP = useMemo(() => {
     const value = activeTab === "mobile" ? watchedMobile : watchedEmail;
@@ -193,6 +272,94 @@ export const LoginForm = ({
       (activeTab === "mobile" ? isValidMobile(value) : isValidEmail(value))
     );
   }, [activeTab, watchedMobile, watchedEmail, recaptchaToken]);
+
+  useEffect(() => {
+    const normalizedOtp = watchedOtp.trim();
+
+    if (normalizedOtp.length !== 6 || !/^\d{6}$/.test(normalizedOtp)) {
+      if (lastVerifiedOtp !== null) {
+        setLastVerifiedOtp(null);
+      }
+      return;
+    }
+
+    if (
+      normalizedOtp === lastVerifiedOtp ||
+      isVerifyOTPPending ||
+      !isValidToGetOTP
+    ) {
+      return;
+    }
+
+    const recipient =
+      activeTab === "mobile"
+        ? (() => {
+            const dialCode = selectedCountry.replace("+", "");
+            const mobileValue = getValues("mobile") ?? "";
+            const mobile = mobileValue.trim();
+            return mobile ? `${dialCode}${mobile}` : "";
+          })()
+        : (() => {
+            const emailValue = getValues("email") ?? "";
+            return emailValue.trim();
+          })();
+
+    if (!recipient) {
+      return;
+    }
+
+    setLastVerifiedOtp(normalizedOtp);
+
+    const verify = async () => {
+      try {
+        const response = await verifyOTP({
+          channel: activeTab === "mobile" ? "phone" : "email",
+          recipient,
+          otp: normalizedOtp,
+          action: "login",
+        });
+
+        const token = response.data?.token;
+        if (token) {
+          clearErrors("otp");
+          setOtpToken(token);
+        } else {
+          setOtpToken(null);
+          setError("otp", {
+            type: "manual",
+            message: t("auth.signUp.invalidOtp"),
+          });
+          toast.error(response.message ?? t("auth.signUp.invalidOtp"));
+        }
+      } catch (error: any) {
+        console.log({ error });
+        const errorMessage =
+          error?.response?.data?.error?.detail ||
+          error?.message ||
+          t("auth.signUp.invalidOtp");
+
+        setError("otp", {
+          type: "manual",
+          message: errorMessage,
+        });
+        toast.error(errorMessage);
+      }
+    };
+
+    void verify();
+  }, [
+    activeTab,
+    clearErrors,
+    getValues,
+    isValidToGetOTP,
+    isVerifyOTPPending,
+    lastVerifiedOtp,
+    selectedCountry,
+    setError,
+    t,
+    verifyOTP,
+    watchedOtp,
+  ]);
 
   return (
     <>
@@ -299,7 +466,7 @@ export const LoginForm = ({
               variant="border"
               placeholder={t("profile.enterYourOTP")}
               onResend={() => handleSendOTP(activeTab)}
-              // disabled={!isValidToGetOTP}
+              disabled={!isValidToGetOTP || isSendOTPPending}
             />
           )}
           <div>
@@ -323,7 +490,12 @@ export const LoginForm = ({
               type="submit"
               size="lg"
               className="bg-primary-blue w-full text-base font-medium"
-              disabled={false}
+              disabled={
+                isPasswordLoginLoading ||
+                isPhoneOtpLoginPending ||
+                isEmailOtpLoginPending ||
+                isVerifyOTPPending
+              }
             >
               {t("profile.login")}
             </Button>

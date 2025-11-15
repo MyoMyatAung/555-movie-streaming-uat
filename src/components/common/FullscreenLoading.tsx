@@ -69,7 +69,7 @@ export default function FullScreenLoading({
       case "gray":
         return "border-gray-400 border-t-transparent";
       default:
-        return "border-primary-yellow border-t-transparent";
+        return "border-primary-blue border-t-transparent";
     }
   };
 
@@ -86,7 +86,7 @@ export default function FullScreenLoading({
       {/* Loading Content */}
       <div
         className={cn(
-          "relative mx-4 rounded-lg bg-white px-6 py-4 shadow-lg",
+          "relative mx-4 rounded-lg bg-[#202229] px-6 py-4 shadow-lg",
           className,
         )}
       >
@@ -107,14 +107,14 @@ export default function FullScreenLoading({
           {/* Spinner */}
           <div
             className={cn(
-              "animate-spin rounded-full border-2",
+              "text-primary-blue animate-spin rounded-full border-2",
               getSpinnerSize(),
               getSpinnerColor(),
             )}
           />
 
           {/* Message */}
-          <span className="text-sm font-medium text-gray-900">
+          <span className="text-sm font-medium text-white">
             {message || t("common.loading")}
           </span>
         </div>

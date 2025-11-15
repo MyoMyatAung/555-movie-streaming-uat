@@ -1,3 +1,4 @@
+import AchievementBadge from "@/assets/svgs/achievement.svg?react";
 import IconInvitation from "@/assets/svgs/icon-invitation.svg?react";
 import IconNotification from "@/assets/svgs/icon-notification.svg?react";
 import IconSettingsFill from "@/assets/svgs/icon-settings-fill.svg?react";
@@ -6,6 +7,7 @@ import { LoginForm } from "@/components/common/auth/LoginForm";
 import RegisterForm from "@/components/common/auth/RegisterForm";
 import SheetModal from "@/components/common/SheetModal";
 import { Button } from "@/components/ui/button";
+import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { createFileRoute } from "@tanstack/react-router";
@@ -21,74 +23,16 @@ import {
   Share2,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/profile/")({
   component: RouteComponent,
 });
 
-const quickActions = [
-  {
-    label: "Notifications",
-    icon: IconNotification,
-    gradient:
-      "bg-[linear-gradient(180deg,rgba(168,82,255,0.2)_0%,rgba(74,177,255,0.2)_100%)]",
-  },
-  {
-    label: "Invitation",
-    icon: IconInvitation,
-    gradient:
-      "bg-[linear-gradient(180deg,rgba(248,89,8,0.2)_0%,rgba(255,205,174,0.2)_56.73%)]",
-  },
-  {
-    label: "Settings",
-    icon: IconSettingsFill,
-    gradient:
-      "bg-[linear-gradient(360deg,rgba(255,139,82,0.2)_0%,rgba(208,255,0,0.2)_100%)]",
-  },
-  {
-    label: "Update",
-    icon: ArrowUp,
-    gradient:
-      "bg-[linear-gradient(90deg,rgba(82,255,108,0.2)_0%,rgba(71,255,55,0.2)_100%)]",
-  },
-];
-
-const watchlistLinks = [
-  {
-    label: "Continue Watching",
-    icon: PlayCircle,
-  },
-  {
-    label: "My Collection",
-    icon: FolderOpen,
-  },
-  {
-    label: "Download",
-    icon: Download,
-  },
-];
-
-const supportLinks = [
-  {
-    label: "Invitation Code",
-    icon: Gift,
-    value: "80880",
-  },
-  {
-    label: "Share Our App",
-    icon: Share2,
-  },
-  {
-    label: "Feedbacks",
-    icon: MessageSquareMore,
-  },
-  {
-    label: "Contact Us",
-    icon: MessageCircle,
-  },
-];
-
 function RouteComponent() {
+  const { t } = useTranslation();
+  const { isAuthenticated, user, logout } = useAuth();
+  console.log({ isAuthenticated, user });
   const [showModal, setShowModal] = useState({
     language: false,
     share: false,
@@ -98,25 +42,105 @@ function RouteComponent() {
 
   const { setRecaptchaToken } = useAuthStore();
 
+  const quickActions = [
+    {
+      label: t("profile.quickActions.notifications"),
+      icon: IconNotification,
+      gradient:
+        "bg-[linear-gradient(180deg,rgba(168,82,255,0.2)_0%,rgba(74,177,255,0.2)_100%)]",
+    },
+    {
+      label: t("profile.quickActions.invitation"),
+      icon: IconInvitation,
+      gradient:
+        "bg-[linear-gradient(180deg,rgba(248,89,8,0.2)_0%,rgba(255,205,174,0.2)_56.73%)]",
+    },
+    {
+      label: t("profile.quickActions.settings"),
+      icon: IconSettingsFill,
+      gradient:
+        "bg-[linear-gradient(360deg,rgba(255,139,82,0.2)_0%,rgba(208,255,0,0.2)_100%)]",
+    },
+    {
+      label: t("profile.quickActions.update"),
+      icon: ArrowUp,
+      gradient:
+        "bg-[linear-gradient(90deg,rgba(82,255,108,0.2)_0%,rgba(71,255,55,0.2)_100%)]",
+    },
+  ];
+
+  const watchlistLinks = [
+    {
+      label: t("profile.watchlistLinks.continueWatching"),
+      icon: PlayCircle,
+    },
+    {
+      label: t("profile.watchlistLinks.watchlist"),
+      icon: FolderOpen,
+    },
+    {
+      label: t("profile.watchlistLinks.history"),
+      icon: Download,
+    },
+  ];
+
+  const supportLinks = [
+    {
+      label: t("profile.supportLinks.invitationCode"),
+      icon: Gift,
+      value: "80880",
+    },
+    {
+      label: t("profile.supportLinks.shareOurApp"),
+      icon: Share2,
+    },
+    {
+      label: t("profile.supportLinks.feedbacks"),
+      icon: MessageSquareMore,
+    },
+    {
+      label: t("profile.supportLinks.contactUs"),
+      icon: MessageCircle,
+    },
+  ];
+
   return (
     <section>
       <div className="relative h-full">
         <div className="flex h-full flex-col px-6 pt-8 pb-10 text-white">
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex size-24 items-center justify-center rounded-full bg-white/10 shadow-[0_15px_45px_rgba(8,14,35,0.45)] backdrop-blur">
-              <UserAvatar className="size-14 text-white/80" />
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4 rounded-lg border border-white/20 p-2">
+              <UserAvatar className="size-12 text-white/80" />
+              <div className="flex-1 space-y-2">
+                <p className="flex items-center justify-between gap-2">
+                  <span className="text-lg font-medium">{user?.name}</span>
+                  <span className="flex items-center gap-2 rounded-full bg-white/20 py-0 pr-2">
+                    <AchievementBadge className="size-6 text-white/80" />
+                    <span className="text-xs font-medium">Level 4</span>
+                  </span>
+                </p>
+                <p className="text-sm">{user?.email}</p>
+              </div>
             </div>
-            <Button
-              variant="link"
-              className="group flex cursor-pointer items-center gap-2 text-lg font-medium text-white"
-              onClick={() => setShowModal((prev) => ({ ...prev, login: true }))}
-            >
-              <span className="underline underline-offset-4">
-                Login or Sign up
-              </span>
-              <ChevronRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
-            </Button>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex size-24 items-center justify-center rounded-full bg-white/10 shadow-[0_15px_45px_rgba(8,14,35,0.45)] backdrop-blur">
+                <UserAvatar className="size-14 text-white/80" />
+              </div>
+              <Button
+                variant="link"
+                className="group flex cursor-pointer items-center gap-2 text-lg font-medium text-white"
+                onClick={() =>
+                  setShowModal((prev) => ({ ...prev, login: true }))
+                }
+              >
+                <span className="underline underline-offset-4">
+                  {t("profile.loginOrSignup")}
+                </span>
+                <ChevronRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
+              </Button>
+            </div>
+          )}
 
           <div className="mt-8 grid grid-cols-4 gap-4">
             {quickActions.map((action) => (
@@ -190,6 +214,10 @@ function RouteComponent() {
                 ))}
               </div>
             </div>
+
+            <Button className="" variant="destructive" onClick={logout}>
+              Logout
+            </Button>
           </div>
         </div>
       </div>

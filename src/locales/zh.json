@@ -41,6 +41,7 @@
     }
   },
   "common": {
+    "loading": "加载中...",
     "hello": "你好",
     "optional": "可选",
     "continue": "继续",
@@ -132,6 +133,26 @@
     }
   },
   "profile": {
+    "loginOrSignup": "登录或注册",
+    "quickActions": {
+      "notifications": "通知",
+      "invitation": "邀请",
+      "settings": "设置",
+      "update": "更新"
+    },
+    "watchlistLinks": {
+      "continueWatching": "继续观看",
+      "watchlist": "观影榜",
+      "history": "观看历史",
+      "settings": "设置",
+      "update": "更新"
+    },
+    "supportLinks": {
+      "invitationCode": "邀请码",
+      "shareOurApp": "分享我们的应用",
+      "feedbacks": "反馈",
+      "contactUs": "联系我们"
+    },
     "email": "邮箱",
     "emailIsRequired": "邮箱是必填项",
     "emailOtpLoginSuccessfully": "邮箱验证码登录成功",
