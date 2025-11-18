@@ -4,7 +4,7 @@ import type { InternalAxiosRequestConfig } from "axios";
 import Axios from "axios";
 import { toast } from "sonner";
 
-const PUBLIC_BASE_URLS: Array<string> = [];
+// const PUBLIC_BASE_URLS: Array<string> = [];
 
 function requestInterceptor(config: InternalAxiosRequestConfig) {
   const authStore = useAuthStore.getState();
@@ -24,8 +24,6 @@ function requestInterceptor(config: InternalAxiosRequestConfig) {
 }
 
 function handleResponseError(error: any) {
-  const resetAuth = useAuthStore.getState().clearAuth;
-
   toast.error(error.response?.data.message);
   if (error.response?.status === 401 || error.response?.status === 403) {
     console.log({ error });

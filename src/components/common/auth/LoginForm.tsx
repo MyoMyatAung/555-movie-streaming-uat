@@ -362,13 +362,13 @@ export const LoginForm = ({
   ]);
 
   return (
-    <>
+    <div className="h-[750px]">
       {/* <FullScreenLoading
           isVisible={
             isEmailOtpLoginPending || isPhoneOtpLoginPending || isLoading
           }
         /> */}
-      <div className="flex flex-col">
+      <div className="flex flex-col pb-20">
         {/* Header */}
         <div className="relative mb-4 px-4 text-center text-white">
           <h1 className="text-[20px] font-medium">{t("profile.login")}</h1>
@@ -532,6 +532,6 @@ export const LoginForm = ({
           </div>
         </Form>
       </div>
-    </>
+    </div>
   );
 };

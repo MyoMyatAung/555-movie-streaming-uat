@@ -1,6 +1,3 @@
-import FullScreenLoading from "../FullScreenLoading";
-import SocialLogin from "../SocialLogin";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeftIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -18,7 +15,9 @@ import { Button } from "@/components/ui/button";
 import countriesAndDial from "@/constants/countryAndDial.json";
 import { cn, isValidEmail, isValidMobile } from "@/lib/utils";
 import useAuthStore from "@/stores/useAuthStore";
-// import FullScreenLoading from "../common/FullScreenLoading";
+
+import { FullScreenLoading } from "@/components/common/FullscreenLoading";
+import SocialLogin from "@/components/common/SocialLogin";
 
 type SignUpFormData = {
   username: string;
@@ -31,9 +30,11 @@ type SignUpFormData = {
 const RegisterForm = ({
   onSignIn,
   onClose,
+  onBack,
 }: {
   onSignIn: () => void;
   onClose: () => void;
+  onBack: () => void;
 }) => {
   const { t } = useTranslation();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -304,7 +305,7 @@ const RegisterForm = ({
           <Button
             variant={"ghost"}
             size={"icon"}
-            onClick={onClose}
+            onClick={onBack}
             className="absolute top-0 left-4 rounded-full border border-white/10 shadow-sm"
           >
             <ArrowLeftIcon className="size-6" />

@@ -6,14 +6,14 @@ import GoogleFilledIcon from "@/assets/svgs/google-fill.svg?react";
 import GoogleIcon from "@/assets/svgs/google.svg?react";
 import WeChatFilledIcon from "@/assets/svgs/wechat-fill.svg?react";
 import WeiboFilledIcon from "@/assets/svgs/weibo-fill.svg?react";
+import { FullScreenLoading } from "@/components/common/FullscreenLoading";
+import SheetModal from "@/components/common/SheetModal";
 import { cn, getRedirectUri } from "@/lib/utils";
 import { ChevronRightIcon, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import FullScreenLoading from "./FullScreenLoading";
-import SheetModal from "./SheetModal";
 
 const SocialLoginModal = () => {
   const { t } = useTranslation();
@@ -48,8 +48,8 @@ const SocialLoginModal = () => {
 
   const filteredProviders = allProviders.filter(
     (provider) =>
-      socialProviders?.status[provider.name]?.supported &&
-      socialProviders.status[provider.name]?.configured,
+      (socialProviders as any)?.status[provider.name]?.supported &&
+      (socialProviders as any)?.status[provider.name]?.configured,
   );
 
   const handleRegister = async (provider: string) => {
@@ -64,10 +64,12 @@ const SocialLoginModal = () => {
       redirect_uri: redirectUri,
     });
 
+    console.log({ socialLoginResponse });
+
     setSelectedProvider(null);
 
-    if (socialLoginResponse.data?.url) {
-      window.location.href = socialLoginResponse.data.url;
+    if (socialLoginResponse?.url) {
+      window.location.href = socialLoginResponse.url;
       return;
     }
 
@@ -130,7 +132,6 @@ const SocialLogin = () => {
         showModal={showModal}
         setShowModal={(value) => setShowModal(value)}
         title={t("auth.socialLogin.title")}
-        canClose={true}
         onClose={() => setShowModal(false)}
         containerClassName="bg-dark-gray!"
       >

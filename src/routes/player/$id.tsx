@@ -16,7 +16,6 @@ export const Route = createFileRoute("/player/$id")({
 function RouteComponent() {
   // TODO: Fetch movie data based on id
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id } = Route.useParams();
   const [activeTab, setActiveTab] = useState<"tab-1" | "tab-2">("tab-1");
   const [openDownloadSheet, setOpenDownloadSheet] = useState(false);
   const [openFeedbackSheet, setOpenFeedbackSheet] = useState(false);

@@ -16,6 +16,8 @@ import { Route as ExploreIndexRouteImport } from './routes/explore/index'
 import { Route as DownloadIndexRouteImport } from './routes/download/index'
 import { Route as ContinueWatchingIndexRouteImport } from './routes/continue-watching/index'
 import { Route as PlayerIdRouteImport } from './routes/player/$id'
+import { Route as AuthSocialSignupRouteImport } from './routes/_auth/social-signup'
+import { Route as AuthSocialCallbackRouteImport } from './routes/_auth/social-callback'
 import { Route as ProfileSettingsIndexRouteImport } from './routes/profile/settings/index'
 import { Route as ProfileCollectionIndexRouteImport } from './routes/profile/collection/index'
 import { Route as ProfileCollectionSlugRouteImport } from './routes/profile/collection/$slug'
@@ -55,6 +57,16 @@ const PlayerIdRoute = PlayerIdRouteImport.update({
   path: '/player/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthSocialSignupRoute = AuthSocialSignupRouteImport.update({
+  id: '/_auth/social-signup',
+  path: '/social-signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSocialCallbackRoute = AuthSocialCallbackRouteImport.update({
+  id: '/_auth/social-callback',
+  path: '/social-callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileSettingsIndexRoute = ProfileSettingsIndexRouteImport.update({
   id: '/profile/settings/',
   path: '/profile/settings/',
@@ -73,6 +85,8 @@ const ProfileCollectionSlugRoute = ProfileCollectionSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/social-callback': typeof AuthSocialCallbackRoute
+  '/social-signup': typeof AuthSocialSignupRoute
   '/player/$id': typeof PlayerIdRoute
   '/continue-watching': typeof ContinueWatchingIndexRoute
   '/download': typeof DownloadIndexRoute
@@ -85,6 +99,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/social-callback': typeof AuthSocialCallbackRoute
+  '/social-signup': typeof AuthSocialSignupRoute
   '/player/$id': typeof PlayerIdRoute
   '/continue-watching': typeof ContinueWatchingIndexRoute
   '/download': typeof DownloadIndexRoute
@@ -98,6 +114,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth/social-callback': typeof AuthSocialCallbackRoute
+  '/_auth/social-signup': typeof AuthSocialSignupRoute
   '/player/$id': typeof PlayerIdRoute
   '/continue-watching/': typeof ContinueWatchingIndexRoute
   '/download/': typeof DownloadIndexRoute
@@ -112,6 +130,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/social-callback'
+    | '/social-signup'
     | '/player/$id'
     | '/continue-watching'
     | '/download'
@@ -124,6 +144,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/social-callback'
+    | '/social-signup'
     | '/player/$id'
     | '/continue-watching'
     | '/download'
@@ -136,6 +158,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_auth/social-callback'
+    | '/_auth/social-signup'
     | '/player/$id'
     | '/continue-watching/'
     | '/download/'
@@ -149,6 +173,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthSocialCallbackRoute: typeof AuthSocialCallbackRoute
+  AuthSocialSignupRoute: typeof AuthSocialSignupRoute
   PlayerIdRoute: typeof PlayerIdRoute
   ContinueWatchingIndexRoute: typeof ContinueWatchingIndexRoute
   DownloadIndexRoute: typeof DownloadIndexRoute
@@ -211,6 +237,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/social-signup': {
+      id: '/_auth/social-signup'
+      path: '/social-signup'
+      fullPath: '/social-signup'
+      preLoaderRoute: typeof AuthSocialSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/social-callback': {
+      id: '/_auth/social-callback'
+      path: '/social-callback'
+      fullPath: '/social-callback'
+      preLoaderRoute: typeof AuthSocialCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/settings/': {
       id: '/profile/settings/'
       path: '/profile/settings'
@@ -237,6 +277,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthSocialCallbackRoute: AuthSocialCallbackRoute,
+  AuthSocialSignupRoute: AuthSocialSignupRoute,
   PlayerIdRoute: PlayerIdRoute,
   ContinueWatchingIndexRoute: ContinueWatchingIndexRoute,
   DownloadIndexRoute: DownloadIndexRoute,

@@ -25,9 +25,8 @@ export interface SocialLoginUrlRequest {
 
 export interface SocialLoginUrlResponse {
   code: string;
-  data?: {
-    url: string;
-  };
+  qrcode?: string;
+  url?: string | null;
 }
 
 export interface SocialLoginCallbackRequest {
@@ -38,38 +37,36 @@ export interface SocialLoginCallbackRequest {
 
 export interface SocialLoginCallbackResponse {
   code: string;
-  data?: {
-    isBound: boolean;
-    user?: {
+  is_bound: boolean;
+  user?: {
+    uid: string;
+    username: string;
+    email?: string;
+    phone?: string;
+    profile: {
       uid: string;
-      username: string;
-      email?: string;
-      phone?: string;
-      profile: {
-        uid: string;
-        nickname?: string;
-        bio?: string;
-        gender?: "Male" | "Female" | "Other";
-        country?: string;
-        city?: string;
-        avatar?: string;
-      };
+      nickname?: string;
+      bio?: string;
+      gender?: "Male" | "Female" | "Other";
+      country?: string;
+      city?: string;
+      avatar?: string;
     };
-    socialUserInfo?: {
-      avatar: string;
-      email: string;
-      gender: string;
-      tempToken?: string;
-      provider: string;
-      socialId: string;
-      nickname: string;
-    };
-    token?: {
-      accessToken: string;
-      accessTokenExpiresIn: number;
-      refreshToken: string;
-      refreshTokenExpiresIn: number;
-    };
+  };
+  social_user_info?: {
+    avatar: string;
+    email: string;
+    gender: string;
+    temp_token?: string;
+    provider: string;
+    socialId: string;
+    nickname: string;
+  };
+  token?: {
+    accessToken: string;
+    accessTokenExpiresIn: number;
+    refreshToken: string;
+    refreshTokenExpiresIn: number;
   };
 }
 

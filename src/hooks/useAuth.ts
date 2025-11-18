@@ -70,7 +70,7 @@ export function useAuth(): UseAuthReturn {
     isPending: isLoggingIn,
     error: loginError,
   } = useLogin({
-    onSuccess: async (response) => {
+    onSuccess: async (response: any) => {
       if (!response?.data) {
         toast.error(response?.error?.detail || t("auth.login.loginFailed"));
         return;
@@ -159,7 +159,7 @@ export function useAuth(): UseAuthReturn {
       try {
         await loginMutation(credentials);
         toast.success(t("auth.login.loginSuccess"));
-      } catch (error) {
+      } catch (error: any) {
         console.error("Login error:", error);
         toast.error(
           error?.response?.data?.error?.detail || t("auth.login.loginFailed"),

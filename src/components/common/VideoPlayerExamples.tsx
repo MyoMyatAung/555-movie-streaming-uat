@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 
 export function VideoPlayerExample() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const handleNext = () => {
     console.log("Next episode");
@@ -40,7 +40,10 @@ export function VideoPlayerExample() {
           {
             name: "info",
             component: (
-              <InfoLayer title="The Great Movie" episode="Season 1, Episode 5" />
+              <InfoLayer
+                title="The Great Movie"
+                episode="Season 1, Episode 5"
+              />
             ),
           },
         ]}
@@ -90,7 +93,7 @@ export function VideoPlayerExample() {
           {
             name: "custom-notification",
             component: (
-              <div className="absolute left-1/2 top-4 -translate-x-1/2 transform">
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 transform">
                 <div className="rounded-lg bg-green-500 px-4 py-2 text-white shadow-lg">
                   New episode available!
                 </div>

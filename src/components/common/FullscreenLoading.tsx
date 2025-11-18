@@ -18,7 +18,7 @@ interface FullScreenLoadingProps {
   allowCloseOnOverlayClick?: boolean;
 }
 
-export default function FullScreenLoading({
+export function FullScreenLoading({
   isVisible,
   onClose,
   message,

@@ -106,12 +106,15 @@
       "title": "Social Login"
     },
     "forgotPassword": {
-      "title": "Forgot Password",
+      "title": "Forget Password",
       "continue": "Continue",
       "accountLabel": "Email or Phone Number",
       "accountPlaceholder": "Enter your email or phone number",
       "accountRequired": "Email or phone number is required",
       "invalidAccountFormat": "Please enter a valid email or phone number",
+      "oldPassword": "Old Password",
+      "oldPasswordPlaceholder": "Old Password",
+      "oldPasswordRequired": "Old password is required",
       "newPassword": "New Password",
       "confirmPassword": "Confirm Password",
       "enterNewPassword": "Enter New Password",
@@ -126,7 +129,10 @@
       "failedToSendCode": "Failed to send reset code",
       "passwordResetSuccessfully": "Password reset successfully",
       "failedToResetPassword": "Failed to reset password",
-      "completeRecaptcha": "Please complete the reCAPTCHA"
+      "completeRecaptcha": "Please complete the reCAPTCHA",
+      "alreadyHaveAccount": "Already have an account?",
+      "newPasswordMustBeDifferent": "New password must be different from old password",
+      "passwordRequirements": "8-25 characters. Must contain at least two of the following: letters, numbers."
     }
   },
   "profile": {

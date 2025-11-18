@@ -7,6 +7,7 @@ import SmileSquareIcon from "@/assets/svgs/smile-square.svg?react";
 import UserAvatar from "@/assets/svgs/user-avatar.svg?react";
 import UserInvitationIcon from "@/assets/svgs/user-invitation.svg?react";
 import VideoIcon from "@/assets/svgs/video-play.svg?react";
+import ForgotPassword from "@/components/common/auth/ForgotPassword";
 import { LoginForm } from "@/components/common/auth/LoginForm";
 import RegisterForm from "@/components/common/auth/RegisterForm";
 import HomeLayout from "@/components/common/layouts/HomeLayout";
@@ -40,6 +41,7 @@ function RouteComponent() {
     login: false,
     signup: false,
   });
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const { setRecaptchaToken } = useAuthStore();
 
@@ -171,7 +173,7 @@ function RouteComponent() {
           <div className="mt-10 flex flex-col gap-6">
             <div className="rounded-xl border border-white/20 bg-transparent p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
               <div className="space-y-6">
-                {watchlistLinks.map((item, index) => (
+                {watchlistLinks.map((item) => (
                   <div key={item.label}>
                     <button className="flex w-full items-center justify-between text-left">
                       <div className="flex items-center gap-3">
@@ -191,7 +193,7 @@ function RouteComponent() {
 
             <div className="rounded-lg border border-white/20 bg-transparent p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
               <div className="space-y-6">
-                {supportLinks.map((item, index) => (
+                {supportLinks.map((item) => (
                   <div key={item.label}>
                     <button className="flex w-full items-center justify-between text-left">
                       <div className="flex items-center gap-3">
@@ -226,6 +228,7 @@ function RouteComponent() {
       </div>
 
       <SheetModal
+        detent="content"
         showModal={showModal.login}
         setShowModal={(value) => {
           if (!value) {
@@ -235,13 +238,24 @@ function RouteComponent() {
         }}
         containerClassName="!bg-dark-gray"
       >
-        <LoginForm
-          onClose={() => setShowModal((prev) => ({ ...prev, login: false }))}
-          onForgotPassword={() => {}}
-          onSignUp={() => {
-            setShowModal((prev) => ({ ...prev, login: false, signup: true }));
-          }}
-        />
+        {showForgotPassword ? (
+          <ForgotPassword
+            onClose={() => setShowForgotPassword(false)}
+            onLogin={() => {
+              setShowForgotPassword(false);
+            }}
+          />
+        ) : (
+          <LoginForm
+            onClose={() => setShowModal((prev) => ({ ...prev, login: false }))}
+            onForgotPassword={() => {
+              setShowForgotPassword(true);
+            }}
+            onSignUp={() => {
+              setShowModal((prev) => ({ ...prev, login: false, signup: true }));
+            }}
+          />
+        )}
       </SheetModal>
 
       <SheetModal
@@ -260,6 +274,9 @@ function RouteComponent() {
         {showModal.signup && (
           <RegisterForm
             onSignIn={() => {
+              setShowModal((prev) => ({ ...prev, login: true, signup: false }));
+            }}
+            onBack={() => {
               setShowModal((prev) => ({ ...prev, login: true, signup: false }));
             }}
             onClose={() => setShowModal((prev) => ({ ...prev, signup: false }))}

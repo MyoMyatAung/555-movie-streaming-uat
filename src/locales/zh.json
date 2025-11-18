@@ -107,12 +107,15 @@
       "invalidIntent": "无效的意图参数"
     },
     "forgotPassword": {
-      "title": "忘记密码？",
+      "title": "忘记密码",
       "continue": "继续",
       "accountLabel": "电子邮件或手机号码",
       "accountPlaceholder": "请输入您的电子邮件或手机号码",
       "accountRequired": "电子邮件或手机号码为必填项",
       "invalidAccountFormat": "请输入有效的电子邮件或手机号码",
+      "oldPassword": "旧密码",
+      "oldPasswordPlaceholder": "旧密码",
+      "oldPasswordRequired": "旧密码为必填项",
       "newPassword": "新密码",
       "confirmPassword": "确认密码",
       "enterNewPassword": "请输入新密码",
@@ -129,7 +132,10 @@
       "failedToResetPassword": "重置密码失败",
       "completeRecaptcha": "请完成reCAPTCHA验证",
       "folderNameMinLength": "文件夹名称必须至少3个字符",
-      "folderNameMaxLength": "文件夹名称必须最多25个字符"
+      "folderNameMaxLength": "文件夹名称必须最多25个字符",
+      "alreadyHaveAccount": "已有账户？",
+      "newPasswordMustBeDifferent": "新密码必须与旧密码不同",
+      "passwordRequirements": "8-25个字符。必须至少包含以下两种组合：字母、数字。"
     }
   },
   "profile": {
