@@ -275,5 +275,11 @@
       "refresh": "刷新一下",
       "switch": "切换资源"
     }
+  },
+  "search": {
+    "placeholder": "搜索电影和剧集...",
+    "recentSearches": "搜索历史",
+    "clearAll": "删除",
+    "recommendedMovies": "为你推荐"
   }
 }

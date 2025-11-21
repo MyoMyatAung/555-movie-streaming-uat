@@ -272,5 +272,11 @@
       "refresh": "Refresh",
       "switch": "Switch Resources"
     }
+  },
+  "search": {
+    "placeholder": "Search movies and series...",
+    "recentSearches": "Recent Searches",
+    "clearAll": "Clear All",
+    "recommendedMovies": "Recommended Movies"
   }
 }
