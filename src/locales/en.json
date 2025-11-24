@@ -276,7 +276,21 @@
   "search": {
     "placeholder": "Search movies and series...",
     "recentSearches": "Recent Searches",
-    "clearAll": "Clear All",
-    "recommendedMovies": "Recommended Movies"
+    "clearAll": "Remove",
+    "recommendedMovies": "Recommended Movies",
+    "results": "Search Results",
+    "noResults": "No Search Results Found",
+    "filters": {
+      "title": "Filters",
+
+      "categories": "Categories",
+      "sort": "Sort",
+      "sortOptions": {
+        "comprehensive": "Comprehensive",
+        "hottest": "Hottest",
+        "rating": "Rating",
+        "newest": "Newest"
+      }
+    }
   }
 }

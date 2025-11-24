@@ -10,7 +10,12 @@ interface SearchBarProps {
   onFilterClick?: () => void;
 }
 
-export function SearchBar({ onSearch, onTyping, showFilterButton, onFilterClick }: SearchBarProps) {
+export function SearchBar({
+  onSearch,
+  onTyping,
+  showFilterButton,
+  onFilterClick,
+}: SearchBarProps) {
   const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -31,7 +36,7 @@ export function SearchBar({ onSearch, onTyping, showFilterButton, onFilterClick 
   const handleInputChange = (value: string) => {
     setSearchText(value);
     onTyping?.(value);
-  }
+  };
 
   return (
     <div className="z-10 px-4 py-4">

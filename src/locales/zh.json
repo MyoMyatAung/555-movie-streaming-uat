@@ -280,6 +280,19 @@
     "placeholder": "搜索电影和剧集...",
     "recentSearches": "搜索历史",
     "clearAll": "删除",
-    "recommendedMovies": "为你推荐"
+    "recommendedMovies": "为你推荐",
+    "results": "搜索结果",
+    "noResults": "没有找到搜索结果",
+    "filters": {
+      "title": "筛选",
+      "categories": "分类",
+      "sort": "排序",
+      "sortOptions": {
+        "comprehensive": "综合",
+        "hottest": "最热",
+        "rating": "评分",
+        "newest": "最新"
+      }
+    }
   }
 }
