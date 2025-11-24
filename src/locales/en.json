@@ -88,7 +88,11 @@
       "nicknameMaxLength": "Nickname must be at most 25 characters",
       "newPassword": "New Password",
       "retypeNewPassword": "Retype New Password",
-      "nickname": "Nickname"
+      "nickname": "Nickname",
+      "accountBinding": "Account Binding",
+      "emailOrPhoneNumberRequired": "Email or Phone Number is required",
+      "bindAccount": "Bind Account",
+      "createNewAccount": "Create New Account"
     },
     "login": {
       "loginSuccess": "Login successful",
@@ -107,6 +111,8 @@
     },
     "forgotPassword": {
       "title": "Forget Password",
+      "chooseNewPassword": "Choose a new password",
+      "chooseNewPasswordSubtitle": "Create a new password that is at least 6 characters long. A strong password has a combination of letters, digits and punctuation marks.",
       "continue": "Continue",
       "accountLabel": "Email or Phone Number",
       "accountPlaceholder": "Enter your email or phone number",

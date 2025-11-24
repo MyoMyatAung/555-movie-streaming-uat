@@ -2,7 +2,12 @@
 export interface SendOTPRequest {
   recipient: string;
   channel: "email" | "sms" | "phone";
-  action: "changeEmail" | "changePhone" | "register" | "login";
+  action:
+    | "changeEmail"
+    | "changePhone"
+    | "register"
+    | "login"
+    | "forgot-password";
 }
 
 export interface SendOTPResponse {
@@ -20,7 +25,12 @@ export interface VerifyOTPRequest {
   channel: "email" | "sms" | "phone";
   recipient: string;
   otp: string;
-  action: "changeEmail" | "changePhone" | "register" | "login";
+  action:
+    | "changeEmail"
+    | "changePhone"
+    | "register"
+    | "login"
+    | "forgot-password";
 }
 
 export interface VerifyOTPResponse {

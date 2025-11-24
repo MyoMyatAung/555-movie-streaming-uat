@@ -103,7 +103,7 @@ function RouteComponent() {
   }, []);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center text-white">
       {isPending ? (
         <div>Processing social login...</div>
       ) : (

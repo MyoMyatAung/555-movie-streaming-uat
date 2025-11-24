@@ -172,6 +172,20 @@ export interface ResetPasswordResponse {
   };
 }
 
+export interface ForgotPasswordResetRequest {
+  token: string;
+  password_confirmation: string;
+  password: string;
+}
+
+export interface ForgotPasswordResetResponse {
+  code: number;
+  message: string;
+  data?: {
+    success: boolean;
+  };
+}
+
 export interface AccountSetupRequest {
   token: string;
   nickname: string;

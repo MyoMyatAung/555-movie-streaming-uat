@@ -4,6 +4,8 @@ import type {
   AccountSetupResponse,
   EmailOtpLoginRequest,
   EmailOtpLoginResponse,
+  ForgotPasswordResetRequest,
+  ForgotPasswordResetResponse,
   LoginCredentials,
   LoginResponse,
   LogoutResponse,
@@ -106,6 +108,19 @@ export async function getMeApi(token: string): Promise<UserResponse> {
 export async function logoutApi(): Promise<LogoutResponse> {
   const response = await AXIOS_CLIENT.post<LogoutResponse>(
     `${AUTH_BASE_URL}/auth/logout`,
+  );
+  return response.data;
+}
+
+/**
+ * Reset password for forgot password flow
+ */
+export async function forgotPasswordResetApi(
+  payload: ForgotPasswordResetRequest,
+): Promise<ForgotPasswordResetResponse> {
+  const response = await AXIOS_CLIENT.post<ForgotPasswordResetResponse>(
+    `${AUTH_BASE_URL}/auth/forget-password/reset-password`,
+    payload,
   );
   return response.data;
 }
