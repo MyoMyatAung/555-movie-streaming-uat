@@ -12,6 +12,7 @@ import { LoginForm } from "@/components/common/auth/LoginForm";
 import RegisterForm from "@/components/common/auth/RegisterForm";
 import HomeLayout from "@/components/common/layouts/HomeLayout";
 import SheetModal from "@/components/common/SheetModal";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
@@ -23,6 +24,7 @@ import {
   Download,
   MessageSquareMore,
   Share2,
+  UserRound,
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -33,7 +35,7 @@ export const Route = createFileRoute("/profile/")({
 
 function RouteComponent() {
   const { t } = useTranslation();
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const [showModal, setShowModal] = useState({
     language: false,
@@ -113,19 +115,31 @@ function RouteComponent() {
       <div className="relative h-full">
         <div className="flex h-full flex-col px-6 pt-8 pb-10 text-white">
           {isAuthenticated ? (
-            <div className="flex items-center gap-4 rounded-xl border border-white/20 p-2 backdrop-blur-xl">
-              <UserAvatar className="size-12 text-white/80" />
-              <div className="flex-1 space-y-2">
-                <p className="flex items-center justify-between gap-2">
-                  <span className="text-lg font-medium">{user?.name}</span>
-                  <span className="flex items-center gap-2 rounded-full bg-white/20 py-0 pr-2">
-                    <AchievementBadge className="size-6 text-white/80" />
-                    <span className="text-xs font-medium">Level 4</span>
-                  </span>
-                </p>
-                <p className="text-sm">{user?.email}</p>
+            <Link to="/profile/edit">
+              <div className="glassmorphism-light flex items-center gap-4 rounded-xl p-2 transition-all hover:bg-white/5">
+                <Avatar className="size-12">
+                  <AvatarImage src={user?.avatar || ""} />
+                  <AvatarFallback className="bg-gray-500">
+                    <UserRound className="size-6 text-white" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="flex items-center gap-2">
+                      <span className="text-lg font-medium">
+                        {user?.nickname || user?.name}
+                      </span>
+                      <ChevronRight className="size-4 text-white" />
+                    </p>
+                    <span className="flex items-center gap-2 rounded-full bg-white/20 py-0 pr-2">
+                      <AchievementBadge className="size-6 text-white/80" />
+                      <span className="text-xs font-medium">Level 4</span>
+                    </span>
+                  </div>
+                  <p className="text-sm">{user?.email}</p>
+                </div>
               </div>
-            </div>
+            </Link>
           ) : (
             <div className="flex flex-col items-center gap-4">
               <div className="flex size-24 items-center justify-center rounded-full bg-white/10 shadow-[0_15px_45px_rgba(8,14,35,0.45)] backdrop-blur">
@@ -171,7 +185,7 @@ function RouteComponent() {
           </div>
 
           <div className="mt-10 flex flex-col gap-6">
-            <div className="rounded-xl border border-white/20 bg-transparent p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
+            <div className="glassmorphism-light rounded-xl p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
               <div className="space-y-6">
                 {watchlistLinks.map((item) => (
                   <div key={item.label}>
@@ -191,7 +205,7 @@ function RouteComponent() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-white/20 bg-transparent p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
+            <div className="glassmorphism-light rounded-xl p-4 shadow-[0_25px_50px_rgba(5,10,25,0.45)] backdrop-blur-xl">
               <div className="space-y-6">
                 {supportLinks.map((item) => (
                   <div key={item.label}>
@@ -217,12 +231,6 @@ function RouteComponent() {
                 ))}
               </div>
             </div>
-
-            {isAuthenticated && (
-              <Button className="w-full" variant="destructive" onClick={logout}>
-                Logout
-              </Button>
-            )}
           </div>
         </div>
       </div>

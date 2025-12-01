@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { ContentItem } from "@/types/movie";
+import { ImageOff } from "lucide-react";
 import { motion } from "motion/react";
 import { useRef, useState } from "react";
 import { MovieDetailCard } from "./MovieDetailCard";
@@ -22,6 +23,7 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
   const isTopRank = item.badge?.type === "top_rank";
   const [isFlipped, setIsFlipped] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isPressedRef = useRef(false);
 
@@ -81,12 +83,20 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
           }}
         >
           {/* Image Container */}
-          <div className="relative aspect-2/3 overflow-hidden rounded-lg">
-            <img
-              src={item.imageUrl}
-              alt={item.title}
-              className="h-full w-full object-cover"
-            />
+          <div className="relative aspect-2/3 overflow-hidden rounded-lg bg-gray-800">
+            <img src={item.imageUrl} alt={item.title} />
+            {!imageError ? (
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="h-full w-full object-cover"
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                <ImageOff className="h-10 w-10 text-gray-500" />
+              </div>
+            )}
 
             {/* Top Rank Badge - Large number at bottom left with gradient */}
             {isTopRank && item.badge?.rank && (

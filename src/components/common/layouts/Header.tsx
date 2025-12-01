@@ -1,7 +1,10 @@
-import { BellIcon, SearchIcon } from "lucide-react";
+import { BellIcon, SearchIcon, UserRound } from "lucide-react";
 import { useState } from "react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import HeaderSkeleton from "../skeletons/HeaderSkeleton";
 
@@ -10,8 +13,10 @@ interface HeaderProps {
 }
 
 function Header({ isLoading = false }: HeaderProps) {
+  const { user } = useAuth();
   const [hasNotifications] = useState(true); // This would come from your notification state
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <HeaderSkeleton />;
@@ -23,27 +28,12 @@ function Header({ isLoading = false }: HeaderProps) {
         {/* Left: Avatar and Welcome */}
         <div className="flex flex-1 items-center gap-3">
           {/* Avatar with Pikachu */}
-          <div className="relative">
-            <div className="relative flex size-12 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-gradient-to-br from-pink-400 via-purple-500 to-purple-700">
-              {/* Lightning bolt background */}
-              <svg
-                className="absolute inset-0 h-full w-full opacity-30"
-                viewBox="0 0 100 100"
-                fill="none"
-              >
-                <path d="M50 10L70 50H55L60 90L30 50H45L50 10Z" fill="white" />
-              </svg>
-              {/* Pikachu */}
-              <div className="relative size-12 overflow-hidden rounded-full border border-white">
-                <img
-                  src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
-                  alt="Pikachu"
-                  width={48}
-                  height={48}
-                />
-              </div>
-            </div>
-          </div>
+          <Avatar className="size-10">
+            <AvatarImage src={user?.avatar || ""} />
+            <AvatarFallback className="bg-gray-500">
+              <UserRound className="size-6 text-white" />
+            </AvatarFallback>
+          </Avatar>
 
           {/* Welcome Text */}
           <div className="flex flex-col">
@@ -51,7 +41,7 @@ function Header({ isLoading = false }: HeaderProps) {
               {t("pages.home.welcomeBack")},
             </span>
             <span className="text-base font-semibold text-white">
-              Krystina Jenny
+              {user?.nickname || user?.name}
             </span>
           </div>
         </div>
@@ -62,6 +52,7 @@ function Header({ isLoading = false }: HeaderProps) {
           <Button
             variant="ghost"
             className="h-auto rounded-2xl bg-white/5 px-4 py-2 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] hover:bg-white/10"
+            onClick={() => navigate({ to: "/search" })}
           >
             <SearchIcon className="mr-2 size-5 text-white" />
             <span className="text-sm text-white">{t("pages.home.search")}</span>

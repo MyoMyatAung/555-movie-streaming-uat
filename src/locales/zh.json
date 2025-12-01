@@ -45,9 +45,14 @@
     "hello": "你好",
     "optional": "可选",
     "continue": "继续",
-    "play": "播放"
+    "play": "播放",
+    "notSet": "未设置",
+    "notFound": {
+      "title": "页面未找到",
+      "description": "您要查找的页面不存在或已被移动。",
+      "goHome": "返回首页"
+    }
   },
-
   "auth": {
     "signUp": {
       "title": "注册",
@@ -218,7 +223,24 @@
       "failedToUpdateNickname": "昵称更新失败",
       "failedToUpdateBio": "个人简介更新失败",
       "failedToUpdateLocation": "位置更新失败",
-      "failedToUpdateGender": "性别更新失败"
+      "failedToUpdateGender": "性别更新失败",
+      "setAvatar": "设置头像",
+      "setNickname": "设置昵称",
+      "socialBind": "社交绑定",
+      "notYet": "尚未设置",
+      "usernameCanBeUsedToLogin": "可用于登录",
+      "noMoreThanCharacters": "不超过 {{count}} 个字符",
+      "nicknameRequired": "昵称是必填项",
+      "avatarUpdatedSuccessfully": "头像更新成功",
+      "failedToUpdateAvatar": "头像更新失败",
+      "takePicture": "拍照",
+      "chooseFromGallery": "从相册选择",
+      "choosePresetAvatar": "选择预设头像",
+      "presetAvatar": "预设头像",
+      "save": "保存",
+      "confirm": "确认",
+      "setAvatarConfirmation": "确定要将此预设头像保存为您的个人资料图片吗？",
+      "unlockLevelRequired": "您无法在此等级更改此头像。您需要先解锁 Lvl {{level}}。"
     },
     "settings": {
       "account": "账户",
@@ -227,10 +249,12 @@
       "changePassword": "更改密码",
       "changeUsername": "更改用户名",
       "currentPassword": "当前密码",
+      "currentPasswordRequired": "当前密码是必填项",
       "currentPasswordPlaceholder": "输入当前密码",
       "email": "邮箱",
       "emailPlaceholder": "请输入您的邮箱",
       "emailUpdatedSuccessfully": "邮箱更新成功",
+      "emailSameAsCurrent": "新邮箱必须与当前邮箱不同",
       "enterCurrentPassword": "输入当前密码",
       "enterNewPassword": "输入新密码",
       "enterNewUsername": "输入新用户名",
@@ -259,7 +283,7 @@
       "usernameUpdatedSuccessfully": "用户名更新成功",
       "usernameMinLength": "用户名必须至少5个字符",
       "usernameMaxLength": "用户名必须最多25个字符",
-      "passwordRequirements": "密码必须为8-25个字符，并且至少包含字母和数字两种组合",
+      "passwordRequirements": "8-25个字符。必须至少包含以下两种组合：字母、数字。",
       "passwordMinLength": "密码必须至少8个字符",
       "mobileRequired": "手机号码是必填项",
       "mobileDigitsOnly": "手机号码只能包含数字",
@@ -271,6 +295,7 @@
       "goBack": "返回",
       "mobileUpdatedSuccessfully": "手机号码更新成功",
       "failedToUpdateMobile": "手机号码更新失败",
+      "phoneSameAsCurrent": "新手机号码必须与当前手机号码不同",
       "notifications": "通知",
       "teenMode": "青少年模式",
       "pictureInPictureMode": "画中画模式",
@@ -314,6 +339,25 @@
     "error": {
       "refresh": "刷新一下",
       "switch": "切换资源"
+    }
+  },
+  "search": {
+    "placeholder": "搜索电影和剧集...",
+    "recentSearches": "搜索历史",
+    "clearAll": "删除",
+    "recommendedMovies": "为你推荐",
+    "results": "搜索结果",
+    "noResults": "没有找到搜索结果",
+    "filters": {
+      "title": "筛选",
+      "categories": "分类",
+      "sort": "排序",
+      "sortOptions": {
+        "comprehensive": "综合",
+        "hottest": "最热",
+        "rating": "评分",
+        "newest": "最新"
+      }
     }
   }
 }

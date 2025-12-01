@@ -200,3 +200,47 @@ select:-webkit-autofill:focus {
   caret-color: #ffffff;
   transition: background-color 9999s ease-in-out 0s;
 }
+
+.glassmorphism {
+  backdrop-filter: blur(3px);
+  background-color: rgba(255, 255, 255, 0.1);
+  /* border: 1px solid rgba(255, 255, 255, 0.2); */
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.glassmorphism:hover {
+  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.glassmorphism-primary-blue {
+  backdrop-filter: blur(3px);
+  background-color: rgba(36, 150, 255, 1);
+  /* border: 1px solid rgba(255, 255, 255, 0.2); */
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.glassmorphism-light {
+  backdrop-filter: blur(8px) saturate(100%);
+  background-color: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.glassmorphism-light:hover {
+  backdrop-filter: blur(10px) saturate(120%);
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}

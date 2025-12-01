@@ -82,7 +82,7 @@ export async function accountSetupApi(
     `${AUTH_BASE_URL}/auth/account-setup`,
     payload,
   );
-  console.log({ response });
+
   return response.data;
 }
 
@@ -98,7 +98,7 @@ export async function getMeApi(token: string): Promise<UserResponse> {
       },
     },
   );
-  console.log({ response });
+
   return response.data;
 }
 

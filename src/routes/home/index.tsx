@@ -1,32 +1,35 @@
+import { useGetIndexRecommend } from "@/apis/home/queryGetIndexRecommend";
 import HomeLayout from "@/components/common/layouts/HomeLayout";
 import { ContentFilter } from "@/components/common/movies/ContentFilter";
 import { ContinueWatchingSection } from "@/components/common/movies/ContinueWatchingSection";
 import { HeroBanner } from "@/components/common/movies/HeroBanner";
 import { HorizontalScrollSection } from "@/components/common/movies/HorizontalScrollSection";
 import HomePageSkeleton from "@/components/common/skeletons/HomePageSkeleton";
-import { mockContentSections, mockHeroBanners } from "@/data/mockMovies";
+import { mockHeroBanners } from "@/data/mockMovies";
 import { db } from "@/lib/db";
 import type {
   ContentCategory,
   ContentItem,
   HeroBannerItem,
 } from "@/types/movie";
+import type { IndexRecommendSection } from "@/types/post";
 import { seedWatchlist } from "@/utils/seedWatchlist";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/home/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] =
     useState<ContentCategory>("all");
+
+  const { sections: apiSections, isLoading: isApiLoading } =
+    useGetIndexRecommend();
 
   // Fetch watch list from IndexedDB
   const watchListFromIndexDB = useLiveQuery(() =>
@@ -67,60 +70,85 @@ function RouteComponent() {
     "animations",
   ];
 
-  // Get all items from mock data (this would be replaced with API call)
-  const allMockItems = mockContentSections.flatMap((section) => section.items);
+  // Filter sections based on layout type (only list and carousel)
+  const filteredSections = useMemo(() => {
+    if (!apiSections || apiSections.length === 0) return [];
 
-  // Filter watch list videos from mock data based on IndexedDB
+    return apiSections.filter((section) => {
+      return (
+        section.layout === "index_recommend_list" ||
+        section.layout === "index_recommend_carousel"
+      );
+    });
+  }, [apiSections]);
+
+  // Get all items from API sections for watchlist filtering
+  const allApiItems = useMemo<ContentItem[]>(() => {
+    if (!apiSections || apiSections.length === 0) return [];
+
+    const items: ContentItem[] = [];
+
+    apiSections.forEach((section) => {
+      if (section.layout === "index_recommend_list") {
+        section.list.forEach((item) => {
+          items.push({
+            id: item.id,
+            title: item.name,
+            imageUrl: item.cover,
+            type: "movie",
+            badge: item.label
+              ? { type: "highly_recommended", label: item.label }
+              : undefined,
+            genres: item.type_name ? [item.type_name] : undefined,
+          });
+        });
+      } else if (section.layout === "index_recommend_carousel") {
+        section.list.forEach((item, index) => {
+          items.push({
+            id: `carousel-${index}-${item.title}`,
+            title: item.title,
+            imageUrl: item.image,
+            type: "movie",
+            badge: item.label
+              ? { type: "highly_recommended", label: item.label }
+              : undefined,
+          });
+        });
+      }
+    });
+
+    return items;
+  }, [apiSections]);
+
+  // Filter watch list videos from API data based on IndexedDB
   const watchListVideos = useMemo<ContentItem[]>(() => {
     if (!watchListData || watchListData.length === 0) return [];
 
-    return allMockItems.filter((item) =>
+    return allApiItems.filter((item) =>
       watchListData.some(
         (watchList: { vod_id: string }) => watchList.vod_id === item.id,
       ),
     );
-  }, [watchListData, allMockItems]);
-
-  // Map section IDs to translation keys
-  const getSectionTitle = (sectionId: string): string => {
-    const titleMap: Record<string, string> = {
-      "latest-movies": t("pages.home.sections.latestMovies"),
-      "top-ten": t("pages.home.sections.topTenWatchlist"),
-      trending: t("pages.home.sections.trendingNow"),
-    };
-    return titleMap[sectionId] || sectionId;
-  };
-
-  // Filter other content sections based on selected category
-  const filteredSections = mockContentSections
-    .filter((section) => section.id !== "continue-watching")
-    .map((section) => ({
-      ...section,
-      title: getSectionTitle(section.id),
-      items:
-        selectedCategory === "all"
-          ? section.items
-          : section.items.filter((item) => {
-              if (selectedCategory === "movies") return item.type === "movie";
-              if (selectedCategory === "tv_series")
-                return item.type === "tv_series";
-              if (selectedCategory === "animations")
-                return item.type === "animation";
-              return true;
-            }),
-    }));
+  }, [watchListData, allApiItems]);
 
   const handleWatchNow = (item: HeroBannerItem) => {
     // TODO: Navigate to watch page or open player
     console.log("Watch now:", item);
   };
 
-  const handleSeeAll = (sectionId: string) => {
-    if (sectionId === "continue-watching") {
-      navigate({ to: "/continue-watching" });
+  const handleSeeAll = (section: IndexRecommendSection) => {
+    if (
+      section.right &&
+      "type" in section.right &&
+      section.right.type === "navigator"
+    ) {
+      const navData = section.right.data;
+      if (navData.page === "post_list") {
+        // TODO: Navigate to post list page with params
+        console.log("Navigate to post list:", navData.param);
+      }
     } else {
-      // TODO: Navigate to other section detail pages
-      console.log("See all:", sectionId);
+      console.log("See all:", section);
     }
   };
 
@@ -130,8 +158,8 @@ function RouteComponent() {
   };
 
   return (
-    <HomeLayout isLoading={isLoading}>
-      {isLoading ? (
+    <HomeLayout isLoading={isLoading || isApiLoading}>
+      {isLoading || isApiLoading ? (
         <HomePageSkeleton />
       ) : (
         <div className="min-h-screen pb-6">
@@ -144,10 +172,12 @@ function RouteComponent() {
             />
           </div>
 
-          {/* Hero Banner */}
-          <div className="px-4 pt-4">
-            <HeroBanner items={mockHeroBanners} onWatchNow={handleWatchNow} />
-          </div>
+          {/* Hero Banner - Check for carousel sections */}
+          {apiSections.some((s) => s.layout === "index_recommend_carousel") && (
+            <div className="px-4 pt-4">
+              <HeroBanner items={mockHeroBanners} onWatchNow={handleWatchNow} />
+            </div>
+          )}
 
           {/* Content Sections */}
           <div className="mt-6 space-y-8">
@@ -160,10 +190,10 @@ function RouteComponent() {
               onItemClick={handleItemClick}
             />
 
-            {/* Other Sections */}
-            {filteredSections.map((section) => (
+            {/* API Sections */}
+            {filteredSections.map((section, index) => (
               <HorizontalScrollSection
-                key={section.id}
+                key={`${section.layout}-${index}`}
                 section={section}
                 onSeeAll={handleSeeAll}
                 onItemClick={handleItemClick}

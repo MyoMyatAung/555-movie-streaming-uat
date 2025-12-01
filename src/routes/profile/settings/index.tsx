@@ -56,7 +56,7 @@ function RouteComponent() {
           onClose={() => navigate({ to: "/profile" })}
         />
 
-        <div className="bg-opacity-10 mt-6 rounded-xl border border-white/20 bg-white/2 p-4 backdrop-blur-3xl">
+        <div className="glassmorphism-light mt-6 rounded-xl bg-white/2 p-4">
           <div className="space-y-6">
             {settings.map((setting) => (
               <div

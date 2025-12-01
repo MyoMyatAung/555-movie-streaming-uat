@@ -83,9 +83,9 @@ function SheetModal({
                 variant={"ghost"}
                 size={"icon"}
                 onClick={onClose}
-                className="absolute -top-1 right-5 text-white"
+                className="absolute -top-1 right-5 rounded-full bg-white/4 text-white hover:bg-white/8 hover:text-white"
               >
-                <XIcon className="size-6" />
+                <XIcon className="size-5 text-white/80" />
               </Button>
             )}
           </div>

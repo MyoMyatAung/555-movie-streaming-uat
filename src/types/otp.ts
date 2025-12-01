@@ -3,8 +3,8 @@ export interface SendOTPRequest {
   recipient: string;
   channel: "email" | "sms" | "phone";
   action:
-    | "changeEmail"
-    | "changePhone"
+    | "change-email"
+    | "change-phone"
     | "register"
     | "login"
     | "forgot-password";
@@ -26,8 +26,8 @@ export interface VerifyOTPRequest {
   recipient: string;
   otp: string;
   action:
-    | "changeEmail"
-    | "changePhone"
+    | "change-email"
+    | "change-phone"
     | "register"
     | "login"
     | "forgot-password";

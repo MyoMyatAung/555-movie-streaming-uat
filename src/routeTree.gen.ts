@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SearchIndexRouteImport } from './routes/search/index'
 import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as ExploreIndexRouteImport } from './routes/explore/index'
@@ -19,12 +21,24 @@ import { Route as PlayerIdRouteImport } from './routes/player/$id'
 import { Route as AuthSocialSignupRouteImport } from './routes/_auth/social-signup'
 import { Route as AuthSocialCallbackRouteImport } from './routes/_auth/social-callback'
 import { Route as ProfileSettingsIndexRouteImport } from './routes/profile/settings/index'
+import { Route as ProfileEditIndexRouteImport } from './routes/profile/edit/index'
 import { Route as ProfileCollectionIndexRouteImport } from './routes/profile/collection/index'
+import { Route as ProfileEditPresetAvatarRouteImport } from './routes/profile/edit/preset-avatar'
 import { Route as ProfileCollectionSlugRouteImport } from './routes/profile/collection/$slug'
 
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchIndexRoute = SearchIndexRouteImport.update({
+  id: '/search/',
+  path: '/search/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileIndexRoute = ProfileIndexRouteImport.update({
@@ -72,9 +86,19 @@ const ProfileSettingsIndexRoute = ProfileSettingsIndexRouteImport.update({
   path: '/profile/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileEditIndexRoute = ProfileEditIndexRouteImport.update({
+  id: '/profile/edit/',
+  path: '/profile/edit/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileCollectionIndexRoute = ProfileCollectionIndexRouteImport.update({
   id: '/profile/collection/',
   path: '/profile/collection/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileEditPresetAvatarRoute = ProfileEditPresetAvatarRouteImport.update({
+  id: '/profile/edit/preset-avatar',
+  path: '/profile/edit/preset-avatar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileCollectionSlugRoute = ProfileCollectionSlugRouteImport.update({
@@ -85,6 +109,7 @@ const ProfileCollectionSlugRoute = ProfileCollectionSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/social-callback': typeof AuthSocialCallbackRoute
   '/social-signup': typeof AuthSocialSignupRoute
   '/player/$id': typeof PlayerIdRoute
@@ -93,12 +118,16 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
   '/profile': typeof ProfileIndexRoute
+  '/search': typeof SearchIndexRoute
   '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
+  '/profile/edit/preset-avatar': typeof ProfileEditPresetAvatarRoute
   '/profile/collection': typeof ProfileCollectionIndexRoute
+  '/profile/edit': typeof ProfileEditIndexRoute
   '/profile/settings': typeof ProfileSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/social-callback': typeof AuthSocialCallbackRoute
   '/social-signup': typeof AuthSocialSignupRoute
   '/player/$id': typeof PlayerIdRoute
@@ -107,13 +136,17 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreIndexRoute
   '/home': typeof HomeIndexRoute
   '/profile': typeof ProfileIndexRoute
+  '/search': typeof SearchIndexRoute
   '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
+  '/profile/edit/preset-avatar': typeof ProfileEditPresetAvatarRoute
   '/profile/collection': typeof ProfileCollectionIndexRoute
+  '/profile/edit': typeof ProfileEditIndexRoute
   '/profile/settings': typeof ProfileSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/_auth/social-callback': typeof AuthSocialCallbackRoute
   '/_auth/social-signup': typeof AuthSocialSignupRoute
   '/player/$id': typeof PlayerIdRoute
@@ -122,14 +155,18 @@ export interface FileRoutesById {
   '/explore/': typeof ExploreIndexRoute
   '/home/': typeof HomeIndexRoute
   '/profile/': typeof ProfileIndexRoute
+  '/search/': typeof SearchIndexRoute
   '/profile/collection/$slug': typeof ProfileCollectionSlugRoute
+  '/profile/edit/preset-avatar': typeof ProfileEditPresetAvatarRoute
   '/profile/collection/': typeof ProfileCollectionIndexRoute
+  '/profile/edit/': typeof ProfileEditIndexRoute
   '/profile/settings/': typeof ProfileSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$'
     | '/social-callback'
     | '/social-signup'
     | '/player/$id'
@@ -138,12 +175,16 @@ export interface FileRouteTypes {
     | '/explore'
     | '/home'
     | '/profile'
+    | '/search'
     | '/profile/collection/$slug'
+    | '/profile/edit/preset-avatar'
     | '/profile/collection'
+    | '/profile/edit'
     | '/profile/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$'
     | '/social-callback'
     | '/social-signup'
     | '/player/$id'
@@ -152,12 +193,16 @@ export interface FileRouteTypes {
     | '/explore'
     | '/home'
     | '/profile'
+    | '/search'
     | '/profile/collection/$slug'
+    | '/profile/edit/preset-avatar'
     | '/profile/collection'
+    | '/profile/edit'
     | '/profile/settings'
   id:
     | '__root__'
     | '/'
+    | '/$'
     | '/_auth/social-callback'
     | '/_auth/social-signup'
     | '/player/$id'
@@ -166,13 +211,17 @@ export interface FileRouteTypes {
     | '/explore/'
     | '/home/'
     | '/profile/'
+    | '/search/'
     | '/profile/collection/$slug'
+    | '/profile/edit/preset-avatar'
     | '/profile/collection/'
+    | '/profile/edit/'
     | '/profile/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
   AuthSocialCallbackRoute: typeof AuthSocialCallbackRoute
   AuthSocialSignupRoute: typeof AuthSocialSignupRoute
   PlayerIdRoute: typeof PlayerIdRoute
@@ -181,18 +230,35 @@ export interface RootRouteChildren {
   ExploreIndexRoute: typeof ExploreIndexRoute
   HomeIndexRoute: typeof HomeIndexRoute
   ProfileIndexRoute: typeof ProfileIndexRoute
+  SearchIndexRoute: typeof SearchIndexRoute
   ProfileCollectionSlugRoute: typeof ProfileCollectionSlugRoute
+  ProfileEditPresetAvatarRoute: typeof ProfileEditPresetAvatarRoute
   ProfileCollectionIndexRoute: typeof ProfileCollectionIndexRoute
+  ProfileEditIndexRoute: typeof ProfileEditIndexRoute
   ProfileSettingsIndexRoute: typeof ProfileSettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search/': {
+      id: '/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile/': {
@@ -258,11 +324,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileSettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/edit/': {
+      id: '/profile/edit/'
+      path: '/profile/edit'
+      fullPath: '/profile/edit'
+      preLoaderRoute: typeof ProfileEditIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/collection/': {
       id: '/profile/collection/'
       path: '/profile/collection'
       fullPath: '/profile/collection'
       preLoaderRoute: typeof ProfileCollectionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/edit/preset-avatar': {
+      id: '/profile/edit/preset-avatar'
+      path: '/profile/edit/preset-avatar'
+      fullPath: '/profile/edit/preset-avatar'
+      preLoaderRoute: typeof ProfileEditPresetAvatarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile/collection/$slug': {
@@ -277,6 +357,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
   AuthSocialCallbackRoute: AuthSocialCallbackRoute,
   AuthSocialSignupRoute: AuthSocialSignupRoute,
   PlayerIdRoute: PlayerIdRoute,
@@ -285,8 +366,11 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreIndexRoute: ExploreIndexRoute,
   HomeIndexRoute: HomeIndexRoute,
   ProfileIndexRoute: ProfileIndexRoute,
+  SearchIndexRoute: SearchIndexRoute,
   ProfileCollectionSlugRoute: ProfileCollectionSlugRoute,
+  ProfileEditPresetAvatarRoute: ProfileEditPresetAvatarRoute,
   ProfileCollectionIndexRoute: ProfileCollectionIndexRoute,
+  ProfileEditIndexRoute: ProfileEditIndexRoute,
   ProfileSettingsIndexRoute: ProfileSettingsIndexRoute,
 }
 export const routeTree = rootRouteImport

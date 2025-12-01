@@ -45,7 +45,13 @@
     "hello": "Hello",
     "optional": "Optional",
     "continue": "Continue",
-    "play": "Play"
+    "play": "Play",
+    "notSet": "Not Set",
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you're looking for doesn't exist or has been moved.",
+      "goHome": "Go Home"
+    }
   },
   "auth": {
     "signUp": {
@@ -215,7 +221,24 @@
       "failedToUpdateNickname": "Failed to update nickname",
       "failedToUpdateBio": "Failed to update bio",
       "failedToUpdateLocation": "Failed to update location",
-      "failedToUpdateGender": "Failed to update gender"
+      "failedToUpdateGender": "Failed to update gender",
+      "setAvatar": "Set Avatar",
+      "setNickname": "Set Nickname",
+      "socialBind": "Social Bind",
+      "notYet": "Not Yet",
+      "usernameCanBeUsedToLogin": "can be used to log in",
+      "noMoreThanCharacters": "No more than {{count}} characters",
+      "nicknameRequired": "Nickname is required",
+      "avatarUpdatedSuccessfully": "Avatar updated successfully",
+      "failedToUpdateAvatar": "Failed to update avatar",
+      "takePicture": "Take a picture",
+      "chooseFromGallery": "Choose From Gallery",
+      "choosePresetAvatar": "Choose Preset Avatar",
+      "presetAvatar": "Preset Avatar",
+      "save": "Save",
+      "confirm": "Confirm",
+      "setAvatarConfirmation": "Are sure you want to save this preset avatar as your profile picture?",
+      "unlockLevelRequired": "You can't change this avatar this level. You need to unlock Lvl {{level}} first."
     },
     "settings": {
       "account": "Account",
@@ -224,10 +247,12 @@
       "changePassword": "Change Password",
       "changeUsername": "Change Username",
       "currentPassword": "Current Password",
+      "currentPasswordRequired": "Current password is required",
       "currentPasswordPlaceholder": "Enter current password",
       "email": "Email",
       "emailPlaceholder": "Enter your email",
       "emailUpdatedSuccessfully": "Email updated successfully",
+      "emailSameAsCurrent": "New email must be different from current email",
       "enterCurrentPassword": "Enter current password",
       "enterNewPassword": "Enter new password",
       "enterNewUsername": "Enter new username",
@@ -256,7 +281,7 @@
       "usernameUpdatedSuccessfully": "Username updated successfully",
       "usernameMinLength": "Username must be at least 5 characters",
       "usernameMaxLength": "Username must be at most 25 characters",
-      "passwordRequirements": "Password must be 8-25 characters and include both letters and numbers.",
+      "passwordRequirements": "8-25 characters. Must be a combination of at least two of the following: letters, numbers.",
       "mobileRequired": "Mobile number is required",
       "mobileDigitsOnly": "Mobile number can contain only digits",
       "mobileMinLength": "Mobile number must be at least 8 digits",
@@ -267,6 +292,7 @@
       "goBack": "Go back",
       "mobileUpdatedSuccessfully": "Mobile number updated successfully",
       "failedToUpdateMobile": "Failed to update mobile number",
+      "phoneSameAsCurrent": "New phone number must be different from current phone number",
       "notifications": "Notifications",
       "teenMode": "Teen Mode",
       "pictureInPictureMode": "Picture-in-picture mode",
@@ -311,6 +337,26 @@
     "error": {
       "refresh": "Refresh",
       "switch": "Switch Resources"
+    }
+  },
+  "search": {
+    "placeholder": "Search movies and series...",
+    "recentSearches": "Recent Searches",
+    "clearAll": "Remove",
+    "recommendedMovies": "Recommended Movies",
+    "results": "Search Results",
+    "noResults": "No Search Results Found",
+    "filters": {
+      "title": "Filters",
+
+      "categories": "Categories",
+      "sort": "Sort",
+      "sortOptions": {
+        "comprehensive": "Comprehensive",
+        "hottest": "Hottest",
+        "rating": "Rating",
+        "newest": "Newest"
+      }
     }
   }
 }

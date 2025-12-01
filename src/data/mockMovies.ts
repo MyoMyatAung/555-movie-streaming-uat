@@ -288,3 +288,16 @@ export const mockContentSections: ContentSection[] = [
     showSeeAll: true,
   },
 ];
+
+export const mockCategories: string[] = [
+  "all",
+  "Actions",
+  "Comedy",
+  "Drama",
+  "Horror",
+  "Romance",
+  "Sci-Fi",
+  "Thriller",
+];
+
+export const mockMovieTypes: string[] = ["全部", "电影", "电视剧", "动画", "纪录片"];
