@@ -1,7 +1,12 @@
 import Artplayer from "artplayer";
 import Hls from "hls.js";
-import React, { useEffect, useRef, type ReactNode } from "react";
+import React, { useEffect, useRef, useState, useCallback, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { NetworkError } from "./NetworkError";
+import { PlaybackError } from "./PlaybackError";
+import { ChevronLeft } from "lucide-react";
+import { Button } from "../ui/button";
+import { useRouter } from "@tanstack/react-router";
 
 interface LayerConfig {
   name: string;
@@ -10,6 +15,8 @@ interface LayerConfig {
   style?: React.CSSProperties;
 }
 
+type ErrorType = "network" | "playback" | null;
+
 interface VideoPlayerProps {
   url: string;
   poster?: string;
@@ -17,6 +24,9 @@ interface VideoPlayerProps {
   autoplay?: boolean;
   muted?: boolean;
   layers?: LayerConfig[];
+  onRefresh?: () => void;
+  onSwitchResource?: () => void;
+  showSwitchResource?: boolean;
 }
 
 function VideoPlayer({
@@ -26,13 +36,28 @@ function VideoPlayer({
   autoplay = false,
   muted = false,
   layers = [],
+  onRefresh,
+  onSwitchResource,
+  showSwitchResource = true,
 }: VideoPlayerProps) {
+  const router = useRouter();
   const $container = useRef<HTMLDivElement>(null);
   const artRef = useRef<Artplayer | null>(null);
   const layerRootsRef = useRef<Map<string, Root>>(new Map());
+  const [error, setError] = useState<ErrorType>(null);
+
+  /**
+   * Handle back navigation
+   * 
+   * Uses router history to navigate back to the previous page.
+   * If there's no history, falls back to browser's native history.
+   */
+  const handleBack = useCallback(() => {
+    router.history.back();
+  }, [router]);
 
   useEffect(() => {
-    if (!$container.current) return;
+    if (!$container.current || error) return;
 
     // Initialize artplayer
     const art = new Artplayer({
@@ -121,16 +146,17 @@ function VideoPlayer({
                 switch (data.type) {
                   case Hls.ErrorTypes.NETWORK_ERROR:
                     console.error(
-                      "Network error encountered, trying to recover",
+                      "Network error encountered",
                     );
-                    hls.startLoad();
+                    setError("network");
                     break;
                   case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.error("Media error encountered, trying to recover");
-                    hls.recoverMediaError();
+                    console.error("Media error encountered");
+                    setError("playback");
                     break;
                   default:
                     console.error("Fatal error encountered, cannot recover");
+                    setError("playback");
                     hls.destroy();
                     break;
                 }
@@ -146,11 +172,24 @@ function VideoPlayer({
           } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
             // For Safari native HLS support
             video.src = url;
+            
+            // Handle native HLS errors
+            video.addEventListener('error', () => {
+              console.error("Native HLS playback error");
+              setError("playback");
+            });
           } else {
             console.error("HLS is not supported in this browser");
+            setError("playback");
           }
         },
       },
+    });
+
+    // Handle video errors
+    art.on("video:error", () => {
+      console.error("Video playback error");
+      setError("playback");
     });
 
     artRef.current = art;
@@ -168,9 +207,66 @@ function VideoPlayer({
         artRef.current = null;
       }
     };
-  }, [url, poster, title, autoplay, muted, layers]);
+  }, [url, poster, title, autoplay, muted, layers, error]);
 
-  return <div ref={$container} className="aspect-video w-full"></div>;
+  // Reset error when URL changes
+  useEffect(() => {
+    setError(null);
+  }, [url]);
+
+  const handleRefresh = () => {
+    setError(null);
+    if (artRef.current && artRef.current.video) {
+      // Reload the video
+      artRef.current.video.load();
+      artRef.current.play();
+    }
+    onRefresh?.();
+  };
+
+  const handleSwitchResource = () => {
+    setError(null);
+    onSwitchResource?.();
+  };
+
+  return (
+    <div className="relative aspect-video w-full bg-black">
+      {/** Back button - navigates to the previous page */}
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className="absolute top-4 left-4 z-10 glassmorphism rounded-full cursor-pointer"
+        onClick={handleBack}
+        aria-label="Go back"
+      >
+        <ChevronLeft className="size-5 text-white" />
+      </Button>
+      {/* Video container - hidden when there's an error */}
+      <div 
+        ref={$container} 
+        className={`aspect-video w-full ${error ? 'hidden' : ''}`}
+      ></div>
+      
+      {/* Error overlay - shown when there's an error */}
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          {error === "network" ? (
+            <NetworkError
+              onRefresh={handleRefresh}
+              onSwitchResource={handleSwitchResource}
+              showSwitchResource={showSwitchResource}
+            />
+          ) : (
+            <PlaybackError
+              onRefresh={handleRefresh}
+              onSwitchResource={handleSwitchResource}
+              showSwitchResource={showSwitchResource}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default React.memo(VideoPlayer);
