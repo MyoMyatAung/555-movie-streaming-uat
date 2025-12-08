@@ -1,128 +1,155 @@
+/**
+ * Collection List Route
+ *
+ * Displays the user's collections with the virtual "Favorite" collection first.
+ * Provides functionality to create new collections and navigate to collection details.
+ *
+ * Features:
+ * - Fetches collections from API with React Query
+ * - Loading skeleton state
+ * - Error state with retry functionality
+ * - Empty state with create action
+ * - Create collection modal
+ *
+ * Route: /profile/collection
+ *
+ * @see useCollectionList for data fetching
+ * @see CollectionCard for individual collection display
+ */
+
+import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import IconPlus from "@/assets/svgs/icon-plus.svg?react";
 import NestedLayout from "@/components/common/layouts/NestedLayout";
-import CollectionCard from "@/components/pages/collection/CollectionCard";
 import { Button } from "@/components/ui/button";
-import type { Collection } from "@/types/collection";
-import { createFileRoute } from "@tanstack/react-router";
+import { useCollectionList } from "@/apis/collection";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  CollectionCard,
+  CreateCollectionSheet,
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from "@/components/pages/collection";
+import { isFavoriteCollection } from "@/types/collection";
+
+// =============================================================================
+// Route Definition
+// =============================================================================
 
 export const Route = createFileRoute("/profile/collection/")({
-  component: RouteComponent,
+  component: CollectionListPage,
 });
 
-const COLLECTIONS: (Collection & { isDefault?: boolean })[] = [
-  {
-    id: "1",
-    isDefault: true,
-    title: "Collection 1",
-    videoCount: 4,
-    isPublic: true,
-    views: "99+",
-  },
-  {
-    id: "2",
-    title: "Collection 2",
-    imageUrl:
-      "https://images.unsplash.com/photo-1761839258575-038fef381ee7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=700",
-    videoCount: 10,
-    isPublic: true,
-    views: "100",
-  },
-  {
-    id: "3",
-    title: "Collection 3",
-    imageUrl:
-      "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&h=400&fit=crop",
-    videoCount: 30,
-    isPublic: false,
-    views: "20+",
-  },
-  {
-    id: "4",
-    title: "Action Movies",
-    imageUrl:
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&h=400&fit=crop",
-    videoCount: 15,
-    isPublic: true,
-    views: "500",
-  },
-  {
-    id: "5",
-    title: "Comedy Collection",
-    imageUrl:
-      "https://images.unsplash.com/photo-1606041008023-472dfb5e530f?w=800&h=400&fit=crop",
-    videoCount: 8,
-    isPublic: true,
-    views: "250",
-  },
-  {
-    id: "6",
-    title: "Sci-Fi Favorites",
-    imageUrl:
-      "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=400&fit=crop",
-    videoCount: 22,
-    isPublic: false,
-    views: "50+",
-  },
-  {
-    id: "7",
-    title: "Documentaries",
-    imageUrl:
-      "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&h=400&fit=crop",
-    videoCount: 12,
-    isPublic: true,
-    views: "180",
-  },
-  {
-    id: "8",
-    title: "Horror Night",
-    imageUrl:
-      "https://images.unsplash.com/photo-1512070679279-8988d32161be?w=800&h=400&fit=crop",
-    videoCount: 18,
-    isPublic: true,
-    views: "320",
-  },
-  {
-    id: "9",
-    title: "Romance Collection",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=800&h=400&fit=crop",
-    videoCount: 6,
-    isPublic: false,
-    views: "30+",
-  },
-  {
-    id: "10",
-    title: "Thriller Series",
-    videoCount: 25,
-    isPublic: true,
-    views: "450",
-  },
-];
+// =============================================================================
+// Page Component
+// =============================================================================
 
-function RouteComponent() {
+/**
+ * CollectionListPage
+ *
+ * Main page component for the collection list route.
+ * Handles authentication check, data fetching, and state rendering.
+ */
+function CollectionListPage() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  // State for create collection modal
+  const [showCreateSheet, setShowCreateSheet] = useState(false);
+
+  // Fetch collections list
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+  } = useCollectionList(
+    { page: 1, per_page: 50 }, // Get up to 50 collections
+    { enabled: isAuthenticated }
+  );
+
+  // Extract collections from response
+  const collections = data?.data.collections ?? [];
+  const hasCollections = collections.length > 0;
+
+  // Handle collection card click - navigate to detail page
+  const handleCollectionClick = (collectionId: string) => {
+    navigate({ to: "/profile/collection/$slug", params: { slug: collectionId } });
+  };
+
+  // Handle create collection success
+  const handleCreateSuccess = (collection: { id: string }) => {
+    // Optionally navigate to the new collection
+    // navigate({ to: "/profile/collection/$slug", params: { slug: collection.id } });
+  };
+
+  // Render action button for header
+  const renderActionButton = () => (
+    <Button
+      type="button"
+      size="icon"
+      variant="ghost"
+      onClick={() => setShowCreateSheet(true)}
+      className="rounded-full border border-white/10"
+      aria-label={t("profile.collection.createCollection")}
+    >
+      <IconPlus className="size-6 text-white" />
+    </Button>
+  );
+
   return (
     <NestedLayout
-      title="Collection"
+      title={t("profile.collection.title")}
       isIncludeBack
-      actionNode={
-        <Button
-          type="button"
-          size={"icon"}
-          variant={"ghost"}
-          onClick={() => {
-            console.log("action clicked");
-          }}
-          className="rounded-full border border-white/10"
-        >
-          <IconPlus className="size-6 text-white" />
-        </Button>
-      }
+      actionNode={renderActionButton()}
     >
-      <div className="flex flex-col gap-y-2 px-4">
-        {COLLECTIONS.map((collection) => (
-          <CollectionCard key={collection.id} item={collection} />
-        ))}
-      </div>
+      {/* Loading State */}
+      {isLoading && <LoadingState />}
+
+      {/* Error State */}
+      {isError && !isLoading && (
+        <ErrorState
+          title={error?.message}
+          onRetry={() => refetch()}
+          isRetrying={isRefetching}
+        />
+      )}
+
+      {/* Empty State */}
+      {!isLoading && !isError && !hasCollections && (
+        <EmptyState
+          showCreateButton
+          onCreateClick={() => setShowCreateSheet(true)}
+        />
+      )}
+
+      {/* Collection List */}
+      {!isLoading && !isError && hasCollections && (
+        <div className="flex flex-col gap-y-2 px-4">
+          {collections.map((collection) => (
+            <CollectionCard
+              key={collection.id}
+              collection={collection}
+              isDefault={isFavoriteCollection(collection)}
+              onClick={() => handleCollectionClick(collection.name.toLowerCase() === "favorite" ? "favorite" : collection.id)} // if collection name is "favorite", navigate to "favorite" route
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Create Collection Modal */}
+      <CreateCollectionSheet
+        isOpen={showCreateSheet}
+        onClose={() => setShowCreateSheet(false)}
+        onSuccess={handleCreateSuccess}
+      />
     </NestedLayout>
   );
 }
+
+export default CollectionListPage;

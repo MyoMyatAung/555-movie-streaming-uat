@@ -1,21 +1,24 @@
 /**
  * Favourite API Module Exports
- * 
+ *
  * Central export point for favourite-related API functions and hooks.
- * 
- * Current Implementation:
- * - Favourite count query (for collection list)
- * 
- * Future Extensions:
- * - Add favourite mutation
- * - Remove favourite mutation
- * - Check favourite status query
- * - Full favourite list with pagination
+ *
+ * Features:
+ * - Add/remove favourites
+ * - Check favourite status
+ * - Get favourite list with pagination
+ * - Favourite count for collection display
+ *
+ * @module favourite
  */
 
 // API Client Functions
 export * from "./favouriteApi";
 
-// React Query Hooks
+// React Query Hooks - Queries
+export * from "./queries";
 export * from "./queryGetFavouriteCount";
+
+// React Query Hooks - Mutations
+export * from "./mutations";
 

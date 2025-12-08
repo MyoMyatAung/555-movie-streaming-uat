@@ -1,42 +1,42 @@
 /**
- * CollectionItemCard Component
+ * SelectableCollectionItemCard Component
  *
- * Displays a single post/movie within a collection.
- * Shows thumbnail, title, metadata, and play button.
+ * A variant of CollectionItemCard that supports selection state.
+ * Used in the "Remove items from collection" mode.
  *
  * Features:
- * - Thumbnail with resolution badge
- * - Title with episode/full info
- * - Rating display with star icon
- * - Play button for quick access
- * - Click handler for navigation
+ * - Checkbox/radio style selection indicator
+ * - Visual feedback for selected state (blue checkmark)
+ * - Unselected state (empty circle)
+ * - Prevents navigation when in selection mode
  *
  * @example
  * ```tsx
- * <CollectionItemCard
+ * <SelectableCollectionItemCard
  *   item={post}
- *   onClick={() => navigate(`/player/${post.id}`)}
+ *   isSelected={selectedIds.has(post.id)}
+ *   onToggle={() => handleToggleSelection(post.id)}
  * />
  * ```
  */
 
+import { CheckIcon } from "lucide-react";
 import CollectionCover from "@/assets/img/collection-cover.png";
-import IconPlay from "@/assets/svgs/icon-play.svg?react";
 import IconStar from "@/assets/svgs/icon-star-fill.svg?react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import type { CollectionItem, PostFile } from "@/types/collection";
 
 // =============================================================================
 // Types
 // =============================================================================
 
-export interface CollectionItemCardProps {
+export interface SelectableCollectionItemCardProps {
   /** Post/movie data from collection */
   item: CollectionItem;
-  /** Click handler for card selection */
-  onClick?: () => void;
-  /** Click handler for play button */
-  onPlayClick?: () => void;
+  /** Whether this item is currently selected */
+  isSelected: boolean;
+  /** Toggle selection handler */
+  onToggle: () => void;
 }
 
 // =============================================================================
@@ -45,9 +45,6 @@ export interface CollectionItemCardProps {
 
 /**
  * Get thumbnail URL from post files
- *
- * @param files - Array of post files
- * @returns Thumbnail URL or undefined
  */
 function getThumbnail(files?: PostFile[]): string | undefined {
   if (!files || files.length === 0) return undefined;
@@ -55,17 +52,13 @@ function getThumbnail(files?: PostFile[]): string | undefined {
 }
 
 /**
- * Get resolution from post files
- *
- * @param files - Array of post files
- * @returns Resolution string (e.g., "4K", "HD") or undefined
+ * Get resolution from post files (4K, HD, etc.)
  */
 function getResolution(files?: PostFile[]): string | undefined {
   if (!files || files.length === 0) return undefined;
   const file = files[0];
   if (!file) return undefined;
 
-  // Determine resolution based on width
   if (file.width >= 3840) return "4K";
   if (file.width >= 1920) return "HD";
   if (file.width >= 1280) return "HD";
@@ -74,9 +67,6 @@ function getResolution(files?: PostFile[]): string | undefined {
 
 /**
  * Get video duration in minutes
- *
- * @param files - Array of post files
- * @returns Duration in minutes or 0
  */
 function getDuration(files?: PostFile[]): number {
   if (!files || files.length === 0) return 0;
@@ -85,40 +75,63 @@ function getDuration(files?: PostFile[]): number {
 }
 
 // =============================================================================
+// Sub-components
+// =============================================================================
+
+/**
+ * SelectionIndicator
+ *
+ * Visual indicator for selection state.
+ * Shows empty circle when unselected, blue checkmark when selected.
+ */
+function SelectionIndicator({ isSelected }: { isSelected: boolean }) {
+  return (
+    <div
+      className={cn(
+        "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200",
+        isSelected
+          ? "border-blue-500 bg-blue-500"
+          : "border-white/30 bg-transparent"
+      )}
+    >
+      {isSelected && <CheckIcon className="size-4 text-white" strokeWidth={3} />}
+    </div>
+  );
+}
+
+// =============================================================================
 // Component
 // =============================================================================
 
 /**
- * CollectionItemCard
+ * SelectableCollectionItemCard
  *
- * Renders a post/movie card within a collection.
- * Displays thumbnail, title, duration, and play action.
+ * Renders a selectable post card for batch removal operations.
+ * Click anywhere on the card to toggle selection.
  */
-export function CollectionItemCard({
+export function SelectableCollectionItemCard({
   item,
-  onClick,
-  onPlayClick,
-}: CollectionItemCardProps) {
+  isSelected,
+  onToggle,
+}: SelectableCollectionItemCardProps) {
   const thumbnail = getThumbnail(item.files);
   const resolution = getResolution(item.files);
   const duration = getDuration(item.files);
 
-  // Handle play button click without triggering card click
-  const handlePlayClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onPlayClick?.();
-  };
-
   return (
     <div
-      className="grid w-full cursor-pointer grid-cols-12 items-center gap-x-3"
-      onClick={onClick}
-      role="button"
+      className={cn(
+        "grid w-full cursor-pointer grid-cols-12 items-center gap-x-3 rounded-lg p-1 transition-colors",
+        isSelected && "bg-white/5"
+      )}
+      onClick={onToggle}
+      role="checkbox"
+      aria-checked={isSelected}
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          onClick?.();
+          onToggle();
         }
       }}
     >
@@ -147,40 +160,32 @@ export function CollectionItemCard({
 
           {/* Metadata Row */}
           <div className="flex items-center text-sm text-white/70">
-            {/* Duration */}
             {duration > 0 && (
               <>
                 <span>{duration} min</span>
                 <div className="mx-2 h-4 border-l border-white/20" />
               </>
             )}
-
-            {/* Tags */}
             {item.tag && item.tag.length > 0 && (
               <span className="line-clamp-1">{item.tag.slice(0, 2).join(", ")}</span>
             )}
           </div>
 
-          {/* Rating placeholder - API doesn't provide rating yet */}
+          {/* Rating placeholder */}
           <div className="flex items-center gap-x-2">
             <IconStar className="size-4 text-neutral-50" />
             <span className="text-sm text-white/70">—</span>
           </div>
         </div>
 
-        {/* Play Button */}
-        <Button
-          type="button"
-          size="icon"
-          variant="ghost"
-          onClick={handlePlayClick}
-          className="ml-3 rounded-full border border-white/10 backdrop-blur-xs hover:bg-white/10"
-        >
-          <IconPlay className="size-6 text-white" />
-        </Button>
+        {/* Selection Indicator (replaces play button) */}
+        <div className="ml-3">
+          <SelectionIndicator isSelected={isSelected} />
+        </div>
       </div>
     </div>
   );
 }
 
-export default CollectionItemCard;
+export default SelectableCollectionItemCard;
+

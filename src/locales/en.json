@@ -180,7 +180,21 @@
       "videos": "Videos",
       "public": "Public",
       "private": "Private",
-      "views": "views"
+      "views": "views",
+      "deleteDialogTitle": "Delete This Collection?",
+      "deleteDialogMessage": "Permanently removes the selected collection and all its contents. This action cannot be undone.",
+      "deleteConfirm": "Yes, Delete",
+      "deleteSuccess": "Collection deleted successfully",
+      "deleteError": "Failed to delete collection",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect All",
+      "remove": "Remove",
+      "removeDialogTitle": "Remove Selected Videos?",
+      "removeDialogMessage": "Are you sure want to remove selected Video?",
+      "removeConfirm": "Yes, Remove",
+      "removeSuccess": "{{count}} video(s) removed successfully",
+      "removePartialError": "Failed to remove {{count}} video(s)",
+      "removeError": "Failed to remove videos"
     },
     "supportLinks": {
       "invitationCode": "Invitation Code",

@@ -22,6 +22,7 @@ import { MovieInfo } from "@/components/common/movies/MovieInfo";
 import { MovieTab } from "@/components/common/movies/MovieTab";
 import VideoPlayer from "@/components/common/VideoPlayer";
 import { BulletCommentLayer } from "@/components/common/VideoPlayerLayers";
+import { AddToFavoriteSheet } from "@/components/pages/collection";
 import { mockComments } from "@/data/mockComments";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
@@ -63,6 +64,7 @@ function RouteComponent() {
   const [activeTab, setActiveTab] = useState<"tab-1" | "tab-2">("tab-1");
   const [openDownloadSheet, setOpenDownloadSheet] = useState(false);
   const [openFeedbackSheet, setOpenFeedbackSheet] = useState(false);
+  const [openBookmarkSheet, setOpenBookmarkSheet] = useState(false);
   const [activeBulletComment, setActiveBulletComment] = useState(false);
   const [currentResourceIndex, setCurrentResourceIndex] = useState(0);
 
@@ -162,6 +164,7 @@ function RouteComponent() {
         postDetail={postDetail.data}
         setOpenFeedbackSheet={setOpenFeedbackSheet}
         setOpenDownloadSheet={setOpenDownloadSheet}
+        setOpenBookmarkSheet={setOpenBookmarkSheet}
         key="info"
       />,
     ],
@@ -276,6 +279,23 @@ function RouteComponent() {
         postId={id}
         openFeedbackSheet={openFeedbackSheet}
         setOpenFeedbackSheet={setOpenFeedbackSheet}
+      />
+
+      {/* 
+        Add to Favorite Sheet Modal
+        
+        Allows users to:
+        - Add/remove post from favorites
+        - Add post to collections
+        - Create new collection and add post
+        
+        Controlled by openBookmarkSheet state
+        Requires postId to associate with the correct post
+      */}
+      <AddToFavoriteSheet
+        isOpen={openBookmarkSheet}
+        onClose={() => setOpenBookmarkSheet(false)}
+        postId={id}
       />
     </>
   );

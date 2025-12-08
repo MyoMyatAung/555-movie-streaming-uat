@@ -182,7 +182,21 @@
       "videos": "个视频",
       "public": "公开",
       "private": "私密",
-      "views": "次查看"
+      "views": "次查看",
+      "deleteDialogTitle": "删除此收藏？",
+      "deleteDialogMessage": "永久删除所选收藏及其所有内容。此操作无法撤消。",
+      "deleteConfirm": "是的，删除",
+      "deleteSuccess": "收藏删除成功",
+      "deleteError": "删除收藏失败",
+      "selectAll": "全选",
+      "deselectAll": "取消全选",
+      "remove": "移除",
+      "removeDialogTitle": "移除选中的视频？",
+      "removeDialogMessage": "确定要移除选中的视频吗？",
+      "removeConfirm": "是的，移除",
+      "removeSuccess": "成功移除 {{count}} 个视频",
+      "removePartialError": "{{count}} 个视频移除失败",
+      "removeError": "视频移除失败"
     },
     "supportLinks": {
       "invitationCode": "邀请码",

@@ -1,3 +1,28 @@
+/**
+ * MovieInfo Component
+ *
+ * Displays movie/post details including title, metadata, description,
+ * and action buttons (download, bookmark, feedback, share).
+ *
+ * Features:
+ * - Movie title and metadata display (year, rating, duration)
+ * - Tag badges
+ * - Expandable description
+ * - Action buttons row
+ * - Episode selector (for series)
+ * - Related movies section
+ *
+ * @example
+ * ```tsx
+ * <MovieInfo
+ *   postDetail={postData}
+ *   setOpenDownloadSheet={setDownloadSheet}
+ *   setOpenFeedbackSheet={setFeedbackSheet}
+ *   setOpenBookmarkSheet={setBookmarkSheet}
+ * />
+ * ```
+ */
+
 import Download from "@/assets/svgs/download.svg?react";
 import HeartActive from "@/assets/svgs/heart-active.svg?react";
 import Message from "@/assets/svgs/message-text.svg?react";
@@ -11,26 +36,41 @@ import { SelectEpisode } from "./SelectEpisode";
 import type { PostDetail } from "@/types/movie-detail";
 import { useState } from "react";
 
+// =============================================================================
+// Types
+// =============================================================================
+
 interface MovieInfoProps {
+  /** Post/movie detail data */
   postDetail: PostDetail;
+  /** Handler to open download sheet */
   setOpenDownloadSheet: Dispatch<SetStateAction<boolean>>;
+  /** Handler to open feedback sheet */
   setOpenFeedbackSheet: Dispatch<SetStateAction<boolean>>;
+  /** Handler to open bookmark/add to favorite sheet */
+  setOpenBookmarkSheet: Dispatch<SetStateAction<boolean>>;
 }
 
 export function MovieInfo({
   postDetail,
   setOpenDownloadSheet,
   setOpenFeedbackSheet,
+  setOpenBookmarkSheet,
 }: MovieInfoProps) {
   const { t } = useTranslation();
   const [showFullDescription, setShowFullDescription] = useState(false);
 
+  // Action handlers
   const handleClickDownload = () => {
     setOpenDownloadSheet(true);
   };
 
   const handleClickFeedback = () => {
     setOpenFeedbackSheet(true);
+  };
+
+  const handleClickBookmark = () => {
+    setOpenBookmarkSheet(true);
   };
 
   // Format duration from seconds to readable format
@@ -96,7 +136,10 @@ export function MovieInfo({
         >
           <Download /> {t("movie-detail.actions.download")}
         </button>
-        <button className="flex flex-col items-center gap-2 text-white">
+        <button
+          onClick={handleClickBookmark}
+          className="flex flex-col items-center gap-2 text-white"
+        >
           <HeartActive /> {t("movie-detail.actions.bookmark")}
         </button>
         <button

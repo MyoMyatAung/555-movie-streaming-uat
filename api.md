@@ -2170,6 +2170,8 @@ The response is an array of layout cards. Each card has:
      - `sub_title`: Subtitle or description
      - `label`: Optional label (e.g., "New", "Featured")
      - `click`: Click action type (e.g., "post_detail")
+     - `tag`: Array of tag names associated with the post (e.g., ["Fantasy", "Action", "Sci-Fi"])
+     - `duration`: Video duration in seconds (0 if not available)
 
 2. **Playback History Card** (`playback_history`) - **Authenticated users only**:
    - Appears after carousel for logged-in users
@@ -3050,9 +3052,9 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/favourite/add \
 > - The favourite is stored in the `user_favourites` table
 
 ## POST `/api/v1/favourite/remove`
-Remove a post from favourites. Requires `Authorization: Bearer <access_token>`.
+Remove one or more posts from favourites. Supports both single and batch removal. Requires `Authorization: Bearer <access_token>`.
 
-**Request:**
+**Request (Single Post):**
 ```bash
 curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/favourite/remove \
   -H 'Authorization: Bearer <access_token>' \
@@ -3062,13 +3064,27 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/favourite/remove \
   }'
 ```
 
+**Request (Multiple Posts):**
+```bash
+curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/favourite/remove \
+  -H 'Authorization: Bearer <access_token>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "post_id": [
+      "550e8400-e29b-41d4-a716-446655440000",
+      "6a8b7c9d-e2f3-41d4-b816-556677889900",
+      "7c9d8e0f-f3a4-52e5-c927-667788990011"
+    ]
+  }'
+```
+
 **Request Parameters**:
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `post_id` | UUID | Yes | The ID of the post to unfavourite (must exist in posts table) |
+| `post_id` | UUID or UUID[] | Yes | The ID(s) of the post(s) to unfavourite. Can be a single UUID string or an array of UUIDs for batch removal. |
 
-**Success Response (200)**:
+**Success Response (200) - Single Post**:
 ```json
 {
   "status": true,
@@ -3076,6 +3092,34 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/favourite/remove \
   "data": {
     "is_favourite": false,
     "favourites_count": 244
+  }
+}
+```
+
+**Success Response (200) - Multiple Posts**:
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "removed": [
+      {
+        "post_id": "550e8400-e29b-41d4-a716-446655440000",
+        "favourites_count": 244
+      },
+      {
+        "post_id": "6a8b7c9d-e2f3-41d4-b816-556677889900",
+        "favourites_count": 132
+      }
+    ],
+    "failed": [
+      {
+        "post_id": "7c9d8e0f-f3a4-52e5-c927-667788990011",
+        "error": "Favourite not found"
+      }
+    ],
+    "removed_count": 2,
+    "failed_count": 1
   }
 }
 ```
@@ -3096,8 +3140,10 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/favourite/remove \
 ```
 
 > **Important Notes**:
-> - Can only remove a favourite that exists
-> - Returns the updated favourites count
+> - Can remove a single favourite or multiple favourites in one request
+> - Returns the updated favourites count for each post
+> - When removing multiple posts, the operation continues even if some posts fail (partial success)
+> - Failed removals are reported in the `failed` array with error messages
 
 ## GET `/api/v1/favourite/list`
 Get user's favourite posts with pagination. Requires `Authorization: Bearer <access_token>`.
@@ -3206,7 +3252,7 @@ The Collection feature allows users to organize posts into custom named groups (
 ## POST `/api/v1/collection/create`
 Create a new collection. Requires `Authorization: Bearer <access_token>`.
 
-**Request:**
+**Request (JSON):**
 ```bash
 curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/create \
   -H 'Authorization: Bearer <access_token>' \
@@ -3220,6 +3266,17 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/create \
   }'
 ```
 
+**Request (With File Upload):**
+```bash
+curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/create \
+  -H 'Authorization: Bearer <access_token>' \
+  -F 'name=Watch Later' \
+  -F 'description=Movies to watch this weekend' \
+  -F 'is_public=false' \
+  -F 'thumbnail=@/path/to/image.jpg' \
+  -F 'sort_order=0'
+```
+
 **Request Parameters**:
 
 | Parameter | Type | Required | Description |
@@ -3228,6 +3285,7 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/create \
 | `description` | string | No | Collection description (max 1000 characters) |
 | `is_public` | boolean | No | Make collection public (default: false) |
 | `thumbnail_url` | string | No | Collection thumbnail URL (max 500 characters) |
+| `thumbnail` | file | No | Image file upload (jpeg, jpg, png, gif, webp; max 5MB) |
 | `sort_order` | integer | No | User-defined sort order (min: 0) |
 
 **Success Response (200)**:
@@ -3241,7 +3299,7 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/create \
       "name": "Watch Later",
       "description": "Movies to watch this weekend",
       "is_public": false,
-      "thumbnail_url": null,
+      "thumbnail_url": "http://your-domain.com/storage/collections/user-id/thumbnails/uuid.jpg",
       "posts_count": 0,
       "sort_order": 0,
       "created_at": "2025-12-03T10:30:00.000000Z",
@@ -3266,13 +3324,16 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/create \
 > - Users can create unlimited collections
 > - Collection names don't need to be unique
 > - `posts_count` is automatically maintained
+> - You can provide either `thumbnail_url` (URL string) OR `thumbnail` (file upload), not both
+> - If uploading a file, use `multipart/form-data` content type
+> - Supported image formats: jpeg, jpg, png, gif, webp (max 5MB)
 
-## PUT `/api/v1/collection/update`
+## POST `/api/v1/collection/update`
 Update collection details. Requires `Authorization: Bearer <access_token>`.
 
-**Request:**
+**Request (JSON):**
 ```bash
-curl -X PUT https://efdfd435gv.qdhgtch.com/api/v1/collection/update \
+curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/update \
   -H 'Authorization: Bearer <access_token>' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -3281,6 +3342,17 @@ curl -X PUT https://efdfd435gv.qdhgtch.com/api/v1/collection/update \
     "description": "Updated description",
     "is_public": true
   }'
+```
+
+**Request (With File Upload):**
+```bash
+curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/update \
+  -H 'Authorization: Bearer <access_token>' \
+  -F 'collection_id=collection-uuid' \
+  -F 'name=Must Watch' \
+  -F 'description=Updated description' \
+  -F 'is_public=true' \
+  -F 'thumbnail=@/path/to/new-image.jpg'
 ```
 
 **Request Parameters**:
@@ -3292,6 +3364,7 @@ curl -X PUT https://efdfd435gv.qdhgtch.com/api/v1/collection/update \
 | `description` | string | No | New description (max 1000 characters) |
 | `is_public` | boolean | No | Update public status |
 | `thumbnail_url` | string | No | Update thumbnail URL |
+| `thumbnail` | file | No | Image file upload (jpeg, jpg, png, gif, webp; max 5MB) |
 | `sort_order` | integer | No | Update sort order |
 
 **Success Response (200)**:
@@ -3331,6 +3404,9 @@ curl -X PUT https://efdfd435gv.qdhgtch.com/api/v1/collection/update \
 > **Important Notes**:
 > - Users can only update their own collections
 > - All fields are optional (only provide fields you want to update)
+> - You can provide either `thumbnail_url` (URL string) OR `thumbnail` (file upload), not both
+> - If uploading a file, use `multipart/form-data` content type and the old thumbnail will be automatically deleted
+> - Supported image formats: jpeg, jpg, png, gif, webp (max 5MB)
 
 ## DELETE `/api/v1/collection/delete`
 Delete a collection. Requires `Authorization: Bearer <access_token>`.
@@ -3392,6 +3468,17 @@ curl "https://efdfd435gv.qdhgtch.com/api/v1/collection/list?page=1&per_page=20" 
   "data": {
     "collections": [
       {
+        "id": "favorite",
+        "name": "Favorite",
+        "description": null,
+        "is_public": false,
+        "thumbnail_url": null,
+        "posts_count": 8,
+        "sort_order": -1,
+        "created_at": "2025-12-03T10:30:00.000000Z",
+        "updated_at": "2025-12-03T10:30:00.000000Z"
+      },
+      {
         "id": "collection-uuid-1",
         "name": "Watch Later",
         "description": "Movies to watch",
@@ -3423,7 +3510,9 @@ curl "https://efdfd435gv.qdhgtch.com/api/v1/collection/list?page=1&per_page=20" 
 ```
 
 > **Important Notes**:
-> - Returns collections ordered by `sort_order` (ascending), then by creation date (descending)
+> - A virtual "Favorite" collection (id: "favorite") is always included as the first item on page 1
+> - The "Favorite" collection shows the count of posts the user has favorited
+> - Regular collections are ordered by `sort_order` (ascending), then by creation date (descending)
 > - Each collection includes `posts_count` showing number of posts
 > - Supports standard pagination
 
@@ -3564,9 +3653,9 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/add-post \
 > - Collection `posts_count` is automatically updated
 
 ## POST `/api/v1/collection/remove-post`
-Remove a post from a collection. Requires `Authorization: Bearer <access_token>`.
+Remove one or more posts from a collection. Supports both single and batch removal. Requires `Authorization: Bearer <access_token>`.
 
-**Request:**
+**Request (Single Post):**
 ```bash
 curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/remove-post \
   -H 'Authorization: Bearer <access_token>' \
@@ -3577,20 +3666,61 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/remove-post \
   }'
 ```
 
+**Request (Multiple Posts):**
+```bash
+curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/remove-post \
+  -H 'Authorization: Bearer <access_token>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "collection_id": "collection-uuid",
+    "post_id": [
+      "550e8400-e29b-41d4-a716-446655440000",
+      "6a8b7c9d-e2f3-41d4-b816-556677889900",
+      "7c9d8e0f-f3a4-52e5-c927-667788990011"
+    ]
+  }'
+```
+
 **Request Parameters**:
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `collection_id` | UUID | Yes | The collection to remove from |
-| `post_id` | UUID | Yes | The post to remove |
+| `post_id` | UUID or UUID[] | Yes | The ID(s) of the post(s) to remove. Can be a single UUID string or an array of UUIDs for batch removal. |
 
-**Success Response (200)**:
+**Success Response (200) - Single Post**:
 ```json
 {
   "status": true,
   "message": "Success",
   "data": {
     "removed": true
+  }
+}
+```
+
+**Success Response (200) - Multiple Posts**:
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "removed": [
+      {
+        "post_id": "550e8400-e29b-41d4-a716-446655440000"
+      },
+      {
+        "post_id": "6a8b7c9d-e2f3-41d4-b816-556677889900"
+      }
+    ],
+    "failed": [
+      {
+        "post_id": "7c9d8e0f-f3a4-52e5-c927-667788990011",
+        "error": "Post not found in collection"
+      }
+    ],
+    "removed_count": 2,
+    "failed_count": 1
   }
 }
 ```
@@ -3613,6 +3743,9 @@ curl -X POST https://efdfd435gv.qdhgtch.com/api/v1/collection/remove-post \
 > **Important Notes**:
 > - Collection `posts_count` is automatically updated
 > - The post itself is not deleted, only removed from the collection
+> - Can remove a single post or multiple posts in one request
+> - When removing multiple posts, the operation continues even if some posts fail (partial success)
+> - Failed removals are reported in the `failed` array with error messages
 
 ## POST `/api/v1/collection/reorder`
 Reorder posts in a collection (for drag & drop functionality). Requires `Authorization: Bearer <access_token>`.
