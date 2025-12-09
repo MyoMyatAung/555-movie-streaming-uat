@@ -4,6 +4,7 @@ import { ImageOff } from "lucide-react";
 import { motion } from "motion/react";
 import { useRef, useState } from "react";
 import { MovieDetailCard } from "./MovieDetailCard";
+import { useNavigate } from "@tanstack/react-router";
 
 interface MovieCardProps {
   item: ContentItem;
@@ -26,7 +27,7 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
   const [imageError, setImageError] = useState(false);
   const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isPressedRef = useRef(false);
-
+  const navigate = useNavigate();
   const handlePressStart = () => {
     isPressedRef.current = true;
     pressTimerRef.current = setTimeout(() => {
@@ -47,7 +48,8 @@ export function MovieCard({ item, onClick, className }: MovieCardProps) {
 
   const handlePlay = () => {
     console.log("Play:", item.title);
-    // Handle play action
+    // Navigate to player/:id route using TanStack Router
+    navigate({ to: `/player/${item.id}` });
   };
 
   const handleFavoriteToggle = () => {

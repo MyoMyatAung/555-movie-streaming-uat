@@ -1,3 +1,28 @@
+/**
+ * MovieInfo Component
+ *
+ * Displays movie/post details including title, metadata, description,
+ * and action buttons (download, bookmark, feedback, share).
+ *
+ * Features:
+ * - Movie title and metadata display (year, rating, duration)
+ * - Tag badges
+ * - Expandable description
+ * - Action buttons row
+ * - Episode selector (for series)
+ * - Related movies section
+ *
+ * @example
+ * ```tsx
+ * <MovieInfo
+ *   postDetail={postData}
+ *   setOpenDownloadSheet={setDownloadSheet}
+ *   setOpenFeedbackSheet={setFeedbackSheet}
+ *   setOpenBookmarkSheet={setBookmarkSheet}
+ * />
+ * ```
+ */
+
 import Download from "@/assets/svgs/download.svg?react";
 import HeartActive from "@/assets/svgs/heart-active.svg?react";
 import Message from "@/assets/svgs/message-text.svg?react";
@@ -8,18 +33,34 @@ import type { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { MoreMovie } from "./MoreMovie";
 import { SelectEpisode } from "./SelectEpisode";
+import type { PostDetail } from "@/types/movie-detail";
+import { useState } from "react";
+
+// =============================================================================
+// Types
+// =============================================================================
 
 interface MovieInfoProps {
+  /** Post/movie detail data */
+  postDetail: PostDetail;
+  /** Handler to open download sheet */
   setOpenDownloadSheet: Dispatch<SetStateAction<boolean>>;
+  /** Handler to open feedback sheet */
   setOpenFeedbackSheet: Dispatch<SetStateAction<boolean>>;
+  /** Handler to open bookmark/add to favorite sheet */
+  setOpenBookmarkSheet: Dispatch<SetStateAction<boolean>>;
 }
 
 export function MovieInfo({
+  postDetail,
   setOpenDownloadSheet,
   setOpenFeedbackSheet,
+  setOpenBookmarkSheet,
 }: MovieInfoProps) {
   const { t } = useTranslation();
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
+  // Action handlers
   const handleClickDownload = () => {
     setOpenDownloadSheet(true);
   };
@@ -28,40 +69,66 @@ export function MovieInfo({
     setOpenFeedbackSheet(true);
   };
 
+  const handleClickBookmark = () => {
+    setOpenBookmarkSheet(true);
+  };
+
+  // Format duration from seconds to readable format
+  const formatDuration = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    
+    if (hours > 0) {
+      return `${hours}hr ${minutes}min`;
+    }
+    return `${minutes}min`;
+  };
+
+  // Get duration from the first video file
+  const videoDuration = postDetail.files.find(f => f.type === "video")?.duration;
+  const durationText = videoDuration ? formatDuration(videoDuration) : null;
+
   return (
     <div className="overflow-y-auto p-2">
-      <h1 className="text-white">Moana (2016)</h1>
+      <h1 className="text-white">{postDetail.title}</h1>
       <div className="flex w-fit items-start divide-x divide-solid divide-gray-400 text-white">
-        <div className="w-fit pr-2">2016</div>
-        <div className="flex w-fit items-center gap-1 px-2">
-          <Star /> <span>6.8/10</span>
+        <div className="w-fit pr-2">{postDetail.year}</div>
+        {(postDetail.rating > 0 || postDetail.score > 0) && (
+          <div className="flex w-fit items-center gap-1 px-2">
+            <Star /> <span>{(postDetail.rating || postDetail.score).toFixed(1)}/10</span>
+          </div>
+        )}
+        {durationText && (
+          <div className="w-fit px-2">{durationText}</div>
+        )}
+      </div>
+      {postDetail.tag && postDetail.tag.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {postDetail.tag.map((tag, index) => (
+            <button
+              key={index}
+              className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white inset-shadow-sm backdrop-blur-md"
+            >
+              {tag}
+            </button>
+          ))}
         </div>
-        <div className="w-fit px-2">2hr 48mins</div>
-      </div>
-      <div className="mt-4 flex gap-2">
-        <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white inset-shadow-sm backdrop-blur-md">
-          Action
-        </button>
-        <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white inset-shadow-sm backdrop-blur-md">
-          Fantasy
-        </button>
-        <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white inset-shadow-sm backdrop-blur-md">
-          Animation
-        </button>
-        <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white inset-shadow-sm backdrop-blur-md">
-          Disney
-        </button>
-      </div>
-      <p className="mt-4 line-clamp-3 text-white">
-        Moana is a 2016 American animated musical fantasy adventure film
-        produced by Walt Disney Animation Studios and released by Walt Disney
-        Pictures. It is the 56th Disney animated feature film. The film tells
-        the story of Moana, a Polynesian girl who sets sail on a daring mission
-        to save her people. During her journey, Moana meets the demigod Maui,
-        voiced by Dwayne Johnson, and together they face challenges to restore
-        the heart of Te Fiti.
-      </p>
-      <button className="mt-2 text-blue-400">Read more</button>
+      )}
+      {postDetail.description && (
+        <>
+          <p className={`mt-4 text-white ${showFullDescription ? "" : "line-clamp-3"}`}>
+            {postDetail.description}
+          </p>
+          {postDetail.description.length > 150 && (
+            <button
+              onClick={() => setShowFullDescription(!showFullDescription)}
+              className="mt-2 text-blue-400"
+            >
+              {showFullDescription ? "Show less" : "Read more"}
+            </button>
+          )}
+        </>
+      )}
       <div className="mt-4 flex justify-between gap-4">
         <button
           onClick={handleClickDownload}
@@ -69,7 +136,10 @@ export function MovieInfo({
         >
           <Download /> {t("movie-detail.actions.download")}
         </button>
-        <button className="flex flex-col items-center gap-2 text-white">
+        <button
+          onClick={handleClickBookmark}
+          className="flex flex-col items-center gap-2 text-white"
+        >
           <HeartActive /> {t("movie-detail.actions.bookmark")}
         </button>
         <button
@@ -83,7 +153,12 @@ export function MovieInfo({
         </button>
       </div>
       <SelectEpisode />
-      <MoreMovie />
+      {postDetail.episodes && postDetail.episodes > 0 ? null : (
+        <div className="mt-6">
+          <h2 className="mb-4 text-lg font-semibold text-white">More Like This</h2>
+          <MoreMovie postId={postDetail.post_id} />
+        </div>
+      )}
     </div>
   );
 }

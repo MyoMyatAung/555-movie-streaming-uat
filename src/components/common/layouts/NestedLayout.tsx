@@ -37,7 +37,7 @@ function NestedLayout({
                 if (link) navigate(link);
                 else router.history.back();
               }}
-              className="rounded-full border border-white/10"
+              className="rounded-full border border-white/10 glassmorphism"
             >
               <IconChevronLeft className="size-5 text-white" />
             </Button>

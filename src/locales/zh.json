@@ -160,9 +160,43 @@
     "watchlistLinks": {
       "continueWatching": "继续观看",
       "watchlist": "观影榜",
+      "myCollection": "我的收藏",
       "history": "观看历史",
       "settings": "设置",
       "update": "更新"
+    },
+    "collection": {
+      "title": "收藏",
+      "createCollection": "创建收藏",
+      "defaultCollectionName": "我的收藏",
+      "emptyState": {
+        "title": "暂无收藏",
+        "description": "创建您的第一个收藏来整理您喜爱的电影和节目",
+        "createButton": "创建收藏"
+      },
+      "loadingError": {
+        "title": "加载失败",
+        "description": "加载收藏时出错，请重试。",
+        "retryButton": "重试"
+      },
+      "videos": "个视频",
+      "public": "公开",
+      "private": "私密",
+      "views": "次查看",
+      "deleteDialogTitle": "删除此收藏？",
+      "deleteDialogMessage": "永久删除所选收藏及其所有内容。此操作无法撤消。",
+      "deleteConfirm": "是的，删除",
+      "deleteSuccess": "收藏删除成功",
+      "deleteError": "删除收藏失败",
+      "selectAll": "全选",
+      "deselectAll": "取消全选",
+      "remove": "移除",
+      "removeDialogTitle": "移除选中的视频？",
+      "removeDialogMessage": "确定要移除选中的视频吗？",
+      "removeConfirm": "是的，移除",
+      "removeSuccess": "成功移除 {{count}} 个视频",
+      "removePartialError": "{{count}} 个视频移除失败",
+      "removeError": "视频移除失败"
     },
     "supportLinks": {
       "invitationCode": "邀请码",
@@ -336,7 +370,19 @@
       "description": "问题的详细描述",
       "required": "必填"
     },
+    "feedback": {
+      "placeholder": "请详细描述您遇到的问题...",
+      "submitting": "提交中...",
+      "submitSuccess": "反馈提交成功，我们会尽快处理。",
+      "submitError": "提交失败，请重试。",
+      "selectProblemType": "请选择问题类型。",
+      "descriptionMinLength": "描述至少需要{{min}}个字符。",
+      "loadProblemTypesError": "加载问题类型失败，请重试。"
+    },
     "error": {
+      "networkError": "网络错误",
+      "networkErrorDescription": "无法连接，请检查您的网络连接后重试。",
+      "playbackError": "播放出错，请尝试切换资源或刷新一下",
       "refresh": "刷新一下",
       "switch": "切换资源"
     }

@@ -158,9 +158,43 @@
     "watchlistLinks": {
       "continueWatching": "Continue Watching",
       "watchlist": "Watchlist",
+      "myCollection": "My Collection",
       "history": "History",
       "settings": "Settings",
       "update": "Update"
+    },
+    "collection": {
+      "title": "Collection",
+      "createCollection": "Create Collection",
+      "defaultCollectionName": "Favorites",
+      "emptyState": {
+        "title": "No Collections Yet",
+        "description": "Create your first collection to organize your favorite movies and shows",
+        "createButton": "Create Collection"
+      },
+      "loadingError": {
+        "title": "Failed to Load Collections",
+        "description": "There was an error loading your collections. Please try again.",
+        "retryButton": "Try Again"
+      },
+      "videos": "Videos",
+      "public": "Public",
+      "private": "Private",
+      "views": "views",
+      "deleteDialogTitle": "Delete This Collection?",
+      "deleteDialogMessage": "Permanently removes the selected collection and all its contents. This action cannot be undone.",
+      "deleteConfirm": "Yes, Delete",
+      "deleteSuccess": "Collection deleted successfully",
+      "deleteError": "Failed to delete collection",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect All",
+      "remove": "Remove",
+      "removeDialogTitle": "Remove Selected Videos?",
+      "removeDialogMessage": "Are you sure want to remove selected Video?",
+      "removeConfirm": "Yes, Remove",
+      "removeSuccess": "{{count}} video(s) removed successfully",
+      "removePartialError": "Failed to remove {{count}} video(s)",
+      "removeError": "Failed to remove videos"
     },
     "supportLinks": {
       "invitationCode": "Invitation Code",
@@ -334,7 +368,19 @@
       "description": "Detailed description of the issue",
       "required": "Required"
     },
+    "feedback": {
+      "placeholder": "Please describe the issue in detail...",
+      "submitting": "Submitting...",
+      "submitSuccess": "Feedback submitted successfully. We will review it shortly.",
+      "submitError": "Failed to submit feedback. Please try again.",
+      "selectProblemType": "Please select a problem type.",
+      "descriptionMinLength": "Description must be at least {{min}} characters.",
+      "loadProblemTypesError": "Failed to load problem types. Please try again."
+    },
     "error": {
+      "networkError": "Network Error",
+      "networkErrorDescription": "Unable to connect. Please check your connection and try again.",
+      "playbackError": "Playback error, please try switching resources or refreshing",
       "refresh": "Refresh",
       "switch": "Switch Resources"
     }
