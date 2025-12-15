@@ -153,8 +153,7 @@ function RouteComponent() {
   };
 
   const handleItemClick = (itemId: string) => {
-    // TODO: Navigate to item detail page
-    console.log("Item clicked:", itemId);
+    navigate({ to: "/player/$id", params: { id: itemId } });
   };
 
   return (
