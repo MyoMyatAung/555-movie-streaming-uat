@@ -133,8 +133,8 @@ export function ChangeMobileSheet({
   };
 
   const isValidToGetOTP = useMemo(() => {
-    const dialCode = selectedCountry.replace("+", "");
-    const fullPhone = `+${dialCode}${watchedMobile?.trim() || ""}`;
+    // const dialCode = selectedCountry.replace("+", "");
+    // const fullPhone = `+${dialCode}${watchedMobile?.trim() || ""}`;
     return (
       recaptchaToken && watchedMobile?.trim() && isValidMobile(watchedMobile)
     );

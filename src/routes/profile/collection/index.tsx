@@ -17,14 +17,9 @@
  * @see CollectionCard for individual collection display
  */
 
-import { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
+import { useCollectionList } from "@/apis/collection";
 import IconPlus from "@/assets/svgs/icon-plus.svg?react";
 import NestedLayout from "@/components/common/layouts/NestedLayout";
-import { Button } from "@/components/ui/button";
-import { useCollectionList } from "@/apis/collection";
-import { useAuth } from "@/hooks/useAuth";
 import {
   CollectionCard,
   CreateCollectionSheet,
@@ -32,7 +27,12 @@ import {
   ErrorState,
   LoadingState,
 } from "@/components/pages/collection";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { isFavoriteCollection } from "@/types/collection";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // =============================================================================
 // Route Definition
@@ -61,17 +61,11 @@ function CollectionListPage() {
   const [showCreateSheet, setShowCreateSheet] = useState(false);
 
   // Fetch collections list
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-  } = useCollectionList(
-    { page: 1, per_page: 50 }, // Get up to 50 collections
-    { enabled: isAuthenticated }
-  );
+  const { data, isLoading, isError, error, refetch, isRefetching } =
+    useCollectionList(
+      { page: 1, per_page: 50 }, // Get up to 50 collections
+      { enabled: isAuthenticated },
+    );
 
   // Extract collections from response
   const collections = data?.data.collections ?? [];
@@ -79,11 +73,14 @@ function CollectionListPage() {
 
   // Handle collection card click - navigate to detail page
   const handleCollectionClick = (collectionId: string) => {
-    navigate({ to: "/profile/collection/$slug", params: { slug: collectionId } });
+    navigate({
+      to: "/profile/collection/$slug",
+      params: { slug: collectionId },
+    });
   };
 
   // Handle create collection success
-  const handleCreateSuccess = (collection: { id: string }) => {
+  const handleCreateSuccess = (_collection: { id: string }) => {
     // Optionally navigate to the new collection
     // navigate({ to: "/profile/collection/$slug", params: { slug: collection.id } });
   };
@@ -136,7 +133,13 @@ function CollectionListPage() {
               key={collection.id}
               collection={collection}
               isDefault={isFavoriteCollection(collection)}
-              onClick={() => handleCollectionClick(collection.name.toLowerCase() === "favorite" ? "favorite" : collection.id)} // if collection name is "favorite", navigate to "favorite" route
+              onClick={() =>
+                handleCollectionClick(
+                  collection.name.toLowerCase() === "favorite"
+                    ? "favorite"
+                    : collection.id,
+                )
+              } // if collection name is "favorite", navigate to "favorite" route
             />
           ))}
         </div>

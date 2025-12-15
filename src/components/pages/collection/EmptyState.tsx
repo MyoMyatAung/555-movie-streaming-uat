@@ -72,7 +72,7 @@ export function EmptyState({
     <div
       className={cn(
         "flex min-h-[60vh] flex-col items-center justify-center px-6 text-center",
-        className
+        className,
       )}
     >
       {/* Icon */}
@@ -84,13 +84,15 @@ export function EmptyState({
       <h3 className="mb-2 text-lg font-medium text-white/70">{displayTitle}</h3>
 
       {/* Description */}
-      <p className="mb-6 max-w-xs text-sm text-white/50">{displayDescription}</p>
+      <p className="mb-6 max-w-xs text-sm text-white/50">
+        {displayDescription}
+      </p>
 
       {/* Create Button */}
       {showCreateButton && onCreateClick && (
         <Button
           onClick={onCreateClick}
-          className="gap-x-2 bg-primary hover:bg-primary/90"
+          className="bg-primary hover:bg-primary/90 gap-x-2"
         >
           <PlusIcon className="size-4" />
           {t("profile.collection.emptyState.createButton")}
@@ -106,14 +108,16 @@ export function EmptyState({
  * Empty state specifically for when a collection has no items.
  * Different from the main EmptyState as it doesn't show create button.
  */
-export function CollectionItemsEmptyState({ className }: { className?: string }) {
-  const { t } = useTranslation();
-
+export function CollectionItemsEmptyState({
+  className,
+}: {
+  className?: string;
+}) {
   return (
     <div
       className={cn(
         "flex min-h-[40vh] flex-col items-center justify-center px-6 text-center",
-        className
+        className,
       )}
     >
       <div className="mb-4">
@@ -132,4 +136,3 @@ export function CollectionItemsEmptyState({ className }: { className?: string })
 }
 
 export default EmptyState;
-

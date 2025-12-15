@@ -227,7 +227,7 @@ function RouteComponent() {
           <h3 className="mb-4 text-lg font-semibold text-white">
             {t("search.recommendedMovies") || "Recommended Movies"}
           </h3>
-          <MoreMovie />
+          <MoreMovie postId={""} />
         </div>
       )}
 
