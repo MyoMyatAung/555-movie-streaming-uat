@@ -32,21 +32,20 @@
  * ```
  */
 
-import { useState, useRef, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { useUpdateCollection } from "@/apis/collection";
 import SheetModal from "@/components/common/SheetModal";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { useUpdateCollection } from "@/apis/collection";
 import type { Collection } from "@/types/collection";
 import {
-  Loader2Icon,
-  ImageIcon,
-  XIcon,
-  GlobeIcon,
   ArrowLeftIcon,
+  GlobeIcon,
+  ImageIcon,
+  Loader2Icon,
+  XIcon,
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 // Note: XIcon is used both in image remove button and custom header close button
 
 // =============================================================================
@@ -83,7 +82,6 @@ export function EditCollectionSheet({
   onBack,
   onSuccess,
 }: EditCollectionSheetProps) {
-  const { t } = useTranslation();
   const { mutate: updateCollection, isPending } = useUpdateCollection();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -93,7 +91,7 @@ export function EditCollectionSheet({
   const [title, setTitle] = useState(collection.name);
   const [isPublic, setIsPublic] = useState(collection.is_public);
   const [coverImage, setCoverImage] = useState<string | null>(
-    collection.thumbnail_url || null
+    collection.thumbnail_url || null,
   );
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [removeThumbnail, setRemoveThumbnail] = useState(false);
@@ -231,7 +229,7 @@ export function EditCollectionSheet({
       },
       onError: (error) => {
         toast.error(
-          error.message || "Failed to update collection. Please try again."
+          error.message || "Failed to update collection. Please try again.",
         );
       },
     });
@@ -337,12 +335,12 @@ export function EditCollectionSheet({
               onChange={(e) => setTitle(e.target.value)}
               placeholder=" "
               maxLength={255}
-              className="peer w-full rounded-lg border border-white/10 bg-[#3A3A3A] px-4 pt-6 pb-2 text-white placeholder-transparent outline-none transition-colors focus:border-white/30"
+              className="peer w-full rounded-lg border border-white/10 bg-[#3A3A3A] px-4 pt-6 pb-2 text-white placeholder-transparent transition-colors outline-none focus:border-white/30"
               disabled={isPending}
             />
             <label
               htmlFor="edit-collection-title"
-              className="pointer-events-none absolute left-4 top-2 text-xs text-white/50 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs"
+              className="pointer-events-none absolute top-2 left-4 text-xs text-white/50 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs"
             >
               Title
             </label>
@@ -385,4 +383,3 @@ export function EditCollectionSheet({
 }
 
 export default EditCollectionSheet;
-

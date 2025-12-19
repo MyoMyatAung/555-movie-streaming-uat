@@ -3,7 +3,11 @@
  * These types ensure type safety and improve code maintainability
  */
 
-import { FC, SVGProps } from "react";
+/**
+ * Type definitions for Profile UI components
+ * These types ensure type safety and improve code maintainability
+ */
+import type { FC, SVGProps } from "react";
 
 /**
  * Type for SVG React components imported from .svg?react files
@@ -81,4 +85,3 @@ export interface ModalState {
  * Type for modal keys
  */
 export type ModalKey = keyof ModalState;
-

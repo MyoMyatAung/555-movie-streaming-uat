@@ -29,8 +29,13 @@
  */
 
 import SheetModal from "@/components/common/SheetModal";
-import { PencilIcon, ListChecksIcon, Trash2Icon, ChevronRightIcon } from "lucide-react";
 import type { Collection } from "@/types/collection";
+import {
+  ChevronRightIcon,
+  ListChecksIcon,
+  PencilIcon,
+  Trash2Icon,
+} from "lucide-react";
 
 // =============================================================================
 // Types
@@ -88,7 +93,8 @@ function ManageMenuItem({
   variant = "default",
 }: ManageMenuItemProps) {
   const iconBgClass = variant === "danger" ? "bg-red-500/10" : "bg-[#2A2A2A]";
-  const iconColorClass = variant === "danger" ? "text-red-400" : "text-white/70";
+  const iconColorClass =
+    variant === "danger" ? "text-red-400" : "text-white/70";
   const titleColorClass = variant === "danger" ? "text-red-400" : "text-white";
 
   return (
@@ -131,7 +137,6 @@ function ManageMenuItem({
 export function ManageCollectionSheet({
   isOpen,
   onClose,
-  collection,
   onEditClick,
   onSelectItemsClick,
   onDeleteClick,
@@ -202,4 +207,3 @@ export function ManageCollectionSheet({
 }
 
 export default ManageCollectionSheet;
-

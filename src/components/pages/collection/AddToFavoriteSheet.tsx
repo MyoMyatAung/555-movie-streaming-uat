@@ -27,28 +27,27 @@
  * ```
  */
 
-import { useState, useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import SheetModal from "@/components/common/SheetModal";
-import { CreateCollectionSheet } from "./CreateCollectionSheet";
-import { CollectionListItem } from "./CollectionListItem";
 import {
-  HeartIcon,
   ChevronRightIcon,
-  Loader2Icon,
   FolderPlusIcon,
+  HeartIcon,
+  Loader2Icon,
 } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { CollectionListItem } from "./CollectionListItem";
+import { CreateCollectionSheet } from "./CreateCollectionSheet";
 
 // API Hooks
 import {
-  useCollectionList,
   useAddPostToCollection,
+  useCollectionList,
   useRemovePostFromCollection,
 } from "@/apis/collection";
 import {
-  useCheckFavourite,
   useAddFavourite,
+  useCheckFavourite,
   useRemoveFavourite,
 } from "@/apis/favourite";
 
@@ -215,8 +214,6 @@ export function AddToFavoriteSheet({
   onClose,
   postId,
 }: AddToFavoriteSheetProps) {
-  const { t } = useTranslation();
-
   // Local state for create collection modal
   const [showCreateSheet, setShowCreateSheet] = useState(false);
 
@@ -228,10 +225,8 @@ export function AddToFavoriteSheet({
   // ---------------------------------------------------------------------------
   // API Hooks - Favourites
   // ---------------------------------------------------------------------------
-  const {
-    data: favouriteData,
-    isLoading: isCheckingFavourite,
-  } = useCheckFavourite(postId, { enabled: isOpen });
+  const { data: favouriteData, isLoading: isCheckingFavourite } =
+    useCheckFavourite(postId, { enabled: isOpen });
 
   const { mutate: addFavourite, isPending: isAddingFavourite } =
     useAddFavourite();
@@ -245,17 +240,13 @@ export function AddToFavoriteSheet({
   // ---------------------------------------------------------------------------
   // API Hooks - Collections
   // ---------------------------------------------------------------------------
-  const {
-    data: collectionsData,
-    isLoading: isLoadingCollections,
-  } = useCollectionList({ page: 1, per_page: 100 }, { enabled: isOpen });
+  const { data: collectionsData, isLoading: isLoadingCollections } =
+    useCollectionList({ page: 1, per_page: 100 }, { enabled: isOpen });
 
   const { mutate: addToCollection, isPending: isAddingToCollection } =
     useAddPostToCollection();
-  const {
-    mutate: removeFromCollection,
-    isPending: isRemovingFromCollection,
-  } = useRemovePostFromCollection();
+  const { mutate: removeFromCollection, isPending: isRemovingFromCollection } =
+    useRemovePostFromCollection();
 
   // Filter out the virtual "favorite" collection from the list
   const collections = useMemo(() => {
@@ -267,7 +258,7 @@ export function AddToFavoriteSheet({
 
   // Track pending operations per collection
   const [pendingCollections, setPendingCollections] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
 
   // ---------------------------------------------------------------------------
@@ -288,7 +279,7 @@ export function AddToFavoriteSheet({
           onError: (error) => {
             toast.error(error.message || "Failed to remove from favorites");
           },
-        }
+        },
       );
     } else {
       addFavourite(
@@ -300,7 +291,7 @@ export function AddToFavoriteSheet({
           onError: (error) => {
             toast.error(error.message || "Failed to add to favorites");
           },
-        }
+        },
       );
     }
   }, [isFavourited, postId, addFavourite, removeFavourite]);
@@ -335,7 +326,7 @@ export function AddToFavoriteSheet({
                 return next;
               });
             },
-          }
+          },
         );
       } else {
         addToCollection(
@@ -343,7 +334,7 @@ export function AddToFavoriteSheet({
           {
             onSuccess: () => {
               setCollectionMemberships((prev) =>
-                new Set(prev).add(collection.id)
+                new Set(prev).add(collection.id),
               );
               toast.success(`Added to "${collection.name}"`);
             },
@@ -351,7 +342,7 @@ export function AddToFavoriteSheet({
               // Handle "already in collection" gracefully
               if (error.message?.includes("already in collection")) {
                 setCollectionMemberships((prev) =>
-                  new Set(prev).add(collection.id)
+                  new Set(prev).add(collection.id),
                 );
                 toast.info(`Already in "${collection.name}"`);
               } else {
@@ -365,11 +356,11 @@ export function AddToFavoriteSheet({
                 return next;
               });
             },
-          }
+          },
         );
       }
     },
-    [postId, addToCollection, removeFromCollection]
+    [postId, addToCollection, removeFromCollection],
   );
 
   /**
@@ -386,20 +377,20 @@ export function AddToFavoriteSheet({
         {
           onSuccess: () => {
             setCollectionMemberships((prev) =>
-              new Set(prev).add(newCollection.id)
+              new Set(prev).add(newCollection.id),
             );
             toast.success(`Added to "${newCollection.name}"`);
           },
           onError: () => {
             // Collection was created, just failed to add post
             toast.info(
-              `Collection created. Tap + to add this video to "${newCollection.name}"`
+              `Collection created. Tap + to add this video to "${newCollection.name}"`,
             );
           },
-        }
+        },
       );
     },
-    [postId, addToCollection]
+    [postId, addToCollection],
   );
 
   /**
@@ -479,4 +470,3 @@ export function AddToFavoriteSheet({
 }
 
 export default AddToFavoriteSheet;
-

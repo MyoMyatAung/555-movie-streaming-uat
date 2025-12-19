@@ -12,42 +12,42 @@
  * @see collectionApi.ts for underlying API functions
  */
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  createCollection,
-  updateCollection,
-  deleteCollection,
-  addPostToCollection,
-  removePostFromCollection,
-  removePostsFromCollectionBatch,
-  addToMultipleCollections,
-  reorderPosts,
-  shareCollection,
-} from "./collectionApi";
-import { collectionKeys } from "./queries";
 import type {
-  CreateCollectionRequest,
-  CreateCollectionWithFileRequest,
-  UpdateCollectionRequest,
-  UpdateCollectionWithFileRequest,
-  DeleteCollectionRequest,
+  AddPostData,
   AddPostToCollectionRequest,
-  RemovePostFromCollectionRequest,
-  RemovePostsFromCollectionRequest,
   AddToMultipleCollectionsRequest,
-  ReorderPostsRequest,
-  ShareCollectionRequest,
+  AddToMultipleData,
   ApiResponse,
   CreateCollectionData,
-  UpdateCollectionData,
+  CreateCollectionRequest,
+  CreateCollectionWithFileRequest,
   DeleteCollectionData,
-  AddPostData,
+  DeleteCollectionRequest,
   RemovePostData,
+  RemovePostFromCollectionRequest,
   RemovePostsBatchData,
-  AddToMultipleData,
+  RemovePostsFromCollectionRequest,
   ReorderPostsData,
+  ReorderPostsRequest,
   ShareCollectionData,
+  ShareCollectionRequest,
+  UpdateCollectionData,
+  UpdateCollectionRequest,
+  UpdateCollectionWithFileRequest,
 } from "@/types/collection";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  addPostToCollection,
+  addToMultipleCollections,
+  createCollection,
+  deleteCollection,
+  removePostFromCollection,
+  removePostsFromCollectionBatch,
+  reorderPosts,
+  shareCollection,
+  updateCollection,
+} from "./collectionApi";
+import { collectionKeys } from "./queries";
 
 // =============================================================================
 // Collection CRUD Mutations
@@ -352,10 +352,10 @@ export function useAddToMultipleCollections() {
     AddToMultipleCollectionsRequest
   >({
     mutationFn: addToMultipleCollections,
-    onSuccess: (data, variables) => {
+    onSuccess: (data, _variables) => {
       // Invalidate list and all affected collections
       queryClient.invalidateQueries({ queryKey: collectionKeys.lists() });
-      
+
       // Invalidate each successfully added collection
       data.data.added.forEach((item) => {
         queryClient.invalidateQueries({
@@ -395,19 +395,17 @@ export function useAddToMultipleCollections() {
 export function useReorderPosts() {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    ApiResponse<ReorderPostsData>,
-    Error,
-    ReorderPostsRequest
-  >({
-    mutationFn: reorderPosts,
-    onSuccess: (_, variables) => {
-      // Invalidate collection detail to reflect new order
-      queryClient.invalidateQueries({
-        queryKey: collectionKeys.detail(variables.collection_id),
-      });
+  return useMutation<ApiResponse<ReorderPostsData>, Error, ReorderPostsRequest>(
+    {
+      mutationFn: reorderPosts,
+      onSuccess: (_, variables) => {
+        // Invalidate collection detail to reflect new order
+        queryClient.invalidateQueries({
+          queryKey: collectionKeys.detail(variables.collection_id),
+        });
+      },
     },
-  });
+  );
 }
 
 // =============================================================================
@@ -463,4 +461,3 @@ export function useShareCollection() {
     },
   });
 }
-

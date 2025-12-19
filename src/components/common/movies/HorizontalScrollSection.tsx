@@ -54,11 +54,12 @@ export function HorizontalScrollSection({
               };
 
               return (
-                <div key={item.id} className="last:pr-4">
-                  <MovieCard
-                    item={contentItem}
-                    onClick={() => onItemClick?.(item.id)}
-                  />
+                <div
+                  key={item.id}
+                  className="last:pr-4"
+                  onClick={() => onItemClick?.(item.id)}
+                >
+                  <MovieCard item={contentItem} />
                 </div>
               );
             })}
@@ -104,13 +105,11 @@ export function HorizontalScrollSection({
 
               return (
                 <div
-                  key={`carousel-${index}-${item.title}`}
+                  key={contentItem.id}
                   className="last:pr-4"
+                  // onClick={() => onItemClick?.(contentItem.id)}
                 >
-                  <MovieCard
-                    item={contentItem}
-                    onClick={() => onItemClick?.(contentItem.id)}
-                  />
+                  <MovieCard item={contentItem} />
                 </div>
               );
             })}

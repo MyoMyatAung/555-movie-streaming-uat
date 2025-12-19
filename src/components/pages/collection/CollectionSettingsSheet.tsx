@@ -21,21 +21,20 @@
  * ```
  */
 
+import {
+  useDeleteCollection,
+  useShareCollection,
+  useUpdateCollection,
+} from "@/apis/collection";
 import SheetModal from "@/components/common/SheetModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import {
-  useUpdateCollection,
-  useDeleteCollection,
-  useShareCollection,
-} from "@/apis/collection";
+import { Switch } from "@/components/ui/switch";
 import type { Collection } from "@/types/collection";
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 // =============================================================================
 // Types
@@ -71,14 +70,13 @@ export function CollectionSettingsSheet({
   onDeleted,
   onUpdated,
 }: CollectionSettingsSheetProps) {
-  const { t } = useTranslation();
-
   // Mutations
   const { mutate: updateCollection, isPending: isUpdating } =
     useUpdateCollection();
   const { mutate: deleteCollection, isPending: isDeleting } =
     useDeleteCollection();
-  const { mutate: shareCollection, isPending: isSharing } = useShareCollection();
+  const { mutate: shareCollection, isPending: isSharing } =
+    useShareCollection();
 
   // Form state
   const [name, setName] = useState(collection.name);
@@ -134,7 +132,7 @@ export function CollectionSettingsSheet({
           onError: (error) => {
             toast.error(error.message || "Failed to update visibility");
           },
-        }
+        },
       );
     } else {
       updateOtherFields();
@@ -158,7 +156,7 @@ export function CollectionSettingsSheet({
         onError: (error) => {
           toast.error(error.message || "Failed to update collection");
         },
-      }
+      },
     );
   };
 
@@ -177,7 +175,7 @@ export function CollectionSettingsSheet({
         onError: (error) => {
           toast.error(error.message || "Failed to delete collection");
         },
-      }
+      },
     );
   };
 
@@ -291,7 +289,7 @@ export function CollectionSettingsSheet({
               <Button
                 type="button"
                 disabled={!isValid || !hasChanges || isLoading}
-                className="w-full bg-primary hover:bg-primary/90"
+                className="bg-primary hover:bg-primary/90 w-full"
                 onClick={handleSave}
               >
                 {(isUpdating || isSharing) && (
@@ -320,4 +318,3 @@ export function CollectionSettingsSheet({
 }
 
 export default CollectionSettingsSheet;
-
